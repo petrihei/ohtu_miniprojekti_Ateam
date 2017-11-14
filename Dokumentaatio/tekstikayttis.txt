@@ -1,0 +1,29 @@
+***********************
+*     Vinkkilista     *
+***********************
+
+Valitse toiminnallisuus:
+1: Lisää vinkkilistaan
+0: Poistu
+
+
+---------------------
+Valinta 1:
+Anna kirjan otsikko:
+[käyttäjä kirjoittaa otsikon]
+Anna kirjan kuvaus:
+[käyttäjä kirjoittaa kuvauksen]
+
+[kun sovelluslogiikan metodi tallenna on suoritettu, näytetään]
+Seuraavat tiedot tallennettu vinkkilistaan:
+Otsikko: ...
+Kuvaus: ...
+
+Valitse toiminnallisuus:
+1: Lisää vinkkilistaan
+0: Poistu
+
+-----------------------
+
+Valinta 0:
+Kiitos vinkkilistan käytöstä!
