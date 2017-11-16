@@ -21,9 +21,6 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.25'
-	
-	// mysql connector Java-DB yhteyttä varten
-	compile files('libs/mysql-connector-java-5.1.44-bin.jar')
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
@@ -34,3 +31,10 @@ dependencies {
 */
 
 apply plugin: 'java'
+
+apply plugin: 'application'
+mainClassName = 'Main'
+
+dependencies {
+	compile files('libs/mysql-connector-java-5.1.44-bin.jar')
+}

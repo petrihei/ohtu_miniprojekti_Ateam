@@ -1,9 +1,10 @@
+package tietokantaobjektit;
+
 /**
  *
  * @author Chamion
  * Vastaparina tietokannan saman nimiselle taululle.
  */
-
 public class Vinkki {
 	
 	private String otsikko;
