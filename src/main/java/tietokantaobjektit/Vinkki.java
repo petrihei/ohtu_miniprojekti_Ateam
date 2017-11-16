@@ -7,10 +7,12 @@ package tietokantaobjektit;
  */
 public class Vinkki {
 	
+	// Vastaavat tietokantataulun sarakkeita.
 	private String otsikko;
 	private String kuvaus;
 	private String tyyppi;
 	
+	// Toistaiseksi ainut konstruktori. Ylikuormitus myöhemmin.
 	public Vinkki(String otsikko, String kuvaus, String tyyppi) {
 		if(otsikko == null) {
 			throw new IllegalArgumentException("Otsikko ei saa olla null.");
