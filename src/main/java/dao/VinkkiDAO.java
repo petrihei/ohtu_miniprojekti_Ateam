@@ -1,7 +1,5 @@
 package dao;
 
-import com.mysql.jdbc.Driver;
-
 import java.sql.*;
 
 import tietokantaobjektit.Vinkki;
@@ -15,7 +13,7 @@ public class VinkkiDAO {
 	public static void lisaaVinkki(Vinkki lisattava) throws SQLException {
 		Connection conn;
 		try {
-			conn = DriverManager.getConnection("jdbc:MySql://localhost:3306/TietokantaTest1.db");
+			conn = DriverManager.getConnection("jdbc:sqlite:TietokantaTest1.db");
 		} catch(SQLException e) {
 			throw new SQLException("Yhteyden muodostus tietokantaan epäonnitui, " + e);
 		}

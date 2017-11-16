@@ -36,5 +36,5 @@ apply plugin: 'application'
 mainClassName = 'Main'
 
 dependencies {
-	compile files('libs/mysql-connector-java-5.1.44-bin.jar')
+	compile files('libs/sqlite-jdbc-3.21.0.jar')
 }
