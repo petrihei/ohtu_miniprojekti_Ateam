@@ -55,13 +55,10 @@ public class Tekstikayttis {
         String kuvaus = this.io.nextLine();
         Vinkki vinkki = new Vinkki(otsikko, kuvaus, "Kirja");
 
-        String[] tiedot = new String[2];
-        tiedot[0] = otsikko;
-        tiedot[1] = kuvaus;
         this.io.print("");
-        /* kutsutaan sovelluslogiikka-luokan metodia tallenna (TBD!), joka
+        /* kutsutaan sovelluslogiikka-luokan metodia lisaaVinkki, joka
         palauttaa true, kun on lähettänyt tallennettavat tiedot eteenpäin
-        if(this.logiikka.tallenna(tiedot)){
+        if(this.logiikka.lisaaVinkki(vinkki)){
             this.io.print("Seuraavat tiedot tallennettu:");
             this.io.print("Otsikko: " + otsikko);
             this.io.print("Kuvaus: " + kuvaus);
