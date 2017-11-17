@@ -31,3 +31,11 @@ dependencies {
 */
 
 apply plugin: 'java'
+
+apply plugin: 'application'
+mainClassName = 'Main'
+
+dependencies {
+	//sqlite driver. Käytetään DAOissa.
+	compile files('libs/sqlite-jdbc-3.21.0.jar')
+}
