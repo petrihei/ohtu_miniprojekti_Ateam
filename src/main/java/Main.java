@@ -14,14 +14,10 @@ public class Main {
 
     	Tietokanta db = new Tietokanta("jdbc:sqlite:TietokantaTest1.db");
         //Logiikka logiikka = new Logiikka(db);
-	    IO io = new KonsoliIO();
+	IO io = new KonsoliIO();
 
         Tekstikayttis kali = new Tekstikayttis(io);
     	//Tekstikayttis kali = new Tekstikayttis(logiikka, io);
-
-        Tekstikayttis kali = new Tekstikayttis();
-        //Logiikka l = new Logiikka();
-        //Tekstikayttis kali = new Tekstikayttis(l);
         kali.kayttoliittyma();
     }
 }
