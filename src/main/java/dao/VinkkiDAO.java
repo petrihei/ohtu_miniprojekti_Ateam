@@ -24,11 +24,11 @@ public class VinkkiDAO {
      * Lisää tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
      * @param lisattava Vinkki-olio, joka lisätään tietokantaan.
      */
-    public void lisaaVinkki(Vinkki lisattava) {
+    public boolean lisaaVinkki(Vinkki lisattava) {
         // Luodaan yhteys tietokantaan.
         Connection conn = this.db.getConnection();
         if(conn == null) {
-            return;
+            return false;
         }
         // Luodaan kysely.
         PreparedStatement stmt;
@@ -37,7 +37,7 @@ public class VinkkiDAO {
             stmt = conn.prepareStatement("INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)");
         } catch(SQLException e){
             System.err.println("SQL kyselyn muodostus epäonnistui, " + e);
-            return;
+            return false;
         }
         try {
             //Syötetään Vinkin attribuutit kyselyyn.
@@ -46,13 +46,15 @@ public class VinkkiDAO {
             stmt.setString(3, lisattava.getTyyppi());
         } catch(SQLException e){
             System.err.println("SQL kyselyn arvojen sijoitus epäonnistui, " + e);
-            return;
+            return false;
         }
         try {
             //Suoritetaan kysely.
             stmt.executeUpdate();
         } catch(SQLException e){
             System.err.println("SQL kyselyn suorittaminen epäonnistui, " + e);
+            return false;
         }
+        return true;
     }
 }
