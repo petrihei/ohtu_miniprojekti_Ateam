@@ -11,39 +11,22 @@ import tietokantaobjektit.Vinkki;
  */
 public class VinkkiDAO {
     
-    private String jdbcAddress;
+    private Tietokanta db;
     
     /**
-     * Parametri "jdbc:sqlite:TietokantaTest1.db" näyttää toimivan.
-     * @param jdbcAddress osoite, jota DAO käyttää.
+     * @param db Tietokanta, jota DAO tulee käyttämään.
      */
-    public VinkkiDAO(String jdbcAddress) {
-        this.jdbcAddress = jdbcAddress;
-    }
-    
-    /**
-     * Luo yhteyden tietokantaan sqlite driverin avulla.
-     * @return java.sql.Connection tyyppinen yhteys.
-     */
-    private Connection getConnection(){
-        Connection conn;
-        try {
-                conn = DriverManager.getConnection(this.jdbcAddress);
-        } catch(SQLException e) {
-                // Älähtää, jos jdbcAddress on huono.
-                System.err.println("Yhteyden muodostus tietokantaan epäonnistui, " + e);
-                return null;
-        }
-        return conn;
+    public VinkkiDAO(Tietokanta db) {
+        this.db = db;
     }
     
     /**
      * Lisää tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
-     * @param lisattava 
+     * @param lisattava Vinkki-olio, joka lisätään tietokantaan.
      */
     public void lisaaVinkki(Vinkki lisattava) {
         // Luodaan yhteys tietokantaan.
-        Connection conn = getConnection();
+        Connection conn = this.db.getConnection();
         if(conn == null) {
             return;
         }
