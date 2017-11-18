@@ -39,3 +39,11 @@ dependencies {
 	//sqlite driver. Käytetään DAOissa.
 	compile files('libs/sqlite-jdbc-3.21.0.jar')
 }
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
