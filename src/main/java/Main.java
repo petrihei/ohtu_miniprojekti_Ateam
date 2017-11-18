@@ -9,8 +9,10 @@ public class Main {
     public static void main(String[] args) {
         Tietokanta db = new Tietokanta("jdbc:sqlite:TietokantaTest1.db");
         Logiikka logiikka = new Logiikka(db);
-	      IO io = new KonsoliIO();
-    	  Tekstikayttis kali = new Tekstikayttis(logiikka, io);
+	IO io = new KonsoliIO();
+    	Tekstikayttis kali = new Tekstikayttis(io);
+	//tätä konstruktoria voi käyttää, kun kommentit luokassa on poistettu
+	//Tekstikayttis kali = new Tekstikayttis(logiikka, io);
         kali.kayttoliittyma();
         //tätä voi käyttää kirjan lisäykseen, kun kommentit metodissa on poistettu
         //kali.kirjanLisays();
