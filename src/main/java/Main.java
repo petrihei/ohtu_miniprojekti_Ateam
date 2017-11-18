@@ -19,6 +19,6 @@ public class Main {
         Vinkki vinkki = new Vinkki("Testiotsikko", "Testikuvaus", "Kirja");
         if (logiikka.lisaaVinkki(vinkki)) {
             System.out.println("Vinkki lisätty");
-
+	}
     }
 }
