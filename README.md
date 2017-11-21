@@ -18,9 +18,12 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
 ## Travis
 [![Build status](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam.svg?branch=master)](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam)
 
+
+<!--
 ## jacoco
 
 [![codecov](https://codecov.io/gh/petrihei/ohtu_miniprojekti_Ateam/branch/master/graph/badge.svg)](https://codecov.io/gh/petrihei/ohtu_miniprojekti_Ateam)
+-->
 
 
 ## Ohjelman asennus- ja käyttöohje
