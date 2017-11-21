@@ -1,22 +1,18 @@
 package tekstikayttis;
 
 import tietokantaobjektit.Vinkki;
+import logiikka.Logiikka;
+
 
 /**
  * Created by hanna-leena on 17/11/17.
  */
 public class Tekstikayttis {
-    //private Logiikka logiikka;
+    private Logiikka logiikka;
     private IO io;
-    /*
+    
     public Tekstikayttis(Logiikka l, IO io){
         this.logiikka = l;
-        this.io = io;
-    }
-    */
-
-    //konstruktori testikäyttöön ennen kuin logiikka on valmis
-    public Tekstikayttis(IO io){
         this.io = io;
         io.print("***********************");
         io.print("*     Vinkkilista     *");
@@ -56,8 +52,7 @@ public class Tekstikayttis {
         Vinkki vinkki = new Vinkki(otsikko, kuvaus, "Kirja");
 
         this.io.print("");
-        /* kutsutaan sovelluslogiikka-luokan metodia lisaaVinkki, joka
-        palauttaa true, kun on lähettänyt tallennettavat tiedot eteenpäin
+        
         if(this.logiikka.lisaaVinkki(vinkki)){
             this.io.print("Seuraavat tiedot tallennettu:");
             this.io.print("Otsikko: " + otsikko);
@@ -65,11 +60,5 @@ public class Tekstikayttis {
         } else {
             this.io.print("Tallennus epäonnistui");
         }
-        */
-        //Alla oleva testikäyttöön, poistetaan kun if-lause saadaan toimimaan
-        this.io.print("Seuraavat tiedot tallennettu:");
-        this.io.print("Otsikko: " + otsikko);
-        this.io.print("Kuvaus: " + kuvaus);
-        return;
     }
 }
