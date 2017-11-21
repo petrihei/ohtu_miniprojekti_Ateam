@@ -46,10 +46,10 @@ public class Stepdefs {
 		assertTrue(arrayContainsSubstring(io.getOutputs(), description));
 	}
 
-  private boolean arrayContainsSubstring(List<String> list, String substr) {
-    for (String str : list) {
-		if (str.contains(substr)) return true;
+	private boolean arrayContainsSubstring(List<String> list, String substr) {
+    	for (String str : list) {
+			if (str.contains(substr)) return true;
+		}
+		return false;
 	}
-    return false;
-  }
 }
