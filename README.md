@@ -24,4 +24,6 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
 
 
 ## Ohjelman asennus- ja käyttöohje
-TBD
+* gradle build
+* gradle run
+* Tallenna vinkkejä
