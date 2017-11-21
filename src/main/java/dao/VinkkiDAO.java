@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import tietokantaobjektit.Vinkki;
 
@@ -56,5 +58,24 @@ public class VinkkiDAO {
             return false;
         }
         return true;
+    }
+    
+    public List<Vinkki> kaikkiVinkit() {
+        List<Vinkki> vinkit = new ArrayList();
+        String query = "SELECT * FROM Vinkki";
+        
+        // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
+        try (Connection conn = this.db.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery()) {
+            
+            while (result.next()) {
+                vinkit.add(new Vinkki(result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQL kysely epäonnistui, " + ex);
+        }
+
+        return vinkit;
     }
 }

@@ -14,6 +14,9 @@ public class Main {
         kali.kayttoliittyma();
       
         // Lisää vinkin tietokantaan. Suorita ja katso esim sqlite3:lla.
-
+        VinkkiDAO dao = new VinkkiDAO(db);
+        for (Vinkki v : dao.kaikkiVinkit()) {
+            System.out.println(v.getOtsikko());
+        }
     }
 }
