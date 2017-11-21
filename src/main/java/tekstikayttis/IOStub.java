@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author petriheinonen
  */
 public class IOStub implements IO{
-    
+
     String[] inputs;
     ArrayList<String> inputList;
     int mones;
@@ -41,7 +41,7 @@ public class IOStub implements IO{
     public void print(String m) {
         outputs.add(m);
     }
-    
+
     public ArrayList<String> getOutputs(){
         return this.outputs;
     }

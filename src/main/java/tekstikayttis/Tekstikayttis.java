@@ -18,15 +18,6 @@ public class Tekstikayttis {
         io.print("*     Vinkkilista     *");
         io.print("***********************");
     }
-    
-
-    //konstruktori testikäyttöön ennen kuin logiikka on valmis
-    public Tekstikayttis(IO io){
-        this.io = io;
-        io.print("***********************");
-        io.print("*     Vinkkilista     *");
-        io.print("***********************");
-    }
 
     public void kayttoliittyma(){
         String valinta = "x";
@@ -61,19 +52,13 @@ public class Tekstikayttis {
         Vinkki vinkki = new Vinkki(otsikko, kuvaus, "Kirja");
 
         this.io.print("");
-        //kutsutaan sovelluslogiikka-luokan metodia lisaaVinkki, joka
-        //palauttaa true, kun on lähettänyt tallennettavat tiedot eteenpäin
-//        if(this.logiikka.lisaaVinkki(vinkki)){
-//            this.io.print("Seuraavat tiedot tallennettu:");
-//            this.io.print("Otsikko: " + otsikko);
-//            this.io.print("Kuvaus: " + kuvaus);
-//        } else {
-//            this.io.print("Tallennus epäonnistui");
-//        }
         
-        //Alla oleva testikäyttöön, poistetaan kun if-lause saadaan toimimaan
-        this.io.print("Seuraavat tiedot tallennettu:");
-        this.io.print("Otsikko: " + otsikko);
-        this.io.print("Kuvaus: " + kuvaus);
+        if(this.logiikka.lisaaVinkki(vinkki)){
+            this.io.print("Seuraavat tiedot tallennettu:");
+            this.io.print("Otsikko: " + otsikko);
+            this.io.print("Kuvaus: " + kuvaus);
+        } else {
+            this.io.print("Tallennus epäonnistui");
+        }
     }
 }
