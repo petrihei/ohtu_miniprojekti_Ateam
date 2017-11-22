@@ -45,4 +45,11 @@ public class Vinkki {
 	public String getTyyppi() {
 		return this.tyyppi;
 	}
+
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.tyyppi + ": " + this.otsikko + "\n");
+		sb.append("  Kuvaus: " + this.kuvaus);
+		return sb.toString();
+	}
 }
