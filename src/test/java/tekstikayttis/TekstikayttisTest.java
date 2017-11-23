@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tekstikayttis;
 
 
@@ -33,6 +29,7 @@ public class TekstikayttisTest {
         kayttis.tulostaToiminnallisuudet();
         
         assertEquals("Valitse toiminnallisuus:", io.outputs.get(4));
+        //muiden testaus?
     }
     
     @Test
@@ -61,6 +58,8 @@ public class TekstikayttisTest {
         
         assertEquals("Valitse toiminnallisuus:", io.outputs.get(4));
     }
+    
+    //listauksen testaus
     
 }
     

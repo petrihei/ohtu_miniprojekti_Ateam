@@ -28,13 +28,12 @@ public class Tekstikayttis {
                 this.kirjanLisays();
             } else if (valinta.equals("2")){
                 this.vinkkienTulostus();
-            } else if(valinta.equals("0")){
-                System.out.println("Kiitos vinkkilistan käytöstä!");
             } else {
                 System.out.println("Virheellinen valinta");
             }
 
         }
+        System.out.println("Kiitos vinkkilistan käytöstä!");
     }
 
     public String tulostaToiminnallisuudet(){
@@ -44,8 +43,8 @@ public class Tekstikayttis {
         this.io.print("2: Selaa vinkkejä");
         this.io.print("0: Poistu");
         this.io.print("");
-        String s = this.io.nextLine();
-        return s;
+        return this.io.nextLine();
+
     }
 
     public void kirjanLisays(){
