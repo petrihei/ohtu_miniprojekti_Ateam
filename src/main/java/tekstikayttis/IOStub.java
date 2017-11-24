@@ -20,12 +20,12 @@ public class IOStub implements IO{
 
     public IOStub(String... inputs) {
         this.inputs = inputs;
-        this.outputs = new ArrayList<String>();
+        this.outputs = new ArrayList<>();
     }
 
     public IOStub(ArrayList<String> inputs){
         this.inputList = inputs;
-        this.outputs = new ArrayList<String>();
+        this.outputs = new ArrayList<>();
     }
 
     public String nextLine() {

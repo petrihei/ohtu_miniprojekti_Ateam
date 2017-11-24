@@ -9,10 +9,11 @@ import logiikka.Logiikka;
  * Created by hanna-leena on 17/11/17.
  */
 public class Tekstikayttis {
+
     private Logiikka logiikka;
     private IO io;
-    
-    public Tekstikayttis(Logiikka l, IO io){
+
+    public Tekstikayttis(Logiikka l, IO io) {
         this.logiikka = l;
         this.io = io;
         io.print("***********************");
@@ -20,23 +21,23 @@ public class Tekstikayttis {
         io.print("***********************");
     }
 
-    public void kayttoliittyma(){
-        String valinta = "x";
-        while(!valinta.equals("0")){
-            valinta = this.tulostaToiminnallisuudet();
-            if(valinta.equals("1")){
+    public void kayttoliittyma() {
+        String valinta = this.tulostaToiminnallisuudet();
+        while (!valinta.equals("0")) {
+
+            if (valinta.equals("1")) {
                 this.kirjanLisays();
-            } else if (valinta.equals("2")){
+            } else if (valinta.equals("2")) {
                 this.vinkkienTulostus();
             } else {
                 System.out.println("Virheellinen valinta");
             }
-
+            valinta = this.tulostaToiminnallisuudet();
         }
         System.out.println("Kiitos vinkkilistan käytöstä!");
     }
 
-    public String tulostaToiminnallisuudet(){
+    public String tulostaToiminnallisuudet() {
         this.io.print("");
         this.io.print("Valitse toiminnallisuus:");
         this.io.print("1: Lisää vinkkilistaan");
@@ -47,7 +48,7 @@ public class Tekstikayttis {
 
     }
 
-    public void kirjanLisays(){
+    public void kirjanLisays() {
         this.io.print("Anna vinkin otsikko:");
         String otsikko = this.io.nextLine();
         this.io.print("Anna vinkin kuvaus:");
@@ -55,8 +56,8 @@ public class Tekstikayttis {
         Vinkki vinkki = new Vinkki(otsikko, kuvaus, "Kirja");
 
         this.io.print("");
-        
-        if(this.logiikka.lisaaVinkki(vinkki)){
+
+        if (this.logiikka.lisaaVinkki(vinkki)) {
             this.io.print("Seuraavat tiedot tallennettu:");
             this.io.print("Otsikko: " + otsikko);
             this.io.print("Kuvaus: " + kuvaus);
@@ -65,16 +66,16 @@ public class Tekstikayttis {
         }
     }
 
-    public void vinkkienTulostus(){
+    public void vinkkienTulostus() {
         List<Vinkki> vinkit = logiikka.kaikkiVinkit();
-        if(vinkit == null){
+        if (vinkit == null) {
             this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
         } else {
-            this.io.print("Kaikki vinkit: ");
+            this.io.print("Kaikki vinkit:");
             this.io.print("**************");
             for (Vinkki vinkki : vinkit) {
                 this.io.print(vinkki.toString());
-                this.io.print("\n  *****  \n");
+                this.io.print("*****  \n");
             }
         }
 
