@@ -1,5 +1,7 @@
 package logiikka;
 
+import java.util.List;
+
 import dao.Tietokanta;
 import dao.VinkkiDAO;
 import tietokantaobjektit.Vinkki;
@@ -7,13 +9,18 @@ import tietokantaobjektit.Vinkki;
 public class Logiikka {
     
     private Tietokanta db;
+    private VinkkiDAO vinkkiDao;
     
     public Logiikka(Tietokanta db) {
         this.db = db;
+        this.vinkkiDao = new VinkkiDAO(db);
     }
 
     public boolean lisaaVinkki(Vinkki vinkki) {
-        VinkkiDAO dao = new VinkkiDAO(db);
-        return dao.lisaaVinkki(vinkki);
+        return vinkkiDao.lisaaVinkki(vinkki);
+    }
+
+    public List<Vinkki> kaikkiVinkit(){
+        return vinkkiDao.kaikkiVinkit();
     }
 }

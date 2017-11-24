@@ -7,9 +7,10 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
 
 * Task on valmis ('done'), kun
   * sen kuvaama toiminnallisuus on toteutettu
-  * testikattavuus on riittävä (toistaiseksi riittävä testikattavuus on > 80%.)
-  * toinen ryhmän jäsen on suorittanut koodin katselmoinnin.
-  * Koodi on kirjoitettu niin selkeästi, että muutkin sitä ymmärtävät ja tarvittaessa kommentoitua.
+  * testikattavuus on riittävä (toistaiseksi riittävä testikattavuus on > 80%)
+  * koko ohjelma toimii, kun ajetaan 'gradle run' ennen pull requestin tekemistä
+  * toinen ryhmän jäsen on suorittanut koodin katselmoinnin
+  * koodi on kirjoitettu niin selkeästi, että muutkin sitä ymmärtävät ja tarvittaessa kommentoitua.
 * User story on valmis, kun
   * kaikki siihen liittyvät taskit ovat valmiita
   * toteutus täyttää hyväksymisehdot (Acceptance criteria).
