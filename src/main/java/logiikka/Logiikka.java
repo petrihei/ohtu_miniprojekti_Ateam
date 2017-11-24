@@ -17,7 +17,7 @@ public class Logiikka {
     }
 
     public boolean lisaaVinkki(Vinkki vinkki) {
-        return vinkkiDao.lisaaVinkki(vinkki);
+        return vinkkiDao.lisaaVinkki(vinkki) != -1;
     }
 
     public List<Vinkki> kaikkiVinkit(){

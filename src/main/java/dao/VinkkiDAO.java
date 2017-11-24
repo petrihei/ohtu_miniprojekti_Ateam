@@ -8,8 +8,7 @@ import tietokantaobjektit.Vinkki;
 
 /**
  *
- * @author Chamion
- * DAO luokalle tietokantaobjektit.Vinkki
+ * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
  */
 public class VinkkiDAO {
 
@@ -26,9 +25,12 @@ public class VinkkiDAO {
      * Lisää tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
      *
      * @param lisattava Vinkki-olio, joka lisätään tietokantaan.
+     * @return long Palauttaa onnistuneen lisäyksen uuden ID:n tai
+     * epäonnistuessa -1.
      */
-    public boolean lisaaVinkki(Vinkki lisattava) {
+    public long lisaaVinkki(Vinkki lisattava) {
         String query = "INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)";
+        long uusiId = -1;
 
         // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
         try (Connection conn = this.db.getConnection();
@@ -37,12 +39,20 @@ public class VinkkiDAO {
             stmt.setString(2, lisattava.getKuvaus());
             stmt.setString(3, lisattava.getTyyppi());
             stmt.executeUpdate();
+
+            // Hae uusi ID:
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    uusiId = rs.getLong(1);
+                }
+            } catch (Exception e) {};
+            
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
-            return false;
+            return -1;
         }
 
-        return true;
+        return uusiId;
     }
 
     public List<Vinkki> kaikkiVinkit() {

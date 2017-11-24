@@ -8,9 +8,9 @@ package tietokantaobjektit;
 public class Vinkki {
 	
 	// Vastaavat tietokantataulun sarakkeita.
-	private String otsikko;
-	private String kuvaus;
-	private String tyyppi;
+	protected String otsikko;
+	protected String kuvaus;
+	protected String tyyppi;
 	
 	// Toistaiseksi ainut konstruktori. Ylikuormitus myöhemmin.
 	public Vinkki(String otsikko, String kuvaus, String tyyppi) {
