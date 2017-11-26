@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tietokantaobjektit.Kirja;
+import tietokantaobjektit.Tag;
 
 public class KirjaDAOTest {
     
@@ -33,5 +34,24 @@ public class KirjaDAOTest {
         assertEquals("kuv", lisatty.getKuvaus());
         assertEquals("isb", lisatty.getIsbn());
         assertEquals("kirj", lisatty.getKirjailija());
+    }
+    
+    @Test
+    public void kirjanVoiLisataTagilla() {
+        Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
+        lisattava.lisaaTag(new Tag("tagi"));
+        long id = dao.lisaaKirja(lisattava);
+        assertTrue(id != -1);
+    }
+    
+    @Test
+    public void haetullaKirjallaOnTag() {
+        Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
+        lisattava.lisaaTag(new Tag("tagi1"));
+
+        long id = dao.lisaaKirja(lisattava);
+        Kirja lisatty = dao.haeKirja(id);
+        
+        assertEquals("tagi1", lisatty.getTagit().get(0));
     }
 }

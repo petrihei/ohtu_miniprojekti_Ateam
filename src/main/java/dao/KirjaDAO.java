@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
+import tietokantaobjektit.Tag;
 
 public class KirjaDAO {
 
@@ -47,10 +48,10 @@ public class KirjaDAO {
         }
 
         // Lisätään Kirja ja yhdistetään Vinkkiin.
-        String query = "INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)";
+        String kirjaAddQuery = "INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)";
 
         try (Connection conn = this.db.getConnection();
-                PreparedStatement st = conn.prepareStatement(query)) {
+                PreparedStatement st = conn.prepareStatement(kirjaAddQuery)) {
             st.setLong(1, vinkkiId);
             st.setString(2, lisattava.getIsbn());
             st.setString(3, lisattava.getKirjailija());

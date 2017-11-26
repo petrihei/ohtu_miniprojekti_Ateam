@@ -3,6 +3,7 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import tietokantaobjektit.Tag;
 
 import tietokantaobjektit.Vinkki;
 
@@ -30,7 +31,7 @@ public class VinkkiDAO {
      */
     public long lisaaVinkki(Vinkki lisattava) {
         String query = "INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)";
-        long uusiId = -1;
+        long vinkkiId = -1;
 
         // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
         try (Connection conn = this.db.getConnection();
@@ -43,16 +44,37 @@ public class VinkkiDAO {
             // Hae uusi ID:
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    uusiId = rs.getLong(1);
+                    vinkkiId = rs.getLong(1);
                 }
-            } catch (Exception e) {};
+            } catch (Exception e) {}
             
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
+        
+        // Lisätään vinkin tagit.
+        TagDAO tagDao = new TagDAO(db);
+        for (Tag tag : lisattava.getTagit()) {
+            // Lisätään tag.
+            long tagId = tagDao.lisaaTag(tag);
+            
+            // Liitetään tag Vinkkiin.
+            String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
 
-        return uusiId;
+            try (Connection conn = this.db.getConnection();
+                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {
+                st.setLong(1, vinkkiId);
+                st.setLong(2, tagId);
+                st.executeUpdate();
+
+            } catch (SQLException ex) {
+                System.out.println("SQL kysely epäonnistui: " + ex);
+                return -1;
+            }
+        }
+
+        return vinkkiId;
     }
 
     public List<Vinkki> kaikkiVinkit() {
