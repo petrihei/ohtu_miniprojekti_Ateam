@@ -14,38 +14,53 @@ public class KirjaDAO {
         this.db = db;
     }
 
+    public Kirja haeKirja(long id) {
+        Kirja kirja = null;
+        String query = "SELECT * FROM Vinkki"
+                + " JOIN Kirja ON vinkki.vinkki_id = kirja.vinkki"
+                + " WHERE vinkki.vinkki_id = ?";
+
+        try (Connection conn = this.db.getConnection();
+                PreparedStatement st = conn.prepareStatement(query)) {
+            st.setLong(1, id);
+            ResultSet result = st.executeQuery();
+            result.next();
+            
+            kirja = new Kirja(result.getString("otsikko"),
+                    result.getString("kuvaus"),
+                    result.getString("isbn"),
+                    result.getString("kirjailija"));
+        } catch (SQLException ex) {
+            System.out.println("SQL kysely epäonnistui: " + ex);
+        }
+
+        return kirja;
+    }
+
     public long lisaaKirja(Kirja lisattava) {
         // Lisätään ensin Vinkki.
         VinkkiDAO vinkkiDao = new VinkkiDAO(db);
         long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);
-        
+
         if (vinkkiId == -1) {
             return -1;
         }
 
         // Lisätään Kirja ja yhdistetään Vinkkiin.
         String query = "INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)";
-        long uusiId = -1;
 
         try (Connection conn = this.db.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setLong(1, vinkkiId);
-            stmt.setString(2, lisattava.getIsbn());
-            stmt.setString(3, lisattava.getKirjailija());
-            stmt.executeUpdate();
-            
-            // Hae uusi ID:
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    uusiId = rs.getLong(1);
-                }
-            } catch (Exception e) {};
-            
+                PreparedStatement st = conn.prepareStatement(query)) {
+            st.setLong(1, vinkkiId);
+            st.setString(2, lisattava.getIsbn());
+            st.setString(3, lisattava.getKirjailija());
+            st.executeUpdate();
+
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
 
-        return uusiId;
+        return vinkkiId;
     }
 }
