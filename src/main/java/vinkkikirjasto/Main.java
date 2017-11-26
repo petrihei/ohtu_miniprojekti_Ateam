@@ -1,3 +1,5 @@
+package vinkkikirjasto;
+
 
 import dao.Tietokanta;
 import tekstikayttis.*;
