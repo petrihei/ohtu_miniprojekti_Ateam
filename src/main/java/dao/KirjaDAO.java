@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
+import tietokantaobjektit.Tag;
 
 public class KirjaDAO {
 
@@ -18,8 +19,10 @@ public class KirjaDAO {
         Kirja kirja = null;
         String query = "SELECT * FROM Vinkki"
                 + " JOIN Kirja ON vinkki.vinkki_id = kirja.vinkki"
-                + " WHERE vinkki.vinkki_id = ?";
-
+                + " LEFT JOIN (SELECT * FROM Tag, VinkkiTag"
+                + " WHERE Tag.tag_id = VinkkiTag.tag) AS R"
+                + " ON Vinkki.vinkki_id = R.vinkki"
+                + " WHERE vinkki.vinkki_id = ? ;";
         try (Connection conn = this.db.getConnection();
                 PreparedStatement st = conn.prepareStatement(query)) {
             st.setLong(1, id);
@@ -30,6 +33,13 @@ public class KirjaDAO {
                         result.getString("kuvaus"),
                         result.getString("isbn"),
                         result.getString("kirjailija"));
+                do {
+                    String tagString = result.getString("tag");
+                    if(tagString != null) {
+                        Tag tag = new Tag(tagString);
+                        kirja.lisaaTag(tag);
+                    }
+                } while(result.next());
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);

@@ -52,6 +52,6 @@ public class KirjaDAOTest {
         long id = dao.lisaaKirja(lisattava);
         Kirja lisatty = dao.haeKirja(id);
         
-        assertEquals("tagi1", lisatty.getTagit().get(0));
+        assertEquals("tagi1", lisatty.getTagit().get(0).getTag());
     }
 }
