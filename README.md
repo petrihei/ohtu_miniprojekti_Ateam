@@ -19,6 +19,8 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
 ## Travis
 [![Build status](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam.svg?branch=master)](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam)
 
+## Testikattavuusraportti
+http://htmlpreview.github.io/?https://github.com/petrihei/ohtu_miniprojekti_Ateam/blob/testauskattavuusraportti/testauskattavuusraportti/index.html
 
 <!--
 ## jacoco
