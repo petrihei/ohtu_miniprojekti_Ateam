@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VinkkiDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">VinkkiDAO.java</span></div><h1>VinkkiDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import tietokantaobjektit.Vinkki;
+
+/**
+ *
+ * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
+ */
+public class VinkkiDAO {
+
+    private Tietokanta db;
+
+    /**
+     * @param db Tietokanta, jota DAO tulee käyttämään.
+     */
+<span class="fc" id="L20">    public VinkkiDAO(Tietokanta db) {</span>
+<span class="fc" id="L21">        this.db = db;</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * Lisää tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
+     *
+     * @param lisattava Vinkki-olio, joka lisätään tietokantaan.
+     * @return long Palauttaa onnistuneen lisäyksen uuden ID:n tai
+     * epäonnistuessa -1.
+     */
+    public long lisaaVinkki(Vinkki lisattava) {
+<span class="fc" id="L32">        String query = &quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)&quot;;</span>
+<span class="fc" id="L33">        long uusiId = -1;</span>
+
+        // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
+<span class="pc" id="L36">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L37">                PreparedStatement stmt = conn.prepareStatement(query)) {</span>
+<span class="fc" id="L38">            stmt.setString(1, lisattava.getOtsikko());</span>
+<span class="fc" id="L39">            stmt.setString(2, lisattava.getKuvaus());</span>
+<span class="fc" id="L40">            stmt.setString(3, lisattava.getTyyppi());</span>
+<span class="fc" id="L41">            stmt.executeUpdate();</span>
+
+            // Hae uusi ID:
+<span class="pc" id="L44">            try (ResultSet rs = stmt.getGeneratedKeys()) {</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">                if (rs.next()) {</span>
+<span class="fc" id="L46">                    uusiId = rs.getLong(1);</span>
+                }
+<span class="pc bpc" id="L48" title="6 of 8 branches missed.">            } catch (Exception e) {};</span>
+            
+<span class="pc bpc" id="L50" title="12 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc" id="L51">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="nc" id="L52">            return -1;</span>
+<span class="fc" id="L53">        }</span>
+
+<span class="fc" id="L55">        return uusiId;</span>
+    }
+
+    public List&lt;Vinkki&gt; kaikkiVinkit() {
+<span class="fc" id="L59">        List&lt;Vinkki&gt; vinkit = new ArrayList();</span>
+<span class="fc" id="L60">        String query = &quot;SELECT * FROM Vinkki&quot;;</span>
+
+        // try-with-resource sulkee suluissa määriteltyjen yhteydet try-osan jälkeen.
+<span class="pc" id="L63">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L64">                PreparedStatement stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L65">                ResultSet result = stmt.executeQuery()) {</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            while (result.next()) {</span>
+<span class="fc" id="L68">                vinkit.add(new Vinkki(result.getString(&quot;otsikko&quot;), result.getString(&quot;kuvaus&quot;), result.getString(&quot;tyyppi&quot;)));</span>
+            }
+<span class="pc bpc" id="L70" title="18 of 24 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc" id="L71">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="fc" id="L72">        }</span>
+
+<span class="fc" id="L74">        return vinkit;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
