@@ -34,4 +34,18 @@ public class TagDAOTest {
         
         assertEquals("Tagi", lisatty.getTag());
     }
+    
+    @Test
+    public void huonoTietokantaPalauttaaNeg1Lisatessa() {
+        Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
+        TagDAO huonoDao = new TagDAO(huonoDB);
+        assertEquals(-1, huonoDao.lisaaTag(new Tag("tagii")));
+    }
+    
+    @Test
+    public void huonoTietokantaPalauttaaNullHakiessa() {
+        Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
+        TagDAO huonoDao = new TagDAO(huonoDB);
+        assertEquals(null, huonoDao.haeTag(1));
+    }
 }

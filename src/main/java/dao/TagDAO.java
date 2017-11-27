@@ -22,7 +22,6 @@ public class TagDAO {
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, lisattava.getTag());
             stmt.executeUpdate();
-
             // Hae uusi ID:
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
