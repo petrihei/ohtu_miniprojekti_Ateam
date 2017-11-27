@@ -4,6 +4,7 @@ import java.util.List;
 
 import tietokantaobjektit.Vinkki;
 import logiikka.Logiikka;
+import tietokantaobjektit.Tag;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -27,8 +28,10 @@ public class Tekstikayttis {
 
             if (valinta.equals("1")) {
                 this.kirjanLisays();
+                //this.vinkinLisays();
             } else if (valinta.equals("2")) {
                 this.vinkkienTulostus();
+                //this.vinkkienJaTietojenTulostus();
             } else {
                 System.out.println("Virheellinen valinta");
             }
@@ -48,12 +51,19 @@ public class Tekstikayttis {
 
     }
 
+    public void vinkinLisays() {
+        //kun lisaystoiminto valitaan, selvitetään ensin tyyppi
+        //ja sen mukaan kysytään lisätietoja
+    }
+
     public void kirjanLisays() {
+        //tästä kirja-tyypin vinkin lisaava metodi
+        //kutsuu lisaaKirja-metodia kirjaoliolle
         this.io.print("Anna vinkin otsikko:");
         String otsikko = this.io.nextLine();
         this.io.print("Anna vinkin kuvaus:");
         String kuvaus = this.io.nextLine();
-        Vinkki vinkki = new Vinkki(otsikko, kuvaus, "Kirja");
+        Vinkki vinkki = new Vinkki(otsikko, kuvaus, "kirja");
 
         this.io.print("");
 
@@ -76,6 +86,28 @@ public class Tekstikayttis {
             for (Vinkki vinkki : vinkit) {
                 this.io.print(vinkki.toString());
                 this.io.print("*****  \n");
+            }
+        }
+
+    }
+
+    public void vinkkienJaTietojenTulostus() {
+        List<Vinkki> vinkit = logiikka.haeKaikkiVinkit();
+        if (vinkit == null) {
+            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
+        } else {
+            this.io.print("Kaikki vinkit:");
+            this.io.print("**************");
+            for (Vinkki vinkki : vinkit) {
+                System.out.println(vinkki.toString());
+                if (vinkki.getTagit() == null) {
+                    System.out.println("ei tageja");
+                } else {
+                    for (Tag tag : vinkki.getTagit()) {
+                        System.out.println(tag.getTag());
+                    }
+                }
+
             }
         }
 

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
-import tietokantaobjektit.Tag;
 
 public class KirjaDAO {
 
@@ -25,12 +24,13 @@ public class KirjaDAO {
                 PreparedStatement st = conn.prepareStatement(query)) {
             st.setLong(1, id);
             ResultSet result = st.executeQuery();
-            result.next();
-            
-            kirja = new Kirja(result.getString("otsikko"),
-                    result.getString("kuvaus"),
-                    result.getString("isbn"),
-                    result.getString("kirjailija"));
+
+            if (result.next()) {
+                kirja = new Kirja(result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("isbn"),
+                        result.getString("kirjailija"));
+            }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
         }
