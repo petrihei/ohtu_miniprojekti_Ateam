@@ -1,5 +1,8 @@
 package tietokantaobjektit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Chamion
@@ -11,6 +14,7 @@ public class Vinkki {
 	protected String otsikko;
 	protected String kuvaus;
 	protected String tyyppi;
+    protected List<Tag> tagit;
 	
 	// Toistaiseksi ainut konstruktori. Ylikuormitus myöhemmin.
 	public Vinkki(String otsikko, String kuvaus, String tyyppi) {
@@ -20,6 +24,7 @@ public class Vinkki {
 		this.otsikko = otsikko;
 		this.kuvaus = kuvaus;
 		this.tyyppi = tyyppi;
+        this.tagit = new ArrayList<>();
 	}
 	
 	public void setOtsikko(String otsikko) {
@@ -45,6 +50,14 @@ public class Vinkki {
 	public String getTyyppi() {
 		return this.tyyppi;
 	}
+    
+    public List<Tag> getTagit() {
+        return tagit;
+    }
+
+    public void lisaaTag(Tag tag) {
+        this.tagit.add(tag);
+    }
 
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
