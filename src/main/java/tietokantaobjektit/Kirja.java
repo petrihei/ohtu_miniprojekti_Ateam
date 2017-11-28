@@ -6,7 +6,7 @@ public class Kirja extends Vinkki {
     private String kirjailija;
 
     public Kirja(String otsikko, String kuvaus, String isbn, String kirjailija) {
-        super(otsikko, kuvaus, "Kirja");
+        super(otsikko, kuvaus, "kirja");
         this.isbn = isbn;
         this.kirjailija = kirjailija;
     }
@@ -33,7 +33,11 @@ public class Kirja extends Vinkki {
         sb.append(this.tyyppi).append(": ").append(this.otsikko).append("\n")
                 .append("  Kuvaus: ").append(this.kuvaus).append("\n")
                 .append("  ISBN: ").append(this.isbn).append("\n")
-                .append("  Kirjailija: ").append(this.kirjailija);
+                .append("  Kirjailija: ").append(this.kirjailija).append("\n")
+                .append("  Tagit: ");
+        for (Tag tag : this.tagit){
+            sb.append(tag.getTag()).append(" ");
+        }
         return sb.toString();
     }
 }

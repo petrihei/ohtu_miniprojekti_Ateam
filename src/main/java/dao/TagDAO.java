@@ -22,7 +22,6 @@ public class TagDAO {
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, lisattava.getTag());
             stmt.executeUpdate();
-
             // Hae uusi ID:
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -36,5 +35,22 @@ public class TagDAO {
         }
 
         return uusiId;
+    }
+    
+    public Tag haeTag(long id) {
+        Tag tag = null;
+        String query = "SELECT * FROM Tag WHERE tag_id = ?";
+
+        try (Connection conn = this.db.getConnection();
+                PreparedStatement st = conn.prepareStatement(query)) {
+            st.setLong(1, id);
+            ResultSet result = st.executeQuery();
+            result.next();
+            tag = new Tag(result.getString("tag"));
+        } catch (SQLException ex) {
+            System.out.println("SQL kysely epäonnistui: " + ex);
+        }
+
+        return tag;
     }
 }

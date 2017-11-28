@@ -3,8 +3,7 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import tietokantaobjektit.Vinkki;
+import tietokantaobjektit.*;
 
 /**
  *
@@ -30,7 +29,7 @@ public class VinkkiDAO {
      */
     public long lisaaVinkki(Vinkki lisattava) {
         String query = "INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)";
-        long uusiId = -1;
+        long vinkkiId = -1;
 
         // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
         try (Connection conn = this.db.getConnection();
@@ -40,19 +39,68 @@ public class VinkkiDAO {
             stmt.setString(3, lisattava.getTyyppi());
             stmt.executeUpdate();
 
-            // Hae uusi ID:
+            // Hae uusi ID ja aseta se oliolle:
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    uusiId = rs.getLong(1);
+                    vinkkiId = rs.getLong(1);
+                    lisattava.setId(vinkkiId);
                 }
-            } catch (Exception e) {};
-            
+            } catch (Exception e) {
+            }
+
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
 
-        return uusiId;
+        // Lisätään vinkin tagit.
+//        TagDAO tagDao = new TagDAO(db);
+//        for (Tag tag : lisattava.getTagit()) {
+//            // Lisätään tag.
+//            long tagId = tagDao.lisaaTag(tag);
+//
+//            // Liitetään tag Vinkkiin.
+//            String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
+//
+//            try (Connection conn = this.db.getConnection();
+//                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {
+//                st.setLong(1, vinkkiId);
+//                st.setLong(2, tagId);
+//                st.executeUpdate();
+//
+//            } catch (SQLException ex) {
+//                System.out.println("SQL kysely epäonnistui: " + ex);
+//                return -1;
+//            }
+//        }
+        if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
+            return -1;
+        }
+
+        return vinkkiId;
+    }
+
+    public boolean lisaaVinkkiTag(List<Tag> tagit, long vinkkiId) {
+        TagDAO tagDao = new TagDAO(db);
+        for (Tag tag : tagit) {
+            // Lisätään tag.
+            long tagId = tagDao.lisaaTag(tag);
+
+            // Liitetään tag Vinkkiin.
+            String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
+
+            try (Connection conn = this.db.getConnection();
+                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {
+                st.setLong(1, vinkkiId);
+                st.setLong(2, tagId);
+                st.executeUpdate();
+
+            } catch (SQLException ex) {
+                System.out.println("SQL kysely epäonnistui: " + ex);
+                return false;
+            }
+        }
+        return true;
     }
 
     public List<Vinkki> kaikkiVinkit() {
@@ -65,12 +113,30 @@ public class VinkkiDAO {
                 ResultSet result = stmt.executeQuery()) {
 
             while (result.next()) {
-                vinkit.add(new Vinkki(result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
+                vinkit.add(new Vinkki(result.getLong("vinkki_id"), result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
         }
 
         return vinkit;
+    }
+
+    public List<Vinkki> kaikkiVinkitJaTiedot() {
+        //pitäisi palauttaa lista kaikista vinkeistä
+        //sisältäen kaikki niiden tiedot
+        KirjaDAO kirjaDao = new KirjaDAO(db);
+        List<Vinkki> vinkit = kaikkiVinkit();
+        List<Vinkki> kaikki = new ArrayList();
+        for (Vinkki vinkki : vinkit) {
+            //if (vinkki.getTyyppi().equals("kirja")) {
+                Kirja kirja = kirjaDao.haeKirja(vinkki.getId());
+                if (kirja != null) {
+                    kaikki.add(kirja);
+                }
+            //}
+        }
+
+        return kaikki;
     }
 }

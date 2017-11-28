@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteOpenMode;
 
 /**
  *
@@ -25,7 +27,10 @@ public class Tietokanta {
     public Connection getConnection(){
         Connection conn;
         try {
-                conn = DriverManager.getConnection(this.jdbcOsoite);
+                SQLiteConfig config = new SQLiteConfig();
+                config.resetOpenMode(SQLiteOpenMode.CREATE); // Ei salli tietokannan luomista.
+                config.enforceForeignKeys(true); // Foreign key ei saa osoittaa tyhjään
+                conn = DriverManager.getConnection(this.jdbcOsoite, config.toProperties());
         } catch(SQLException e) {
                 // Älähtää, jos jdbcAddress on huono.
                 System.err.println("Yhteyden muodostus tietokantaan epäonnistui, " + e);
