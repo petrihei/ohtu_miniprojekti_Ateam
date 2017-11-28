@@ -61,15 +61,15 @@ public class Tekstikayttis {
         this.io.print("1: Kirja");
         this.io.print("0: Peruuta");
         String valinta = this.io.nextLine();
-        if(valinta.equals("1")){
+        if (valinta.equals("1")) {
             this.kirjanLisays();
-        } else if(valinta.equals("0")){
+        } else if (valinta.equals("0")) {
             return;
         } else {
             this.io.print("Valitse toiminto listasta!");
             this.vinkinLisays();
         }
-        
+
     }
 
     public void kirjanLisays() {
@@ -87,32 +87,31 @@ public class Tekstikayttis {
         this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
         String tagSyote = this.io.nextLine();
         List<Tag> tagit = this.tagienErottaminen(tagSyote);
-        
-        //Vinkki vinkki = new Vinkki(otsikko, kuvaus, "kirja");
+
         Kirja kirja = new Kirja(otsikko, kuvaus, isbn, kirjailija);
         kirja.setTagit(tagit);
-        
+
         this.io.print("");
 
-        if (this.logiikka.lisaaKirja(kirja)!=null) {
+        if (this.logiikka.lisaaKirja(kirja) != null) {
             this.io.print("Seuraavat tiedot tallennettu:");
             this.io.print("Otsikko: " + kirja.getOtsikko());
             this.io.print("Kuvaus: " + kirja.getKuvaus());
             this.io.print("ISBN: " + kirja.getIsbn());
             this.io.print("Kirjailija: " + kirja.getKirjailija());
             this.io.print("Tagit: ");
-            for(Tag tag : kirja.getTagit()){
+            for (Tag tag : kirja.getTagit()) {
                 this.io.print("  " + tag.getTag());
             }
         } else {
             this.io.print("Tallennus epäonnistui");
         }
     }
-    
-    public List<Tag> tagienErottaminen(String syote){
+
+    public List<Tag> tagienErottaminen(String syote) {
         List<Tag> tagLista = new ArrayList<>();
         String tagit[] = syote.split(",");
-        for(int i = 0; i < tagit.length; i++){
+        for (int i = 0; i < tagit.length; i++) {
             String lisattava = tagit[i].trim();
             tagLista.add(new Tag(lisattava));
         }
@@ -131,29 +130,27 @@ public class Tekstikayttis {
                 this.io.print("*****  \n");
             }
         }
-
     }
 
-    public void vinkkienJaTietojenTulostus() {
-        List<Vinkki> vinkit = logiikka.haeKaikkiVinkit();
-        if (vinkit == null) {
-            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
-        } else {
-            this.io.print("Kaikki vinkit:");
-            this.io.print("**************");
-            for (Vinkki vinkki : vinkit) {
-                System.out.println(vinkki.toString());
-                if (vinkki.getTagit() == null) {
-                    System.out.println("ei tageja");
-                } else {
-                    for (Tag tag : vinkki.getTagit()) {
-                        System.out.println(tag.getTag());
-                    }
-                }
-
-            }
-        }
-
-    }
-
+//    public void vinkkienJaTietojenTulostus() {
+//        List<Vinkki> vinkit = logiikka.haeKaikkiVinkit();
+//        if (vinkit == null) {
+//            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
+//        } else {
+//            this.io.print("Kaikki vinkit:");
+//            this.io.print("**************");
+//            for (Vinkki vinkki : vinkit) {
+//                System.out.println(vinkki.toString());
+//                if (vinkki.getTagit() == null) {
+//                    System.out.println("ei tageja");
+//                } else {
+//                    for (Tag tag : vinkki.getTagit()) {
+//                        System.out.println(tag.getTag());
+//                    }
+//                }
+//
+//            }
+//        }
+//
+//    }
 }
