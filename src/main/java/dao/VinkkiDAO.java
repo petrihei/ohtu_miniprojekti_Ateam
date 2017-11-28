@@ -137,6 +137,6 @@ public class VinkkiDAO {
             }
         }
 
-        return vinkit;
+        return kaikki;
     }
 }

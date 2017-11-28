@@ -25,8 +25,10 @@ public class Logiikka {
         return vinkkiDao.kaikkiVinkit();
     }
 
-    private boolean lisaaKirja(Kirja kirja) {
-        return kirjaDao.lisaaKirja(kirja) != -1;
+    public Kirja lisaaKirja(Kirja kirja) {
+        long id = kirjaDao.lisaaKirja(kirja);
+        Kirja uusiKirja = kirjaDao.haeKirja(id);
+        return uusiKirja;
     }
 
     public List<Vinkki> haeKaikkiVinkit() {

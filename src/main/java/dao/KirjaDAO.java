@@ -27,7 +27,7 @@ public class KirjaDAO {
                 PreparedStatement st = conn.prepareStatement(query)) {
             st.setLong(1, id);
             ResultSet result = st.executeQuery();
-
+            
             if (result.next()) {
                 kirja = new Kirja(result.getString("otsikko"),
                         result.getString("kuvaus"),
@@ -44,7 +44,7 @@ public class KirjaDAO {
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
         }
-
+        
         return kirja;
     }
 
@@ -71,6 +71,7 @@ public class KirjaDAO {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
+        lisattava.setId(vinkkiId);
 
         return vinkkiId;
     }
