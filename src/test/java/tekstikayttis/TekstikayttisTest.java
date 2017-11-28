@@ -37,7 +37,7 @@ public class TekstikayttisTest {
         IOStub io = new IOStub("1", "Marxin Pääoma", "paras", "08348696873", "Marx", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.vinkinLisays();
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "Otsikko: Marxin Pääoma"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma"));
         //assertEquals("Otsikko: Marxin Pääoma", io.outputs.get(7));
     }
 
@@ -101,7 +101,21 @@ public class TekstikayttisTest {
         //assertEquals("Kirja: testikirja\n  Kuvaus: teskikuvaus", vinkit.get(5));
         //assertEquals("Kirja: Marxin Pääoma\n  Kuvaus: paras", vinkit.get(7));
     }
+    
+    @Test
+    public void vinkkienJaTietojenTulostusToimii() {
+        IOStub io = new IOStub("2");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.vinkkienJaTietojenTulostus();
+        //List<String> vinkit = io.outputs;
 
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit:"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN: 08348696873\n  Kirjailija: Marx"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
+
+    }
+    
     private boolean arrayContainsSubstring(List<String> list, String substr) {
         for (String str : list) {
             if (str.contains(substr)) {

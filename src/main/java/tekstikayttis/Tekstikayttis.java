@@ -32,8 +32,8 @@ public class Tekstikayttis {
                 //this.kirjanLisays();
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
-                this.vinkkienTulostus();
-                //this.vinkkienJaTietojenTulostus();
+                //this.vinkkienTulostus();
+                this.vinkkienJaTietojenTulostus();
             } else {
                 this.io.print("Virheellinen valinta");
             }
@@ -61,6 +61,7 @@ public class Tekstikayttis {
         this.io.print("1: Kirja");
         this.io.print("0: Peruuta");
         String valinta = this.io.nextLine();
+
         if (valinta.equals("1")) {
             this.kirjanLisays();
         } else if (valinta.equals("0")) {
@@ -95,14 +96,15 @@ public class Tekstikayttis {
 
         if (this.logiikka.lisaaKirja(kirja) != null) {
             this.io.print("Seuraavat tiedot tallennettu:");
-            this.io.print("Otsikko: " + kirja.getOtsikko());
-            this.io.print("Kuvaus: " + kirja.getKuvaus());
-            this.io.print("ISBN: " + kirja.getIsbn());
-            this.io.print("Kirjailija: " + kirja.getKirjailija());
-            this.io.print("Tagit: ");
-            for (Tag tag : kirja.getTagit()) {
-                this.io.print("  " + tag.getTag());
-            }
+            this.io.print(kirja.toString());
+//            this.io.print("Otsikko: " + kirja.getOtsikko());
+//            this.io.print("Kuvaus: " + kirja.getKuvaus());
+//            this.io.print("ISBN: " + kirja.getIsbn());
+//            this.io.print("Kirjailija: " + kirja.getKirjailija());
+//            this.io.print("Tagit: ");
+//            for (Tag tag : kirja.getTagit()) {
+//                this.io.print("  " + tag.getTag());
+//            }
         } else {
             this.io.print("Tallennus epäonnistui");
         }
@@ -132,25 +134,17 @@ public class Tekstikayttis {
         }
     }
 
-//    public void vinkkienJaTietojenTulostus() {
-//        List<Vinkki> vinkit = logiikka.haeKaikkiVinkit();
-//        if (vinkit == null) {
-//            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
-//        } else {
-//            this.io.print("Kaikki vinkit:");
-//            this.io.print("**************");
-//            for (Vinkki vinkki : vinkit) {
-//                System.out.println(vinkki.toString());
-//                if (vinkki.getTagit() == null) {
-//                    System.out.println("ei tageja");
-//                } else {
-//                    for (Tag tag : vinkki.getTagit()) {
-//                        System.out.println(tag.getTag());
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//    }
+    public void vinkkienJaTietojenTulostus() {
+        List<Vinkki> vinkit = logiikka.haeKaikkiVinkit();
+        if (vinkit == null) {
+            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
+        } else {
+            this.io.print("Kaikki vinkit:");
+            this.io.print("**************");
+            for (Vinkki vinkki : vinkit) {
+                this.io.print(vinkki.toString() + "\n");
+            }
+        }
+
+    }
 }

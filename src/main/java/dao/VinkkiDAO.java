@@ -113,7 +113,7 @@ public class VinkkiDAO {
                 ResultSet result = stmt.executeQuery()) {
 
             while (result.next()) {
-                vinkit.add(new Vinkki(result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
+                vinkit.add(new Vinkki(result.getLong("vinkki_id"), result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
@@ -129,12 +129,12 @@ public class VinkkiDAO {
         List<Vinkki> vinkit = kaikkiVinkit();
         List<Vinkki> kaikki = new ArrayList();
         for (Vinkki vinkki : vinkit) {
-            if (vinkki.getTyyppi().equals("kirja")) {
+            //if (vinkki.getTyyppi().equals("kirja")) {
                 Kirja kirja = kirjaDao.haeKirja(vinkki.getId());
                 if (kirja != null) {
                     kaikki.add(kirja);
                 }
-            }
+            //}
         }
 
         return kaikki;

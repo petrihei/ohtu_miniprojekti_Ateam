@@ -25,7 +25,12 @@ public class Vinkki {
         this.kuvaus = kuvaus;
         this.tyyppi = tyyppi;
         this.tagit = new ArrayList<>();
-    }    
+    }
+    
+    public Vinkki(Long id,String otsikko, String kuvaus, String tyyppi){
+        this(otsikko, kuvaus, tyyppi);
+        this.id = id;
+    }
 
     public void setOtsikko(String otsikko) {
         this.otsikko = otsikko;
