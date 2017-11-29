@@ -34,7 +34,7 @@ public class TekstikayttisTest {
 
     @Test
     public void kirjanLisayksenOtsikkoToimii() {
-        IOStub io = new IOStub("1", "Marxin Pääoma", "paras", "08348696873", "Marx", "tag");
+        IOStub io = new IOStub("1", "Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.vinkinLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma"));
@@ -43,7 +43,7 @@ public class TekstikayttisTest {
 
     @Test
     public void kirjanLisayksenKuvausToimii() {
-        IOStub io = new IOStub("Marxin Pääoma", "paras", "08348696873", "Marx", "tag");
+        IOStub io = new IOStub("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.kirjanLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: paras"));
@@ -52,15 +52,15 @@ public class TekstikayttisTest {
 
     @Test
     public void kirjanLisayksenIsbnToimii() {
-        IOStub io = new IOStub("Marxin Pääoma", "paras", "08348696873", "Marx", "tag");
+        IOStub io = new IOStub("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.kirjanLisays();
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN: 08348696873"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN 978-0-596-52068-7"));
     }
 
     @Test
     public void kirjanLisayksenKirjailijaToimii() {
-        IOStub io = new IOStub("Marxin Pääoma", "paras", "08348696873", "Marx", "tag");
+        IOStub io = new IOStub("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.kirjanLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kirjailija: Marx"));
@@ -69,7 +69,7 @@ public class TekstikayttisTest {
     @Test
     public void kirjanLisayksenTagitToimii() {
         String tagit = "tag, test";
-        IOStub io = new IOStub("Marxin Pääoma", "paras", "08348696873", "Marx", tagit);
+        IOStub io = new IOStub("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", tagit);
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.kirjanLisays();
         List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
@@ -111,7 +111,7 @@ public class TekstikayttisTest {
 
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit:"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN: 08348696873\n  Kirjailija: Marx"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN: ISBN 978-0-596-52068-7\n  Kirjailija: Marx"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
 
     }

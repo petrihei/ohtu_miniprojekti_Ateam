@@ -15,10 +15,12 @@ public class Tekstikayttis {
 
     private Logiikka logiikka;
     private IO io;
+    private Validoija validointi;
 
     public Tekstikayttis(Logiikka l, IO io) {
         this.logiikka = l;
         this.io = io;
+        this.validointi = new Validaattori();
         io.print("***********************");
         io.print("*     Vinkkilista     *");
         io.print("***********************");
@@ -83,8 +85,39 @@ public class Tekstikayttis {
         String kuvaus = this.io.nextLine();
         this.io.print("Anna kirjan ISBN:");
         String isbn = this.io.nextLine();
+        String valintaISBN = "";
+        while (this.validointi.validoiISBN(isbn) == false ||
+                valintaISBN.equals("k")) {
+            System.out.println("Väärä ISBN");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            valintaISBN = this.io.nextLine();
+            if (valintaISBN.equals("k")) {
+                isbn = this.io.nextLine();
+                valintaISBN = "";
+            } else {
+                System.out.println("ISBN ei tallennettu");
+                isbn = "";
+                break;
+            }
+        }
+        
         this.io.print("Anna kirjan kirjoittaja:");
         String kirjailija = this.io.nextLine();
+        String valintaKirjailija = "";
+        while (this.validointi.validoiNimi(kirjailija) == false ||
+                valintaKirjailija.equals("k")) {
+            System.out.println("Nimi väärässä muodossa");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            valintaKirjailija = this.io.nextLine();
+            if (valintaKirjailija.equals("k")) {
+                kirjailija = this.io.nextLine();
+                valintaKirjailija = "";
+            } else {
+                System.out.println("Kirjailijaa ei tallennettu");
+                kirjailija = "";
+                break;
+            }
+        }
         this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
         String tagSyote = this.io.nextLine();
         List<Tag> tagit = this.tagienErottaminen(tagSyote);
