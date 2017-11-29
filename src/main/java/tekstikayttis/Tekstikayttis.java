@@ -15,10 +15,12 @@ public class Tekstikayttis {
 
     private Logiikka logiikka;
     private IO io;
+    private Validoija validointi;
 
     public Tekstikayttis(Logiikka l, IO io) {
         this.logiikka = l;
         this.io = io;
+        this.validointi = new Validaattori();
         io.print("***********************");
         io.print("*     Vinkkilista     *");
         io.print("***********************");
@@ -83,8 +85,30 @@ public class Tekstikayttis {
         String kuvaus = this.io.nextLine();
         this.io.print("Anna kirjan ISBN:");
         String isbn = this.io.nextLine();
+        if (this.validointi.validoiISBN(isbn) == false) {
+            System.out.println("Väärä ISBN");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            String valinta = this.io.nextLine();
+            if (valinta.equals("k")) {
+            isbn = this.io.nextLine();
+            } else {
+                System.out.println("ISBN ei tallennettu");
+                isbn = "";
+            }
+        }
         this.io.print("Anna kirjan kirjoittaja:");
         String kirjailija = this.io.nextLine();
+        if (this.validointi.validoiNimi(kirjailija) == false) {
+            System.out.println("Nimi väärässä muodossa");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            String valinta = this.io.nextLine();
+            if (valinta.equals("k")) {
+            kirjailija = this.io.nextLine();
+            } else {
+                System.out.println("Kirjailijaa ei tallennettu");
+                kirjailija = "";
+            }
+        }
         this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
         String tagSyote = this.io.nextLine();
         List<Tag> tagit = this.tagienErottaminen(tagSyote);
