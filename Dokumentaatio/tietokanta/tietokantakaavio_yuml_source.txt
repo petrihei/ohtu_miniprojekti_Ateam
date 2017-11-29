@@ -1,5 +1,8 @@
 [Vinkki|otsikko:string;kuvaus:string;tyyppi:string]
 [Kirja|vinkki:fk;ISBN;kirjailija:string]-->[Vinkki]
+[Video|vinkki:fk;tekijä:string;url:string;pvm:string -->[Vinkki]
+[Podcast|vinkki:fk;tekijä:string;url:string;pvm:string -->[Vinkki]
+[Blogi|vinkki:fk;kirjoittaja:string;url:string;pvm:string -->[Vinkki]
 [Tag|tag:string]
 [VinkkiTag|vinkki:fk;tag:fk]-->[Tag]
 [VinkkiTag]-->[Vinkki]
