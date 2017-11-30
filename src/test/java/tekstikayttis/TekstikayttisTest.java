@@ -95,8 +95,8 @@ public class TekstikayttisTest {
         //List<String> vinkit = io.outputs;
 
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit:"));
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kirja: testikirja\n  Kuvaus: teskikuvaus"));
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kirja: Marxin Pääoma\n  Kuvaus: paras"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: testikirja\n  Kuvaus: testikuvaus"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
         //assertEquals("Kaikki vinkit:", vinkit.get(3));
         //assertEquals("Kirja: testikirja\n  Kuvaus: teskikuvaus", vinkit.get(5));
         //assertEquals("Kirja: Marxin Pääoma\n  Kuvaus: paras", vinkit.get(7));
