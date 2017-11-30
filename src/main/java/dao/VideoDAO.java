@@ -1,24 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
+import tietokantaobjektit.Video;
 
-public class KirjaDAO {
-
+/**
+ *
+ * @author Chamion
+ */
+public class VideoDAO {
     private Tietokanta db;
 
-    public KirjaDAO(Tietokanta db) {
+    public VideoDAO(Tietokanta db) {
         this.db = db;
     }
-
-    public Kirja haeKirja(long id) {
-        Kirja kirja = null;
+    
+    public Video haeVideo(long id) {
+        Video video = null;
         String query = "SELECT * FROM Vinkki"
-                + " JOIN Kirja ON vinkki.vinkki_id = kirja.vinkki"
+                + " JOIN Video ON vinkki.vinkki_id = Video.vinkki"
                 + " LEFT JOIN (SELECT * FROM Tag, VinkkiTag"
                 + " WHERE Tag.tag_id = VinkkiTag.tag) AS R"
                 + " ON Vinkki.vinkki_id = R.vinkki"
@@ -29,15 +37,16 @@ public class KirjaDAO {
             ResultSet result = st.executeQuery();
             
             if (result.next()) {
-                kirja = new Kirja(result.getString("otsikko"),
+                video = new Video(result.getString("otsikko"),
                         result.getString("kuvaus"),
-                        result.getString("isbn"),
-                        result.getString("kirjailija"));
+                        result.getString("tekija"),
+                        result.getString("url"),
+                        result.getString("pvm"));
                 do {
                     String tagString = result.getString("tag");
                     if(tagString != null) {
                         Tag tag = new Tag(tagString);
-                        kirja.lisaaTag(tag);
+                        video.lisaaTag(tag);
                     }
                 } while(result.next());
             }
@@ -45,10 +54,10 @@ public class KirjaDAO {
             System.out.println("SQL kysely epäonnistui: " + ex);
         }
         
-        return kirja;
+        return video;
     }
-
-    public long lisaaKirja(Kirja lisattava) {
+    
+    public long lisaaVideo(Video lisattava) {
         // Lisätään ensin Vinkki.
         VinkkiDAO vinkkiDao = new VinkkiDAO(db);
         long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);
@@ -57,14 +66,15 @@ public class KirjaDAO {
             return -1;
         }
 
-        // Lisätään Kirja ja yhdistetään Vinkkiin.
-        String kirjaAddQuery = "INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)";
+        // Lisätään Video ja yhdistetään Vinkkiin.
+        String videoAddQuery = "INSERT INTO Video (vinkki, tekija, url, pvm) values (?, ?, ?, ?)";
 
         try (Connection conn = this.db.getConnection();
-                PreparedStatement st = conn.prepareStatement(kirjaAddQuery)) {
+                PreparedStatement st = conn.prepareStatement(videoAddQuery)) {
             st.setLong(1, vinkkiId);
-            st.setString(2, lisattava.getIsbn());
-            st.setString(3, lisattava.getKirjailija());
+            st.setString(2, lisattava.getTekija());
+            st.setString(3, lisattava.getUrl());
+            st.setString(4, lisattava.getPvm());
             st.executeUpdate();
 
         } catch (SQLException ex) {

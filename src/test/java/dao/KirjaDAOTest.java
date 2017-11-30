@@ -45,14 +45,16 @@ public class KirjaDAOTest {
     }
     
     @Test
-    public void haetullaKirjallaOnTag() {
+    public void haetullaKirjallaOnTagit() {
         Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
         lisattava.lisaaTag(new Tag("tagi1"));
+        lisattava.lisaaTag(new Tag("tagi2"));
 
         long id = dao.lisaaKirja(lisattava);
         Kirja lisatty = dao.haeKirja(id);
         
         assertEquals("tagi1", lisatty.getTagit().get(0).getTag());
+        assertEquals("tagi2", lisatty.getTagit().get(1).getTag());
     }
     
     @Test
@@ -68,4 +70,10 @@ public class KirjaDAOTest {
         KirjaDAO huonoDao = new KirjaDAO(huonoDB);
         assertEquals(null, huonoDao.haeKirja(1));
     }
+    
+    @Test
+    public void olemattomanKirjanHakuPalauttaaNull() {
+        assertEquals(null, dao.haeKirja(-1l));
+    }
+    
 }
