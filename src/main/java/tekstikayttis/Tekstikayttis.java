@@ -68,7 +68,7 @@ public class Tekstikayttis {
         }
     }
 
-    private void videonLisays() {
+    public void videonLisays() {
         this.io.print("");
         String otsikko = kysyKentta("otsikko");
         String kuvaus = kysyKentta("kuvaus");
