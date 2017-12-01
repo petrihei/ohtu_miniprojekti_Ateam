@@ -4,6 +4,10 @@ public class Kirja extends Vinkki {
 
     private String isbn;
     private String kirjailija;
+    
+    public Kirja(String otsikko, String kuvaus) {
+        super(otsikko, kuvaus, "kirja");
+    }
 
     public Kirja(String otsikko, String kuvaus, String isbn, String kirjailija) {
         super(otsikko, kuvaus, "kirja");

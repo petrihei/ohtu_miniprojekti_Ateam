@@ -31,10 +31,8 @@ public class Tekstikayttis {
         while (!valinta.equals("0")) {
 
             if (valinta.equals("1")) {
-                //this.kirjanLisays();
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
-                //this.vinkkienTulostus();
                 this.vinkkienJaTietojenTulostus();
             } else {
                 this.io.print("Virheellinen valinta");
@@ -72,72 +70,29 @@ public class Tekstikayttis {
             this.io.print("Valitse toiminto listasta!");
             this.vinkinLisays();
         }
-
     }
 
     public void kirjanLisays() {
-        //tästä kirja-tyypin vinkin lisaava metodi
-        //kutsuu lisaaKirja-metodia kirjaoliolle
         this.io.print("");
         this.io.print("Anna kirjan otsikko:");
         String otsikko = this.io.nextLine();
         this.io.print("Anna kirjan kuvaus:");
         String kuvaus = this.io.nextLine();
-        this.io.print("Anna kirjan ISBN:");
-        String isbn = this.io.nextLine();
-        String valintaISBN = "";
-        while (this.validointi.validoiISBN(isbn) == false ||
-                valintaISBN.equals("k")) {
-            System.out.println("Väärä ISBN");
-            System.out.println("Haluatko syöttää uuden? k/e");
-            valintaISBN = this.io.nextLine();
-            if (valintaISBN.equals("k")) {
-                isbn = this.io.nextLine();
-                valintaISBN = "";
-            } else {
-                System.out.println("ISBN ei tallennettu");
-                isbn = "";
-                break;
-            }
-        }
-        
-        this.io.print("Anna kirjan kirjoittaja:");
-        String kirjailija = this.io.nextLine();
-        String valintaKirjailija = "";
-        while (this.validointi.validoiNimi(kirjailija) == false ||
-                valintaKirjailija.equals("k")) {
-            System.out.println("Nimi väärässä muodossa");
-            System.out.println("Haluatko syöttää uuden? k/e");
-            valintaKirjailija = this.io.nextLine();
-            if (valintaKirjailija.equals("k")) {
-                kirjailija = this.io.nextLine();
-                valintaKirjailija = "";
-            } else {
-                System.out.println("Kirjailijaa ei tallennettu");
-                kirjailija = "";
-                break;
-            }
-        }
+
+        Kirja lisattava = new Kirja(otsikko, kuvaus);
+        kysyIsbn(lisattava);
+        kysyKirjailija(lisattava);
+
         this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
         String tagSyote = this.io.nextLine();
         List<Tag> tagit = this.tagienErottaminen(tagSyote);
-
-        Kirja kirja = new Kirja(otsikko, kuvaus, isbn, kirjailija);
-        kirja.setTagit(tagit);
+        lisattava.setTagit(tagit);
 
         this.io.print("");
 
-        if (this.logiikka.lisaaKirja(kirja) != null) {
+        if (this.logiikka.lisaaKirja(lisattava) != null) {
             this.io.print("Seuraavat tiedot tallennettu:");
-            this.io.print(kirja.toString());
-//            this.io.print("Otsikko: " + kirja.getOtsikko());
-//            this.io.print("Kuvaus: " + kirja.getKuvaus());
-//            this.io.print("ISBN: " + kirja.getIsbn());
-//            this.io.print("Kirjailija: " + kirja.getKirjailija());
-//            this.io.print("Tagit: ");
-//            for (Tag tag : kirja.getTagit()) {
-//                this.io.print("  " + tag.getTag());
-//            }
+            this.io.print(lisattava.toString());
         } else {
             this.io.print("Tallennus epäonnistui");
         }
@@ -179,5 +134,44 @@ public class Tekstikayttis {
             }
         }
 
+    }
+
+    private void kysyIsbn(Kirja lisattava) {
+        this.io.print("Anna kirjan ISBN:");
+        lisattava.setIsbn(kysyValidoitava("ISBN"));
+    }
+
+    private void kysyKirjailija(Kirja lisattava) {
+        this.io.print("Anna kirjan kirjoittaja:");
+        lisattava.setKirjailija(kysyValidoitava("Kirjailija"));
+    }
+
+    private String kysyValidoitava(String kentanTyyppi) {
+        String validoitava = this.io.nextLine();
+        String komento = "";
+        while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals("k")) {
+            System.out.println(kentanTyyppi + " väärässä muodossa");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            komento = this.io.nextLine();
+            if (komento.equals("k")) {
+                validoitava = this.io.nextLine();
+                komento = "";
+            } else {
+                System.out.println(kentanTyyppi + " ei tallennettu");
+                validoitava = "";
+                break;
+            }
+        }
+        return validoitava;
+    }
+
+    private boolean validoiSyote(String validoitava, String kentanTyyppi) {
+        if (kentanTyyppi.equals("Kirjailija")) {
+            return this.validointi.validoiNimi(validoitava);
+        }
+        if (kentanTyyppi.equals("ISBN")) {
+            return this.validointi.validoiISBN(validoitava);
+        }
+        return false;
     }
 }
