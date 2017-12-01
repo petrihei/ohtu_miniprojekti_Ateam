@@ -9,7 +9,7 @@ public class Video extends Vinkki  {
     private String tekija;
     private String url;
     private String pvm;
-    
+        
     public Video(String otsikko, String kuvaus, String tekija, String url, String pvm) {
         super(otsikko, kuvaus, "video");
         this.tekija = tekija;
