@@ -10,25 +10,40 @@ public class Logiikka {
     private Tietokanta db;
     private VinkkiDAO vinkkiDao;
     private KirjaDAO kirjaDao;
+    private VideoDAO videoDao;
 
     public Logiikka(Tietokanta db) {
         this.db = db;
         this.vinkkiDao = new VinkkiDAO(db);
         this.kirjaDao = new KirjaDAO(db);
-    }
-
-    public boolean lisaaVinkki(Vinkki vinkki) {
-        return vinkkiDao.lisaaVinkki(vinkki) != -1;
+        this.videoDao = new VideoDAO(db);
     }
 
     public List<Vinkki> kaikkiVinkit() {
         return vinkkiDao.kaikkiVinkit();
     }
+    
+    public Vinkki lisaaVinkki(Vinkki vinkki) {
+        // TODO: Käytä super-DAO:n lisaaVinkki-metodia
+        if (vinkki.getTyyppi().equals("kirja")) {
+            return lisaaKirja((Kirja) vinkki);
+        }
+        if (vinkki.getTyyppi().equals("video")) {
+            return lisaaVideo((Video) vinkki);
+        }
+        return null;
+    }
 
-    public Kirja lisaaKirja(Kirja kirja) {
+    private Kirja lisaaKirja(Kirja kirja) {
         long id = kirjaDao.lisaaKirja(kirja);
         Kirja uusiKirja = kirjaDao.haeKirja(id);
         return uusiKirja;
+    }
+    
+    private Video lisaaVideo(Video video) {
+        long id = videoDao.lisaaVideo(video);
+        Video uusiVideo = videoDao.haeVideo(id);
+        return uusiVideo;
     }
 
     public List<Vinkki> haeKaikkiVinkit() {

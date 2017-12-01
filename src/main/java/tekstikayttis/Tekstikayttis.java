@@ -7,6 +7,7 @@ import tietokantaobjektit.Vinkki;
 import logiikka.Logiikka;
 import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
+import tietokantaobjektit.Video;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -31,10 +32,8 @@ public class Tekstikayttis {
         while (!valinta.equals("0")) {
 
             if (valinta.equals("1")) {
-                //this.kirjanLisays();
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
-                //this.vinkkienTulostus();
                 this.vinkkienJaTietojenTulostus();
             } else {
                 this.io.print("Virheellinen valinta");
@@ -44,6 +43,74 @@ public class Tekstikayttis {
         this.io.print("Kiitos vinkkilistan käytöstä!");
     }
 
+    /*
+    *  Vinkin lisääminen
+     */
+    public void vinkinLisays() {
+        //kun lisaystoiminto valitaan, selvitetään ensin tyyppi
+        //ja sen mukaan kysytään lisätietoja
+        this.io.print("");
+        this.io.print("Minkätyyppisen vinkin haluat lisätä? Valitse alta:");
+        this.io.print("2: Video");
+        this.io.print("1: Kirja");
+        this.io.print("0: Peruuta");
+        String komento = this.io.nextLine();
+
+        if (komento.equals("1")) {
+            this.kirjanLisays();
+        } else if (komento.equals("2")) {
+            this.videonLisays();
+        } else if (komento.equals("0")) {
+            return;
+        } else {
+            this.io.print("Valitse toiminto listasta!");
+            this.vinkinLisays();
+        }
+    }
+
+    public void videonLisays() {
+        this.io.print("");
+        String otsikko = kysyKentta("otsikko");
+        String kuvaus = kysyKentta("kuvaus");
+        String tekija = kysyKentta("tekijä");
+        String url = kysyKentta("url");
+        String pvm = kysyKentta("pvm");
+
+        Video lisattava = new Video(otsikko, kuvaus, tekija, url, pvm);
+        kysyTagit(lisattava);
+
+        this.io.print("");
+        
+        lisaaVinkkiJaTulostaTiedot(lisattava);
+    }
+
+    public void kirjanLisays() {
+        this.io.print("");
+        String otsikko = kysyKentta("otsikko");
+        String kuvaus = kysyKentta("kuvaus");
+
+        Kirja lisattava = new Kirja(otsikko, kuvaus);
+        kysyIsbn(lisattava);
+        kysyKirjailija(lisattava);
+        kysyTagit(lisattava);
+
+        this.io.print("");
+
+        lisaaVinkkiJaTulostaTiedot(lisattava);
+    }
+    
+    private void lisaaVinkkiJaTulostaTiedot(Vinkki lisattava) {
+        if (this.logiikka.lisaaVinkki(lisattava) != null) {
+            this.io.print("Seuraavat tiedot tallennettu:");
+            this.io.print(lisattava.toString());
+        } else {
+            this.io.print("Tallennus epäonnistui");
+        }
+    }
+
+    /**
+     * Tulostus
+     */
     public String tulostaToiminnallisuudet() {
         this.io.print("");
         this.io.print("Valitse toiminnallisuus:");
@@ -52,105 +119,6 @@ public class Tekstikayttis {
         this.io.print("0: Poistu");
         this.io.print("");
         return this.io.nextLine();
-
-    }
-
-    public void vinkinLisays() {
-        //kun lisaystoiminto valitaan, selvitetään ensin tyyppi
-        //ja sen mukaan kysytään lisätietoja
-        this.io.print("");
-        this.io.print("Minkätyyppisen vinkin haluat lisätä? Valitse alta:");
-        this.io.print("1: Kirja");
-        this.io.print("0: Peruuta");
-        String valinta = this.io.nextLine();
-
-        if (valinta.equals("1")) {
-            this.kirjanLisays();
-        } else if (valinta.equals("0")) {
-            return;
-        } else {
-            this.io.print("Valitse toiminto listasta!");
-            this.vinkinLisays();
-        }
-
-    }
-
-    public void kirjanLisays() {
-        //tästä kirja-tyypin vinkin lisaava metodi
-        //kutsuu lisaaKirja-metodia kirjaoliolle
-        this.io.print("");
-        this.io.print("Anna kirjan otsikko:");
-        String otsikko = this.io.nextLine();
-        this.io.print("Anna kirjan kuvaus:");
-        String kuvaus = this.io.nextLine();
-        this.io.print("Anna kirjan ISBN:");
-        String isbn = this.io.nextLine();
-        String valintaISBN = "";
-        while (this.validointi.validoiISBN(isbn) == false ||
-                valintaISBN.equals("k")) {
-            System.out.println("Väärä ISBN");
-            System.out.println("Haluatko syöttää uuden? k/e");
-            valintaISBN = this.io.nextLine();
-            if (valintaISBN.equals("k")) {
-                isbn = this.io.nextLine();
-                valintaISBN = "";
-            } else {
-                System.out.println("ISBN ei tallennettu");
-                isbn = "";
-                break;
-            }
-        }
-        
-        this.io.print("Anna kirjan kirjoittaja:");
-        String kirjailija = this.io.nextLine();
-        String valintaKirjailija = "";
-        while (this.validointi.validoiNimi(kirjailija) == false ||
-                valintaKirjailija.equals("k")) {
-            System.out.println("Nimi väärässä muodossa");
-            System.out.println("Haluatko syöttää uuden? k/e");
-            valintaKirjailija = this.io.nextLine();
-            if (valintaKirjailija.equals("k")) {
-                kirjailija = this.io.nextLine();
-                valintaKirjailija = "";
-            } else {
-                System.out.println("Kirjailijaa ei tallennettu");
-                kirjailija = "";
-                break;
-            }
-        }
-        this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
-        String tagSyote = this.io.nextLine();
-        List<Tag> tagit = this.tagienErottaminen(tagSyote);
-
-        Kirja kirja = new Kirja(otsikko, kuvaus, isbn, kirjailija);
-        kirja.setTagit(tagit);
-
-        this.io.print("");
-
-        if (this.logiikka.lisaaKirja(kirja) != null) {
-            this.io.print("Seuraavat tiedot tallennettu:");
-            this.io.print(kirja.toString());
-//            this.io.print("Otsikko: " + kirja.getOtsikko());
-//            this.io.print("Kuvaus: " + kirja.getKuvaus());
-//            this.io.print("ISBN: " + kirja.getIsbn());
-//            this.io.print("Kirjailija: " + kirja.getKirjailija());
-//            this.io.print("Tagit: ");
-//            for (Tag tag : kirja.getTagit()) {
-//                this.io.print("  " + tag.getTag());
-//            }
-        } else {
-            this.io.print("Tallennus epäonnistui");
-        }
-    }
-
-    public List<Tag> tagienErottaminen(String syote) {
-        List<Tag> tagLista = new ArrayList<>();
-        String tagit[] = syote.split(",");
-        for (int i = 0; i < tagit.length; i++) {
-            String lisattava = tagit[i].trim();
-            tagLista.add(new Tag(lisattava));
-        }
-        return tagLista;
     }
 
     public void vinkkienTulostus() {
@@ -179,5 +147,72 @@ public class Tekstikayttis {
             }
         }
 
+    }
+
+    /**
+     * Syötteen kysyminen
+     */
+    private String kysyKentta(String kentanTyyppi) {
+        this.io.print("Anna vinkin " + kentanTyyppi + ":");
+        return this.io.nextLine();
+    }
+
+    private void kysyTagit(Vinkki lisattava) {
+        this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
+        String tagSyote = this.io.nextLine();
+        List<Tag> tagit = this.tagienErottaminen(tagSyote);
+        lisattava.setTagit(tagit);
+    }
+
+    private void kysyIsbn(Kirja lisattava) {
+        this.io.print("Anna kirjan ISBN:");
+        lisattava.setIsbn(kysyValidoitava("ISBN"));
+    }
+
+    private void kysyKirjailija(Kirja lisattava) {
+        this.io.print("Anna kirjan kirjoittaja:");
+        lisattava.setKirjailija(kysyValidoitava("Kirjailija"));
+    }
+
+    private String kysyValidoitava(String kentanTyyppi) {
+        String validoitava = this.io.nextLine();
+        String komento = "";
+        while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals("k")) {
+            System.out.println(kentanTyyppi + " väärässä muodossa");
+            System.out.println("Haluatko syöttää uuden? k/e");
+            komento = this.io.nextLine();
+            if (komento.equals("k")) {
+                validoitava = this.io.nextLine();
+                komento = "";
+            } else {
+                System.out.println(kentanTyyppi + " ei tallennettu");
+                validoitava = "";
+                break;
+            }
+        }
+        return validoitava;
+    }
+
+    private boolean validoiSyote(String validoitava, String kentanTyyppi) {
+        if (kentanTyyppi.equals("Kirjailija")) {
+            return this.validointi.validoiNimi(validoitava);
+        }
+        if (kentanTyyppi.equals("ISBN")) {
+            return this.validointi.validoiISBN(validoitava);
+        }
+        return false;
+    }
+
+    /**
+     * Apumetodit
+     */
+    public List<Tag> tagienErottaminen(String syote) {
+        List<Tag> tagLista = new ArrayList<>();
+        String tagit[] = syote.split(",");
+        for (int i = 0; i < tagit.length; i++) {
+            String lisattava = tagit[i].trim();
+            tagLista.add(new Tag(lisattava));
+        }
+        return tagLista;
     }
 }
