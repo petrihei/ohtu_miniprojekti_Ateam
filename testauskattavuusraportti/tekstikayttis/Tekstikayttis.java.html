@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tekstikayttis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tekstikayttis</a> &gt; <span class="el_source">Tekstikayttis.java</span></div><h1>Tekstikayttis.java</h1><pre class="source lang-java linenums">package tekstikayttis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tietokantaobjektit.Vinkki;
 import logiikka.Logiikka;
+import tietokantaobjektit.Kirja;
+import tietokantaobjektit.Tag;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -12,74 +15,170 @@ public class Tekstikayttis {
 
     private Logiikka logiikka;
     private IO io;
+    private Validoija validointi;
 
-<span class="fc" id="L16">    public Tekstikayttis(Logiikka l, IO io) {</span>
-<span class="fc" id="L17">        this.logiikka = l;</span>
-<span class="fc" id="L18">        this.io = io;</span>
-<span class="fc" id="L19">        io.print(&quot;***********************&quot;);</span>
-<span class="fc" id="L20">        io.print(&quot;*     Vinkkilista     *&quot;);</span>
-<span class="fc" id="L21">        io.print(&quot;***********************&quot;);</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L20">    public Tekstikayttis(Logiikka l, IO io) {</span>
+<span class="fc" id="L21">        this.logiikka = l;</span>
+<span class="fc" id="L22">        this.io = io;</span>
+<span class="fc" id="L23">        this.validointi = new Validaattori();</span>
+<span class="fc" id="L24">        io.print(&quot;***********************&quot;);</span>
+<span class="fc" id="L25">        io.print(&quot;*     Vinkkilista     *&quot;);</span>
+<span class="fc" id="L26">        io.print(&quot;***********************&quot;);</span>
+<span class="fc" id="L27">    }</span>
 
     public void kayttoliittyma() {
-<span class="fc" id="L25">        String valinta = this.tulostaToiminnallisuudet();</span>
-<span class="fc bfc" id="L26" title="All 2 branches covered.">        while (!valinta.equals(&quot;0&quot;)) {</span>
+<span class="fc" id="L30">        String valinta = this.tulostaToiminnallisuudet();</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        while (!valinta.equals(&quot;0&quot;)) {</span>
 
-<span class="fc bfc" id="L28" title="All 2 branches covered.">            if (valinta.equals(&quot;1&quot;)) {</span>
-<span class="fc" id="L29">                this.kirjanLisays();</span>
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">            } else if (valinta.equals(&quot;2&quot;)) {</span>
-<span class="nc" id="L31">                this.vinkkienTulostus();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (valinta.equals(&quot;1&quot;)) {</span>
+                //this.kirjanLisays();
+<span class="nc" id="L35">                this.vinkinLisays();</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            } else if (valinta.equals(&quot;2&quot;)) {</span>
+                //this.vinkkienTulostus();
+<span class="nc" id="L38">                this.vinkkienJaTietojenTulostus();</span>
             } else {
-<span class="fc" id="L33">                System.out.println(&quot;Virheellinen valinta&quot;);</span>
+<span class="nc" id="L40">                this.io.print(&quot;Virheellinen valinta&quot;);</span>
             }
-<span class="fc" id="L35">            valinta = this.tulostaToiminnallisuudet();</span>
+<span class="nc" id="L42">            valinta = this.tulostaToiminnallisuudet();</span>
         }
-<span class="fc" id="L37">        System.out.println(&quot;Kiitos vinkkilistan käytöstä!&quot;);</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L44">        this.io.print(&quot;Kiitos vinkkilistan kÃ¤ytÃ¶stÃ¤!&quot;);</span>
+<span class="fc" id="L45">    }</span>
 
     public String tulostaToiminnallisuudet() {
-<span class="fc" id="L41">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L42">        this.io.print(&quot;Valitse toiminnallisuus:&quot;);</span>
-<span class="fc" id="L43">        this.io.print(&quot;1: Lisää vinkkilistaan&quot;);</span>
-<span class="fc" id="L44">        this.io.print(&quot;2: Selaa vinkkejä&quot;);</span>
-<span class="fc" id="L45">        this.io.print(&quot;0: Poistu&quot;);</span>
-<span class="fc" id="L46">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L47">        return this.io.nextLine();</span>
+<span class="fc" id="L48">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L49">        this.io.print(&quot;Valitse toiminnallisuus:&quot;);</span>
+<span class="fc" id="L50">        this.io.print(&quot;1: LisÃ¤Ã¤ vinkkilistaan&quot;);</span>
+<span class="fc" id="L51">        this.io.print(&quot;2: Selaa vinkkejÃ¤&quot;);</span>
+<span class="fc" id="L52">        this.io.print(&quot;0: Poistu&quot;);</span>
+<span class="fc" id="L53">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L54">        return this.io.nextLine();</span>
 
     }
 
-    public void kirjanLisays() {
-<span class="fc" id="L52">        this.io.print(&quot;Anna vinkin otsikko:&quot;);</span>
-<span class="fc" id="L53">        String otsikko = this.io.nextLine();</span>
-<span class="fc" id="L54">        this.io.print(&quot;Anna vinkin kuvaus:&quot;);</span>
-<span class="fc" id="L55">        String kuvaus = this.io.nextLine();</span>
-<span class="fc" id="L56">        Vinkki vinkki = new Vinkki(otsikko, kuvaus, &quot;Kirja&quot;);</span>
+    public void vinkinLisays() {
+        //kun lisaystoiminto valitaan, selvitetÃ¤Ã¤n ensin tyyppi
+        //ja sen mukaan kysytÃ¤Ã¤n lisÃ¤tietoja
+<span class="fc" id="L61">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L62">        this.io.print(&quot;MinkÃ¤tyyppisen vinkin haluat lisÃ¤tÃ¤? Valitse alta:&quot;);</span>
+<span class="fc" id="L63">        this.io.print(&quot;1: Kirja&quot;);</span>
+<span class="fc" id="L64">        this.io.print(&quot;0: Peruuta&quot;);</span>
+<span class="fc" id="L65">        String valinta = this.io.nextLine();</span>
 
-<span class="fc" id="L58">        this.io.print(&quot;&quot;);</span>
-
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (this.logiikka.lisaaVinkki(vinkki)) {</span>
-<span class="fc" id="L61">            this.io.print(&quot;Seuraavat tiedot tallennettu:&quot;);</span>
-<span class="fc" id="L62">            this.io.print(&quot;Otsikko: &quot; + otsikko);</span>
-<span class="fc" id="L63">            this.io.print(&quot;Kuvaus: &quot; + kuvaus);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (valinta.equals(&quot;1&quot;)) {</span>
+<span class="fc" id="L68">            this.kirjanLisays();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        } else if (valinta.equals(&quot;0&quot;)) {</span>
+<span class="nc" id="L70">            return;</span>
         } else {
-<span class="nc" id="L65">            this.io.print(&quot;Tallennus epäonnistui&quot;);</span>
+<span class="nc" id="L72">            this.io.print(&quot;Valitse toiminto listasta!&quot;);</span>
+<span class="nc" id="L73">            this.vinkinLisays();</span>
         }
-<span class="fc" id="L67">    }</span>
+
+<span class="fc" id="L76">    }</span>
+
+    public void kirjanLisays() {
+        //tÃ¤stÃ¤ kirja-tyypin vinkin lisaava metodi
+        //kutsuu lisaaKirja-metodia kirjaoliolle
+<span class="fc" id="L81">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L82">        this.io.print(&quot;Anna kirjan otsikko:&quot;);</span>
+<span class="fc" id="L83">        String otsikko = this.io.nextLine();</span>
+<span class="fc" id="L84">        this.io.print(&quot;Anna kirjan kuvaus:&quot;);</span>
+<span class="fc" id="L85">        String kuvaus = this.io.nextLine();</span>
+<span class="fc" id="L86">        this.io.print(&quot;Anna kirjan ISBN:&quot;);</span>
+<span class="fc" id="L87">        String isbn = this.io.nextLine();</span>
+<span class="fc" id="L88">        String valintaISBN = &quot;&quot;;</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        while (this.validointi.validoiISBN(isbn) == false ||</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                valintaISBN.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L91">            System.out.println(&quot;VÃ¤Ã¤rÃ¤ ISBN&quot;);</span>
+<span class="nc" id="L92">            System.out.println(&quot;Haluatko syÃ¶ttÃ¤Ã¤ uuden? k/e&quot;);</span>
+<span class="nc" id="L93">            valintaISBN = this.io.nextLine();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (valintaISBN.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L95">                isbn = this.io.nextLine();</span>
+<span class="nc" id="L96">                valintaISBN = &quot;&quot;;</span>
+            } else {
+<span class="nc" id="L98">                System.out.println(&quot;ISBN ei tallennettu&quot;);</span>
+<span class="nc" id="L99">                isbn = &quot;&quot;;</span>
+<span class="nc" id="L100">                break;</span>
+            }
+        }
+        
+<span class="fc" id="L104">        this.io.print(&quot;Anna kirjan kirjoittaja:&quot;);</span>
+<span class="fc" id="L105">        String kirjailija = this.io.nextLine();</span>
+<span class="fc" id="L106">        String valintaKirjailija = &quot;&quot;;</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        while (this.validointi.validoiNimi(kirjailija) == false ||</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                valintaKirjailija.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L109">            System.out.println(&quot;Nimi vÃ¤Ã¤rÃ¤ssÃ¤ muodossa&quot;);</span>
+<span class="nc" id="L110">            System.out.println(&quot;Haluatko syÃ¶ttÃ¤Ã¤ uuden? k/e&quot;);</span>
+<span class="nc" id="L111">            valintaKirjailija = this.io.nextLine();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (valintaKirjailija.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L113">                kirjailija = this.io.nextLine();</span>
+<span class="nc" id="L114">                valintaKirjailija = &quot;&quot;;</span>
+            } else {
+<span class="nc" id="L116">                System.out.println(&quot;Kirjailijaa ei tallennettu&quot;);</span>
+<span class="nc" id="L117">                kirjailija = &quot;&quot;;</span>
+<span class="nc" id="L118">                break;</span>
+            }
+        }
+<span class="fc" id="L121">        this.io.print(&quot;Anna lukuvinkin tagit. Erota eri tagit pilkulla:&quot;);</span>
+<span class="fc" id="L122">        String tagSyote = this.io.nextLine();</span>
+<span class="fc" id="L123">        List&lt;Tag&gt; tagit = this.tagienErottaminen(tagSyote);</span>
+
+<span class="fc" id="L125">        Kirja kirja = new Kirja(otsikko, kuvaus, isbn, kirjailija);</span>
+<span class="fc" id="L126">        kirja.setTagit(tagit);</span>
+
+<span class="fc" id="L128">        this.io.print(&quot;&quot;);</span>
+
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (this.logiikka.lisaaKirja(kirja) != null) {</span>
+<span class="fc" id="L131">            this.io.print(&quot;Seuraavat tiedot tallennettu:&quot;);</span>
+<span class="fc" id="L132">            this.io.print(kirja.toString());</span>
+//            this.io.print(&quot;Otsikko: &quot; + kirja.getOtsikko());
+//            this.io.print(&quot;Kuvaus: &quot; + kirja.getKuvaus());
+//            this.io.print(&quot;ISBN: &quot; + kirja.getIsbn());
+//            this.io.print(&quot;Kirjailija: &quot; + kirja.getKirjailija());
+//            this.io.print(&quot;Tagit: &quot;);
+//            for (Tag tag : kirja.getTagit()) {
+//                this.io.print(&quot;  &quot; + tag.getTag());
+//            }
+        } else {
+<span class="nc" id="L142">            this.io.print(&quot;Tallennus epÃ¤onnistui&quot;);</span>
+        }
+<span class="fc" id="L144">    }</span>
+
+    public List&lt;Tag&gt; tagienErottaminen(String syote) {
+<span class="fc" id="L147">        List&lt;Tag&gt; tagLista = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L148">        String tagit[] = syote.split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (int i = 0; i &lt; tagit.length; i++) {</span>
+<span class="fc" id="L150">            String lisattava = tagit[i].trim();</span>
+<span class="fc" id="L151">            tagLista.add(new Tag(lisattava));</span>
+        }
+<span class="fc" id="L153">        return tagLista;</span>
+    }
 
     public void vinkkienTulostus() {
-<span class="fc" id="L70">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
-<span class="nc" id="L72">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
+<span class="fc" id="L157">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
+<span class="nc" id="L159">            this.io.print(&quot;Ei vinkkejÃ¤. Valitse toiminto 1 lisÃ¤tÃ¤ksesi vinkin.&quot;);</span>
         } else {
-<span class="fc" id="L74">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
-<span class="fc" id="L75">            this.io.print(&quot;**************&quot;);</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
-<span class="fc" id="L77">                this.io.print(vinkki.toString());</span>
-<span class="fc" id="L78">                this.io.print(&quot;*****  \n&quot;);</span>
-<span class="fc" id="L79">            }</span>
+<span class="fc" id="L161">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="fc" id="L162">            this.io.print(&quot;**************&quot;);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
+<span class="fc" id="L164">                this.io.print(vinkki.toString());</span>
+<span class="fc" id="L165">                this.io.print(&quot;*****  \n&quot;);</span>
+<span class="fc" id="L166">            }</span>
+        }
+<span class="fc" id="L168">    }</span>
+
+    public void vinkkienJaTietojenTulostus() {
+<span class="fc" id="L171">        List&lt;Vinkki&gt; vinkit = logiikka.haeKaikkiVinkit();</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (vinkit == null) {</span>
+<span class="fc" id="L173">            this.io.print(&quot;Ei vinkkejÃ¤. Valitse toiminto 1 lisÃ¤tÃ¤ksesi vinkin.&quot;);</span>
+        } else {
+<span class="fc" id="L175">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="fc" id="L176">            this.io.print(&quot;**************&quot;);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
+<span class="fc" id="L178">                this.io.print(vinkki.toString() + &quot;\n&quot;);</span>
+<span class="fc" id="L179">            }</span>
         }
 
-<span class="fc" id="L82">    }</span>
-
+<span class="fc" id="L182">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

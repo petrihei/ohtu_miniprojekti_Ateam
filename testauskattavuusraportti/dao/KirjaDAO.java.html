@@ -5,48 +5,76 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
+import tietokantaobjektit.Tag;
 
 public class KirjaDAO {
 
     private Tietokanta db;
 
-<span class="nc" id="L13">    public KirjaDAO(Tietokanta db) {</span>
-<span class="nc" id="L14">        this.db = db;</span>
-<span class="nc" id="L15">    }</span>
+<span class="fc" id="L14">    public KirjaDAO(Tietokanta db) {</span>
+<span class="fc" id="L15">        this.db = db;</span>
+<span class="fc" id="L16">    }</span>
+
+    public Kirja haeKirja(long id) {
+<span class="fc" id="L19">        Kirja kirja = null;</span>
+<span class="fc" id="L20">        String query = &quot;SELECT * FROM Vinkki&quot;</span>
+                + &quot; JOIN Kirja ON vinkki.vinkki_id = kirja.vinkki&quot;
+                + &quot; LEFT JOIN (SELECT * FROM Tag, VinkkiTag&quot;
+                + &quot; WHERE Tag.tag_id = VinkkiTag.tag) AS R&quot;
+                + &quot; ON Vinkki.vinkki_id = R.vinkki&quot;
+                + &quot; WHERE vinkki.vinkki_id = ? ;&quot;;
+<span class="pc" id="L26">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L27">                PreparedStatement st = conn.prepareStatement(query)) {</span>
+<span class="fc" id="L28">            st.setLong(1, id);</span>
+<span class="fc" id="L29">            ResultSet result = st.executeQuery();</span>
+            
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            if (result.next()) {</span>
+<span class="fc" id="L32">                kirja = new Kirja(result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L33">                        result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L34">                        result.getString(&quot;isbn&quot;),</span>
+<span class="fc" id="L35">                        result.getString(&quot;kirjailija&quot;));</span>
+                do {
+<span class="fc" id="L37">                    String tagString = result.getString(&quot;tag&quot;);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                    if(tagString != null) {</span>
+<span class="fc" id="L39">                        Tag tag = new Tag(tagString);</span>
+<span class="fc" id="L40">                        kirja.lisaaTag(tag);</span>
+                    }
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                } while(result.next());</span>
+            }
+<span class="pc bpc" id="L44" title="10 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="fc" id="L45">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+<span class="fc" id="L46">        }</span>
+        
+<span class="fc" id="L48">        return kirja;</span>
+    }
 
     public long lisaaKirja(Kirja lisattava) {
-        // Lisätään ensin Vinkki.
-<span class="nc" id="L19">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
-<span class="nc" id="L20">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
-        
-<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (vinkkiId == -1) {</span>
-<span class="nc" id="L23">            return -1;</span>
+        // LisÃ¤tÃ¤Ã¤n ensin Vinkki.
+<span class="fc" id="L53">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
+<span class="fc" id="L54">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (vinkkiId == -1) {</span>
+<span class="fc" id="L57">            return -1;</span>
         }
 
-        // Lisätään Kirja ja yhdistetään Vinkkiin.
-<span class="nc" id="L27">        String query = &quot;INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)&quot;;</span>
-<span class="nc" id="L28">        long uusiId = -1;</span>
+        // LisÃ¤tÃ¤Ã¤n Kirja ja yhdistetÃ¤Ã¤n Vinkkiin.
+<span class="fc" id="L61">        String kirjaAddQuery = &quot;INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)&quot;;</span>
 
-<span class="nc" id="L30">        try (Connection conn = this.db.getConnection();</span>
-<span class="nc" id="L31">                PreparedStatement stmt = conn.prepareStatement(query)) {</span>
-<span class="nc" id="L32">            stmt.setLong(1, vinkkiId);</span>
-<span class="nc" id="L33">            stmt.setString(2, lisattava.getIsbn());</span>
-<span class="nc" id="L34">            stmt.setString(3, lisattava.getKirjailija());</span>
-<span class="nc" id="L35">            stmt.executeUpdate();</span>
-            
-            // Hae uusi ID:
-<span class="nc" id="L38">            try (ResultSet rs = stmt.getGeneratedKeys()) {</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">                if (rs.next()) {</span>
-<span class="nc" id="L40">                    uusiId = rs.getLong(1);</span>
-                }
-<span class="nc bnc" id="L42" title="All 8 branches missed.">            } catch (Exception e) {};</span>
-            
-<span class="nc bnc" id="L44" title="All 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="nc" id="L45">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
-<span class="nc" id="L46">            return -1;</span>
-<span class="nc" id="L47">        }</span>
+<span class="pc" id="L63">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L64">                PreparedStatement st = conn.prepareStatement(kirjaAddQuery)) {</span>
+<span class="fc" id="L65">            st.setLong(1, vinkkiId);</span>
+<span class="fc" id="L66">            st.setString(2, lisattava.getIsbn());</span>
+<span class="fc" id="L67">            st.setString(3, lisattava.getKirjailija());</span>
+<span class="fc" id="L68">            st.executeUpdate();</span>
 
-<span class="nc" id="L49">        return uusiId;</span>
+<span class="pc bpc" id="L70" title="12 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc" id="L71">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+            //TBD Poista vinkki
+<span class="nc" id="L73">            return -1;</span>
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">        lisattava.setId(vinkkiId);</span>
+
+<span class="fc" id="L77">        return vinkkiId;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

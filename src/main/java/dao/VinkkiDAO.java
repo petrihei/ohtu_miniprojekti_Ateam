@@ -52,27 +52,7 @@ public class VinkkiDAO {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
-
-        // Lisätään vinkin tagit.
-//        TagDAO tagDao = new TagDAO(db);
-//        for (Tag tag : lisattava.getTagit()) {
-//            // Lisätään tag.
-//            long tagId = tagDao.lisaaTag(tag);
-//
-//            // Liitetään tag Vinkkiin.
-//            String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
-//
-//            try (Connection conn = this.db.getConnection();
-//                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {
-//                st.setLong(1, vinkkiId);
-//                st.setLong(2, tagId);
-//                st.executeUpdate();
-//
-//            } catch (SQLException ex) {
-//                System.out.println("SQL kysely epäonnistui: " + ex);
-//                return -1;
-//            }
-//        }
+        
         if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
             return -1;
         }
@@ -125,18 +105,58 @@ public class VinkkiDAO {
     public List<Vinkki> kaikkiVinkitJaTiedot() {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
-        KirjaDAO kirjaDao = new KirjaDAO(db);
-        List<Vinkki> vinkit = kaikkiVinkit();
-        List<Vinkki> kaikki = new ArrayList();
-        for (Vinkki vinkki : vinkit) {
-            //if (vinkki.getTyyppi().equals("kirja")) {
-                Kirja kirja = kirjaDao.haeKirja(vinkki.getId());
-                if (kirja != null) {
-                    kaikki.add(kirja);
+        List<Vinkki> vinkit = new ArrayList<>();
+        
+        // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
+        String query = "SELECT * FROM Vinkki "
+                + "LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki "
+                + "LEFT OUTER JOIN Video ON Vinkki.vinkki_id = Video.vinkki "
+                + "LEFT OUTER JOIN Blogi ON Vinkki.vinkki_id = Blogi.vinkki "
+                + "LEFT OUTER JOIN Podcast ON Vinkki.vinkki_id = Podcast.vinkki "
+                + "LEFT OUTER JOIN ("
+                + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
+                + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
+                + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
+                + ") GROUP BY vinkki"
+                + ") AS R ON Vinkki.vinkki_id = R.vinkki;";
+        try (Connection conn = this.db.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet result = stmt.executeQuery()) {
+            while (result.next()) {
+                String tyyppi = result.getString("tyyppi");
+                Vinkki vinkki;
+                if(tyyppi.equals("kirja")) {
+                    vinkki = new Kirja(
+                            result.getString("otsikko"),
+                            result.getString("kuvaus"),
+                            result.getString("ISBN"),
+                            result.getString("kirjailija")
+                    );
+                } else if(tyyppi.equals("video")) {
+                    vinkki = new Video(
+                            result.getString("otsikko"),
+                            result.getString("kuvaus"),
+                            result.getString("tekija"),
+                            result.getString("url"),
+                            result.getString("pvm")
+                    );
+                } else {
+                    System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+                    continue;
                 }
-            //}
+                if(result.getString("tagit") != null) {
+                    String[] tagitString = result.getString("tagit").split(",");
+                    for (String tagString : tagitString) {
+                        vinkki.lisaaTag(new Tag(tagString));
+                    }
+                }
+                vinkit.add(vinkki);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e);
+            return null;
         }
-
-        return kaikki;
+        
+        return vinkit;
     }
 }

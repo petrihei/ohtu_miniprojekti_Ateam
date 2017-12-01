@@ -3,8 +3,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import tietokantaobjektit.Vinkki;
+import tietokantaobjektit.*;
 
 /**
  *
@@ -15,63 +14,150 @@ public class VinkkiDAO {
     private Tietokanta db;
 
     /**
-     * @param db Tietokanta, jota DAO tulee käyttämään.
+     * @param db Tietokanta, jota DAO tulee kÃ¤yttÃ¤mÃ¤Ã¤n.
      */
-<span class="fc" id="L20">    public VinkkiDAO(Tietokanta db) {</span>
-<span class="fc" id="L21">        this.db = db;</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L19">    public VinkkiDAO(Tietokanta db) {</span>
+<span class="fc" id="L20">        this.db = db;</span>
+<span class="fc" id="L21">    }</span>
 
     /**
-     * Lisää tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
+     * LisÃ¤Ã¤ tietokantaan Vinkki-olioa vastaavan rivin Vinkki-tietokantatauluun.
      *
-     * @param lisattava Vinkki-olio, joka lisätään tietokantaan.
-     * @return long Palauttaa onnistuneen lisäyksen uuden ID:n tai
-     * epäonnistuessa -1.
+     * @param lisattava Vinkki-olio, joka lisÃ¤tÃ¤Ã¤n tietokantaan.
+     * @return long Palauttaa onnistuneen lisÃ¤yksen uuden ID:n tai
+     * epÃ¤onnistuessa -1.
      */
     public long lisaaVinkki(Vinkki lisattava) {
-<span class="fc" id="L32">        String query = &quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)&quot;;</span>
-<span class="fc" id="L33">        long uusiId = -1;</span>
+<span class="fc" id="L31">        String query = &quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) values (?, ?, ?)&quot;;</span>
+<span class="fc" id="L32">        long vinkkiId = -1;</span>
 
-        // try-with-resource sulkee tarvittavat yhteydet try-osan jälkeen.
-<span class="pc" id="L36">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L37">                PreparedStatement stmt = conn.prepareStatement(query)) {</span>
-<span class="fc" id="L38">            stmt.setString(1, lisattava.getOtsikko());</span>
-<span class="fc" id="L39">            stmt.setString(2, lisattava.getKuvaus());</span>
-<span class="fc" id="L40">            stmt.setString(3, lisattava.getTyyppi());</span>
-<span class="fc" id="L41">            stmt.executeUpdate();</span>
+        // try-with-resource sulkee tarvittavat yhteydet try-osan jÃ¤lkeen.
+<span class="pc" id="L35">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L36">                PreparedStatement stmt = conn.prepareStatement(query)) {</span>
+<span class="fc" id="L37">            stmt.setString(1, lisattava.getOtsikko());</span>
+<span class="fc" id="L38">            stmt.setString(2, lisattava.getKuvaus());</span>
+<span class="fc" id="L39">            stmt.setString(3, lisattava.getTyyppi());</span>
+<span class="fc" id="L40">            stmt.executeUpdate();</span>
 
-            // Hae uusi ID:
-<span class="pc" id="L44">            try (ResultSet rs = stmt.getGeneratedKeys()) {</span>
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">                if (rs.next()) {</span>
-<span class="fc" id="L46">                    uusiId = rs.getLong(1);</span>
+            // Hae uusi ID ja aseta se oliolle:
+<span class="pc" id="L43">            try (ResultSet rs = stmt.getGeneratedKeys()) {</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">                if (rs.next()) {</span>
+<span class="fc" id="L45">                    vinkkiId = rs.getLong(1);</span>
+<span class="fc" id="L46">                    lisattava.setId(vinkkiId);</span>
                 }
-<span class="pc bpc" id="L48" title="6 of 8 branches missed.">            } catch (Exception e) {};</span>
-            
-<span class="pc bpc" id="L50" title="12 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="nc" id="L51">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
-<span class="nc" id="L52">            return -1;</span>
-<span class="fc" id="L53">        }</span>
+<span class="pc bpc" id="L48" title="6 of 8 branches missed.">            } catch (Exception e) {</span>
+<span class="fc" id="L49">            }</span>
 
-<span class="fc" id="L55">        return uusiId;</span>
+<span class="pc bpc" id="L51" title="10 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="fc" id="L52">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+<span class="fc" id="L53">            return -1;</span>
+<span class="fc" id="L54">        }</span>
+        
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {</span>
+<span class="fc" id="L57">            return -1;</span>
+        }
+
+<span class="fc" id="L60">        return vinkkiId;</span>
+    }
+
+    public boolean lisaaVinkkiTag(List&lt;Tag&gt; tagit, long vinkkiId) {
+<span class="fc" id="L64">        TagDAO tagDao = new TagDAO(db);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (Tag tag : tagit) {</span>
+            // LisÃ¤tÃ¤Ã¤n tag.
+<span class="fc" id="L67">            long tagId = tagDao.lisaaTag(tag);</span>
+
+            // LiitetÃ¤Ã¤n tag Vinkkiin.
+<span class="fc" id="L70">            String vinkkiTagQuery = &quot;INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)&quot;;</span>
+
+<span class="fc" id="L72">            try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L73">                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {</span>
+<span class="fc" id="L74">                st.setLong(1, vinkkiId);</span>
+<span class="fc" id="L75">                st.setLong(2, tagId);</span>
+<span class="fc" id="L76">                st.executeUpdate();</span>
+
+<span class="pc bpc" id="L78" title="8 of 16 branches missed.">            } catch (SQLException ex) {</span>
+<span class="fc" id="L79">                System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+<span class="fc" id="L80">                return false;</span>
+<span class="fc" id="L81">            }</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">        return true;</span>
     }
 
     public List&lt;Vinkki&gt; kaikkiVinkit() {
-<span class="fc" id="L59">        List&lt;Vinkki&gt; vinkit = new ArrayList();</span>
-<span class="fc" id="L60">        String query = &quot;SELECT * FROM Vinkki&quot;;</span>
+<span class="fc" id="L87">        List&lt;Vinkki&gt; vinkit = new ArrayList();</span>
+<span class="fc" id="L88">        String query = &quot;SELECT * FROM Vinkki&quot;;</span>
 
-        // try-with-resource sulkee suluissa määriteltyjen yhteydet try-osan jälkeen.
-<span class="pc" id="L63">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L64">                PreparedStatement stmt = conn.prepareStatement(query);</span>
-<span class="fc" id="L65">                ResultSet result = stmt.executeQuery()) {</span>
+        // try-with-resource sulkee suluissa mÃ¤Ã¤riteltyjen yhteydet try-osan jÃ¤lkeen.
+<span class="pc" id="L91">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L92">                PreparedStatement stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L93">                ResultSet result = stmt.executeQuery()) {</span>
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">            while (result.next()) {</span>
-<span class="fc" id="L68">                vinkit.add(new Vinkki(result.getString(&quot;otsikko&quot;), result.getString(&quot;kuvaus&quot;), result.getString(&quot;tyyppi&quot;)));</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            while (result.next()) {</span>
+<span class="fc" id="L96">                vinkit.add(new Vinkki(result.getLong(&quot;vinkki_id&quot;), result.getString(&quot;otsikko&quot;), result.getString(&quot;kuvaus&quot;), result.getString(&quot;tyyppi&quot;)));</span>
             }
-<span class="pc bpc" id="L70" title="18 of 24 branches missed.">        } catch (SQLException ex) {</span>
-<span class="nc" id="L71">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
-<span class="fc" id="L72">        }</span>
+<span class="pc bpc" id="L98" title="16 of 24 branches missed.">        } catch (SQLException ex) {</span>
+<span class="fc" id="L99">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+<span class="fc" id="L100">        }</span>
 
-<span class="fc" id="L74">        return vinkit;</span>
+<span class="fc" id="L102">        return vinkit;</span>
+    }
+
+    public List&lt;Vinkki&gt; kaikkiVinkitJaTiedot() {
+        //pitÃ¤isi palauttaa lista kaikista vinkeistÃ¤
+        //sisÃ¤ltÃ¤en kaikki niiden tiedot
+<span class="fc" id="L108">        List&lt;Vinkki&gt; vinkit = new ArrayList&lt;&gt;();</span>
+        
+        // TÃ¤hÃ¤n lauseeseen ei toivottavasti tarvitse enÃ¤Ã¤ koskea ikinÃ¤.
+<span class="fc" id="L111">        String query = &quot;SELECT * FROM Vinkki &quot;</span>
+                + &quot;LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki &quot;
+                + &quot;LEFT OUTER JOIN Video ON Vinkki.vinkki_id = Video.vinkki &quot;
+                + &quot;LEFT OUTER JOIN Blogi ON Vinkki.vinkki_id = Blogi.vinkki &quot;
+                + &quot;LEFT OUTER JOIN Podcast ON Vinkki.vinkki_id = Podcast.vinkki &quot;
+                + &quot;LEFT OUTER JOIN (&quot;
+                + &quot;SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM (&quot;
+                + &quot;SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag &quot;
+                + &quot;WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki&quot;
+                + &quot;) GROUP BY vinkki&quot;
+                + &quot;) AS R ON Vinkki.vinkki_id = R.vinkki;&quot;;
+<span class="pc" id="L122">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L123">                PreparedStatement stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L124">                ResultSet result = stmt.executeQuery()) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            while (result.next()) {</span>
+<span class="fc" id="L126">                String tyyppi = result.getString(&quot;tyyppi&quot;);</span>
+                Vinkki vinkki;
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                if(tyyppi.equals(&quot;kirja&quot;)) {</span>
+<span class="fc" id="L129">                    vinkki = new Kirja(</span>
+<span class="fc" id="L130">                            result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L131">                            result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L132">                            result.getString(&quot;ISBN&quot;),</span>
+<span class="fc" id="L133">                            result.getString(&quot;kirjailija&quot;)</span>
+                    );
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                } else if(tyyppi.equals(&quot;video&quot;)) {</span>
+<span class="fc" id="L136">                    vinkki = new Video(</span>
+<span class="fc" id="L137">                            result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L138">                            result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L139">                            result.getString(&quot;tekija&quot;),</span>
+<span class="fc" id="L140">                            result.getString(&quot;url&quot;),</span>
+<span class="fc" id="L141">                            result.getString(&quot;pvm&quot;)</span>
+                    );
+                } else {
+<span class="fc" id="L144">                    System.err.println(&quot;Tunnistamaton vinkin tyyppi: &quot; + tyyppi);</span>
+<span class="fc" id="L145">                    continue;</span>
+                }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">                if(result.getString(&quot;tagit&quot;) != null) {</span>
+<span class="fc" id="L148">                    String[] tagitString = result.getString(&quot;tagit&quot;).split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                    for (String tagString : tagitString) {</span>
+<span class="fc" id="L150">                        vinkki.lisaaTag(new Tag(tagString));</span>
+                    }
+                }
+<span class="fc" id="L153">                vinkit.add(vinkki);</span>
+<span class="fc" id="L154">            }</span>
+<span class="pc bpc" id="L155" title="16 of 24 branches missed.">        } catch (SQLException e) {</span>
+<span class="fc" id="L156">            System.err.println(&quot;SQLException: &quot; + e);</span>
+<span class="fc" id="L157">            return null;</span>
+<span class="fc" id="L158">        }</span>
+        
+<span class="fc" id="L160">        return vinkit;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
