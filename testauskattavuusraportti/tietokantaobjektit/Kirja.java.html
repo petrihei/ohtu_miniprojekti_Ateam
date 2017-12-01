@@ -6,13 +6,13 @@ public class Kirja extends Vinkki {
     private String kirjailija;
 
     public Kirja(String otsikko, String kuvaus, String isbn, String kirjailija) {
-<span class="nc" id="L9">        super(otsikko, kuvaus, &quot;Kirja&quot;);</span>
-<span class="nc" id="L10">        this.isbn = isbn;</span>
-<span class="nc" id="L11">        this.kirjailija = kirjailija;</span>
-<span class="nc" id="L12">    }</span>
+<span class="fc" id="L9">        super(otsikko, kuvaus, &quot;kirja&quot;);</span>
+<span class="fc" id="L10">        this.isbn = isbn;</span>
+<span class="fc" id="L11">        this.kirjailija = kirjailija;</span>
+<span class="fc" id="L12">    }</span>
 
     public String getIsbn() {
-<span class="nc" id="L15">        return isbn;</span>
+<span class="fc" id="L15">        return isbn;</span>
     }
 
     public void setIsbn(String isbn) {
@@ -20,7 +20,7 @@ public class Kirja extends Vinkki {
 <span class="nc" id="L20">    }</span>
 
     public String getKirjailija() {
-<span class="nc" id="L23">        return kirjailija;</span>
+<span class="fc" id="L23">        return kirjailija;</span>
     }
 
     public void setKirjailija(String kirjailija) {
@@ -29,12 +29,16 @@ public class Kirja extends Vinkki {
 
     @Override
     public String toString() {
-<span class="nc" id="L32">        StringBuilder sb = new StringBuilder();</span>
-<span class="nc" id="L33">        sb.append(this.tyyppi).append(&quot;: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
-<span class="nc" id="L34">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
-<span class="nc" id="L35">                .append(&quot;  ISBN: &quot;).append(this.isbn).append(&quot;\n&quot;)</span>
-<span class="nc" id="L36">                .append(&quot;  Kirjailija: &quot;).append(this.kirjailija);</span>
-<span class="nc" id="L37">        return sb.toString();</span>
+<span class="fc" id="L32">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L33">        sb.append(this.tyyppi).append(&quot;: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
+<span class="fc" id="L34">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
+<span class="fc" id="L35">                .append(&quot;  ISBN: &quot;).append(this.isbn).append(&quot;\n&quot;)</span>
+<span class="fc" id="L36">                .append(&quot;  Kirjailija: &quot;).append(this.kirjailija).append(&quot;\n&quot;)</span>
+<span class="fc" id="L37">                .append(&quot;  Tagit: &quot;);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
+<span class="fc" id="L39">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">        return sb.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

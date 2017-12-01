@@ -2,26 +2,38 @@
 
 import java.util.List;
 
-import dao.Tietokanta;
-import dao.VinkkiDAO;
-import tietokantaobjektit.Vinkki;
+import dao.*;
+import tietokantaobjektit.*;
 
 public class Logiikka {
-    
+
     private Tietokanta db;
     private VinkkiDAO vinkkiDao;
-    
+    private KirjaDAO kirjaDao;
+
 <span class="fc" id="L14">    public Logiikka(Tietokanta db) {</span>
 <span class="fc" id="L15">        this.db = db;</span>
 <span class="fc" id="L16">        this.vinkkiDao = new VinkkiDAO(db);</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L17">        this.kirjaDao = new KirjaDAO(db);</span>
+<span class="fc" id="L18">    }</span>
 
     public boolean lisaaVinkki(Vinkki vinkki) {
-<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        return vinkkiDao.lisaaVinkki(vinkki) != -1;</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        return vinkkiDao.lisaaVinkki(vinkki) != -1;</span>
     }
 
-    public List&lt;Vinkki&gt; kaikkiVinkit(){
-<span class="fc" id="L24">        return vinkkiDao.kaikkiVinkit();</span>
+    public List&lt;Vinkki&gt; kaikkiVinkit() {
+<span class="fc" id="L25">        return vinkkiDao.kaikkiVinkit();</span>
     }
+
+    public Kirja lisaaKirja(Kirja kirja) {
+<span class="fc" id="L29">        long id = kirjaDao.lisaaKirja(kirja);</span>
+<span class="fc" id="L30">        Kirja uusiKirja = kirjaDao.haeKirja(id);</span>
+<span class="fc" id="L31">        return uusiKirja;</span>
+    }
+
+    public List&lt;Vinkki&gt; haeKaikkiVinkit() {
+<span class="fc" id="L35">        return vinkkiDao.kaikkiVinkitJaTiedot();</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

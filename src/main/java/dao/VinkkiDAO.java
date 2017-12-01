@@ -52,27 +52,7 @@ public class VinkkiDAO {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return -1;
         }
-
-        // Lisätään vinkin tagit.
-//        TagDAO tagDao = new TagDAO(db);
-//        for (Tag tag : lisattava.getTagit()) {
-//            // Lisätään tag.
-//            long tagId = tagDao.lisaaTag(tag);
-//
-//            // Liitetään tag Vinkkiin.
-//            String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
-//
-//            try (Connection conn = this.db.getConnection();
-//                    PreparedStatement st = conn.prepareStatement(vinkkiTagQuery)) {
-//                st.setLong(1, vinkkiId);
-//                st.setLong(2, tagId);
-//                st.executeUpdate();
-//
-//            } catch (SQLException ex) {
-//                System.out.println("SQL kysely epäonnistui: " + ex);
-//                return -1;
-//            }
-//        }
+        
         if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
             return -1;
         }
