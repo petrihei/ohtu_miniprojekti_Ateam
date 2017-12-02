@@ -17,7 +17,7 @@ public class TekstikayttisTest {
 
     private Tietokanta db;
     private Logiikka logiikka;
-    
+
 //    @BeforeClass
 //    public void initTietokannanData() {
 //        Tietokanta tietokanta = new Tietokanta("jdbc:sqlite:TestausTietokanta.db");
@@ -26,7 +26,6 @@ public class TekstikayttisTest {
 //        tietokanta.poistaKaikki();
 //        tietokanta.lisaaTestiData();
 //    }
-
     @Before
     public void initTietokanta() {
         this.db = new Tietokanta("jdbc:sqlite:TestausTietokanta.db");
@@ -85,10 +84,10 @@ public class TekstikayttisTest {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
     }
-    
+
     @Test
     public void videonLisayksenOtsikkoToimii() {
-        IOStub io = new IOStub("2", "Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", "tag");
+        IOStub io = new IOStub("2", "Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.vinkinLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "video: Videon otsikko"));
@@ -96,41 +95,40 @@ public class TekstikayttisTest {
 
     @Test
     public void videonLisayksenKuvausToimii() {
-        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", "tag");
+        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.videonLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: videon kuvaus"));
     }
-    
+
     @Test
     public void videonLisayksenTekijaToimii() {
-        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", "tag");
+        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.videonLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: videon tekijä"));
     }
-    
+
     @Test
     public void videonLisayksenUrlToimii() {
-        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", "tag");
+        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.videonLisays();
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: videon url"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.video.com/watch"));
     }
-    
+
     @Test
     public void videonLisayksenPvmToimii() {
-        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", "tag");
+        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.videonLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
     }
 
-
     @Test
     public void videonLisayksenTagitToimii() {
         String tagit = "tagi1, tagi2";
-        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "videon url", "2017-12-01", tagit);
+        IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", tagit);
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
         kayttis.videonLisays();
         List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
@@ -157,8 +155,10 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit:"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: testikirja\n  Kuvaus: testikuvaus"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "video: Videon otsikko\n  Kuvaus: videon kuvaus"));
     }
-    
+
     @Test
     public void vinkkienJaTietojenTulostusToimii() {
         IOStub io = new IOStub("2");
@@ -169,8 +169,16 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "ISBN: ISBN 978-0-596-52068-7\n  Kirjailija: Marx"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "video: Videon otsikko"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: videon kuvaus"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: videon tekijä"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.video.com/watch"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tagi1 tagi2"));
+
     }
-        
+
     private boolean arrayContainsSubstring(List<String> list, String substr) {
         for (String str : list) {
             if (str.contains(substr)) {
