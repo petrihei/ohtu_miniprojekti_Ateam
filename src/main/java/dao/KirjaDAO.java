@@ -43,6 +43,8 @@ public class KirjaDAO {
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
         }
         
         return kirja;

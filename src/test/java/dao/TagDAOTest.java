@@ -48,4 +48,18 @@ public class TagDAOTest {
         TagDAO huonoDao = new TagDAO(huonoDB);
         assertEquals(null, huonoDao.haeTag(1));
     }
+    
+    @Test
+    public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        TagDAO huonoDao = new TagDAO(huonoDB);
+        assertEquals(-1, huonoDao.lisaaTag(new Tag("tagii")));
+    }
+    
+    @Test
+    public void huonoTietokantaosoitePalauttaaNullHakiessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        TagDAO huonoDao = new TagDAO(huonoDB);
+        assertEquals(null, huonoDao.haeTag(1));
+    }
 }

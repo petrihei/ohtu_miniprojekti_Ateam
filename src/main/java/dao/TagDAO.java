@@ -23,14 +23,14 @@ public class TagDAO {
             stmt.setString(1, lisattava.getTag());
             stmt.executeUpdate();
             // Hae uusi ID:
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    uusiId = rs.getLong(1);
-                }
-            } catch (Exception e) {};
+            ResultSet rs = stmt.getGeneratedKeys();
+            uusiId = rs.getLong(1);
             
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+            return -1;
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
 
@@ -49,6 +49,8 @@ public class TagDAO {
             tag = new Tag(result.getString("tag"));
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
         }
 
         return tag;

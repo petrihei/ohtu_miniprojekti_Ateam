@@ -40,16 +40,15 @@ public class VinkkiDAO {
             stmt.executeUpdate();
 
             // Hae uusi ID ja aseta se oliolle:
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    vinkkiId = rs.getLong(1);
-                    lisattava.setId(vinkkiId);
-                }
-            } catch (Exception e) {
-            }
+            ResultSet rs = stmt.getGeneratedKeys();
+            vinkkiId = rs.getLong(1);
+            lisattava.setId(vinkkiId);
 
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+            return -1;
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
         
@@ -65,7 +64,7 @@ public class VinkkiDAO {
         for (Tag tag : tagit) {
             // Lisätään tag.
             long tagId = tagDao.lisaaTag(tag);
-
+            
             // Liitetään tag Vinkkiin.
             String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
 
@@ -77,6 +76,9 @@ public class VinkkiDAO {
 
             } catch (SQLException ex) {
                 System.out.println("SQL kysely epäonnistui: " + ex);
+                return false;
+            } catch (NullPointerException ex) {
+                // Tietokanta-luokka tekee virheilmoituksen.
                 return false;
             }
         }
@@ -97,6 +99,8 @@ public class VinkkiDAO {
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
         }
 
         return vinkit;
@@ -154,6 +158,9 @@ public class VinkkiDAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e);
+            return null;
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
             return null;
         }
         

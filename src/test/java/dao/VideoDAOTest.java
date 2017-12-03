@@ -94,4 +94,18 @@ public class VideoDAOTest {
     public void olemattomanVideonHakuPalauttaaNull() {
         assertEquals(null, dao.haeVideo(-1l));
     }
+    
+    @Test
+    public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        VideoDAO huonoDao = new VideoDAO(huonoDB);
+        assertEquals(-1, huonoDao.lisaaVideo(new Video("Ots", "kuv", "tekija", "url", "pvm")));
+    }
+    
+    @Test
+    public void huonoTietokantaosoitePalauttaaNullHakiessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        VideoDAO huonoDao = new VideoDAO(huonoDB);
+        assertEquals(null, huonoDao.haeVideo(1));
+    }
 }
