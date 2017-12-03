@@ -72,6 +72,20 @@ public class KirjaDAOTest {
     }
     
     @Test
+    public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        KirjaDAO huonoDao = new KirjaDAO(huonoDB);
+        assertEquals(-1, huonoDao.lisaaKirja(new Kirja("Ots", "kuv", "isb", "kirj")));
+    }
+    
+    @Test
+    public void huonoTietokantaosoitePalauttaaNullHakiessa() {
+        Tietokanta huonoDB = new Tietokanta("");
+        KirjaDAO huonoDao = new KirjaDAO(huonoDB);
+        assertEquals(null, huonoDao.haeKirja(1));
+    }
+    
+    @Test
     public void olemattomanKirjanHakuPalauttaaNull() {
         assertEquals(null, dao.haeKirja(-1l));
     }

@@ -58,4 +58,27 @@ public class VinkkiDAOTest {
         lisattava.lisaaTag(new Tag(null));
         assertEquals(-1l, dao.lisaaVinkki(lisattava));
     }
+    
+    @Test
+    public void kaikkiVinkitJaTiedotHuonollaTietokantaosoitteellaPalauttaaNull() {
+        Tietokanta huonoDB = new Tietokanta("");
+        VinkkiDAO huonoDao = new VinkkiDAO(huonoDB);
+        assertEquals(null, huonoDao.kaikkiVinkitJaTiedot());
+    }
+    
+    @Test
+    public void lisaaVinkkiTagHuonollaTietokantaosoitteellaPalauttaaFalse() {
+        Tietokanta huonoDB = new Tietokanta("");
+        VinkkiDAO huonoDao = new VinkkiDAO(huonoDB);
+        Vinkki lisattava = new Vinkki("ots", "kuv", "kirja");
+        lisattava.lisaaTag(new Tag("doot"));
+        assertFalse(huonoDao.lisaaVinkkiTag(lisattava.getTagit(), 1l));
+    }
+    
+    @Test
+    public void kaikkiVinkitHuonollaTietokantaosoitteellaPalauttaaTyhjanListan() {
+        Tietokanta huonoDB = new Tietokanta("");
+        VinkkiDAO huonoDao = new VinkkiDAO(huonoDB);
+        assertTrue(huonoDao.kaikkiVinkit().isEmpty());
+    }
 }
