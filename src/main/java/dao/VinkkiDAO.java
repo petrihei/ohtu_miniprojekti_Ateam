@@ -112,7 +112,11 @@ public class VinkkiDAO {
         List<Vinkki> vinkit = new ArrayList<>();
         
         // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
-        String query = "SELECT * FROM Vinkki "
+        String query = "SELECT vinkki.otsikko, vinkki.kuvaus, vinkki.tyyppi, kirja.isbn, kirja.kirjailija, video.tekija, "
+                + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.url AS blogi_url, "
+                + "blogi.pvm AS blogi_pvm, podcast.tekija AS podcast_tekija, podcast.url AS podcast_url,"
+                + "podcast.pvm AS podcast_pvm, R.tagit "
+                + "FROM Vinkki "
                 + "LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki "
                 + "LEFT OUTER JOIN Video ON Vinkki.vinkki_id = Video.vinkki "
                 + "LEFT OUTER JOIN Blogi ON Vinkki.vinkki_id = Blogi.vinkki "
@@ -141,8 +145,16 @@ public class VinkkiDAO {
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
                             result.getString("tekija"),
-                            result.getString("url"),
-                            result.getString("pvm")
+                            result.getString("video_url"),
+                            result.getString("video_pvm")
+                    );
+                } else if(tyyppi.equals("blogi")) {
+                    vinkki = new Blogi(
+                            result.getString("otsikko"),
+                            result.getString("kuvaus"),
+                            result.getString("kirjoittaja"),
+                            result.getString("blogi_url"),
+                            result.getString("blogi_pvm")
                     );
                 } else {
                     System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);

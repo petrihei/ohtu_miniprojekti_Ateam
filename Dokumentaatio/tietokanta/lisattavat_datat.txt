@@ -1,0 +1,98 @@
+
+
+Kirjat: 
+
+Introduction to Algorithms
+The algorithms are described in English and in a pseudocode designed to be readable by anyone who has done a little programming. 
+9780262033848
+James Cormen
+algoritmit, Tira
+
+The Art of Agile development
+The Art of Agile Development contains practical guidance for anyone considering or applying agile development for building valuable software. Plenty of books describe what agile development is or why it helps software projects succeed, but very few combine information for developers, managers, testers, and customers into a single package that they can apply directly.
+9780596527679
+James Shore
+ohtu, agile, developers
+
+The Agile Samurai
+Combining cutting-edge tools with classic agile practices, The Agile Samurai gives you everything you need to deliver something of value every week and make rolling your software into production a non-event.
+9781934356586
+Jonathan Rasmusson
+ohtu, agile, tools
+
+Videot:
+
+Agile In Practice: StoryCards/User Stories
+This video is part of the Agile Academy's Agile in Practice series to support our Practice Help Sheets on our website at www.agileacademy.com.au. There is more to Agile success than just using practices. However, practices can serve as valuable techniques to assist you in working Agile.
+AgileAcademyAus
+https://www.youtube.com/watch?v=LGeDZmrWwsw
+20.3.2011
+ohtu, user story
+
+60 Second Scrum Organizing the Product Backlog
+Is your Product Backlog growing too large to manage?  Here are some tips to get it under control.
+Angela Druckman
+https://www.youtube.com/watch?v=g92anflQgyY
+
+
+26.11.2012
+ohtu, product backlog
+
+Eric Ries: "The Lean Startup" | Talks at Google
+https://www.youtube.com/watch?v=fEvKo90qBns
+Talks at Google
+Eric is the author of the popular blog Startup Lessons Learned and the creator of the Lean Startup methodology. He co-founded and served as CTO of IMVU, his third startup, which has today has over 40 million users and 2009 revenue over $22 million.
+7.4.2011
+ohtu, lean startup
+
+Blogit:
+
+Add the Right Amount of Detail to User Stories
+Talking about the timing and the detail of user stories. Points also to a video advicing what to do right now.
+Mike Cohn
+https://www.mountaingoatsoftware.com/blog/add-the-right-amount-of-detail-to-user-stories
+3.10.2017
+ohtu, user story
+Blogin nimi: Mountain Goat Software Blog
+
+How to communicate bad news to your project sponsor
+Delivering bad news to your project sponsor is not an easy task that any project manager. You never know what you can expect. 
+Helena Liu
+https://www.ronrosenhead.co.uk/6952/communicate-bad-news-project-sponsor/
+27.9.2017
+projektit, ohtu
+Blogin nimi: Ron Rosenhead's blog
+
+Remote Agile Teams
+Results of a survey about how agile teams work when team members don't work in the same place.
+Sam Laing
+https://www.growingagile.co.za/2017/07/remote-agile-teams/
+25.7.2017
+agile, ohtu
+Blogin nimi: Growing Agile Blog
+
+Podcastit:
+
+Episode 130: Intelligent Monkeys
+Discussion about the value of automation and what is the right amount of automation.
+Amos King, Craig Buchek, John Sextro, Lee McCauley
+http://www.thisagilelife.com/130
+24.9.2017
+automation, ohtu
+Podcastin nimi: This Agile Life
+
+Joe Anderson on using Retrospectives for self-development as well as team development
+As Scrum Masters we are intimately familiar with Retrospectives. We plan, organize and facilitate retrospectives for our team members and even larger chunks of the organization. But when was the last time you did your own personal retrospective?
+Joe Anderson
+http://scrum-master-toolbox.org/2017/11/podcast/joe-anderson-on-using-retrospectives-for-self-development-as-well-as-team-development/
+30.11.2017
+ohtu, scrum
+Podcastin nimi: Scrum Master Toolbox Podcast
+
+Donald Ewart the 3 steps to mastery for Scrum teams
+Podcast discussed leadership. "Powerful Questions" is recommended as a tool that helps Scrum Masters to initiate right kind of discussions with the team.
+Donald Ewart
+http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/
+16.11.2017
+scrum, ohtu
+Podcastin nimi: Scrum Master Toolbox Podcast
