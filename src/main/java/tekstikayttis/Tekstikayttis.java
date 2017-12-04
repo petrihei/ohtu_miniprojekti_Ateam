@@ -77,10 +77,11 @@ public class Tekstikayttis {
         String otsikko = kysyKentta("otsikko");
         String kuvaus = kysyKentta("kuvaus");
         String tekija = kysyKentta("tekijä");
+        String nimi = kysyKentta("nimi");
         String url = kysyKentta("url");
         String pvm = kysyKentta("pvm");
         
-        Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, url, pvm);
+        Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
 
         this.io.print("");

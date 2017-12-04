@@ -40,34 +40,34 @@ INSERT INTO Tag (tag) VALUES ("lean startup");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("Add the Right Amount of Detail to User Stories","Talking about the timing and the detail of user stories. Points also to a video advicing what to do right now.", "blogi");
-INSERT INTO Blogi (vinkki, kirjoittaja, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Mike Cohn", "https://www.mountaingoatsoftware.com/blog/add-the-right-amount-of-detail-to-user-stories", "3.10.2017");
+INSERT INTO Blogi (vinkki, kirjoittaja, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Mike Cohn", "Mountain Goat Software", "https://www.mountaingoatsoftware.com/blog/add-the-right-amount-of-detail-to-user-stories", "3.10.2017");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "user story" LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("How to communicate bad news to your project sponsor","Delivering bad news to your project sponsor is not an easy task that any project manager. You never know what you can expect.", "blogi");
-INSERT INTO Blogi (vinkki, kirjoittaja, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Helena Liu", "https://www.ronrosenhead.co.uk/6952/communicate-bad-news-project-sponsor/", "27.9.2017");
+INSERT INTO Blogi (vinkki, kirjoittaja, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Helena Liu", "Ron Rosenhead's blog", "https://www.ronrosenhead.co.uk/6952/communicate-bad-news-project-sponsor/", "27.9.2017");
 INSERT INTO Tag (tag) VALUES ("projektit");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("Remote Agile Teams","Results of a survey about how agile teams work when team members don't work in the same place.", "blogi");
-INSERT INTO Blogi (vinkki, kirjoittaja, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Sam Laing", "https://www.growingagile.co.za/2017/07/remote-agile-teams/", "25.7.2017");
+INSERT INTO Blogi (vinkki, kirjoittaja, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Sam Laing", "Growing Agile Blog", "https://www.growingagile.co.za/2017/07/remote-agile-teams/", "25.7.2017");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "agile" LIMIT 1));
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("Episode 130: Intelligent Monkeys","Discussion about the value of automation and what is the right amount of automation.", "podcast");
-INSERT INTO Podcast (vinkki, tekija, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Amos King, Craig Buchek, John Sextro, Lee McCauley", "http://www.thisagilelife.com/130", "24.9.2017");
+INSERT INTO Podcast (vinkki, tekija, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Amos King, Craig Buchek, John Sextro, Lee McCauley", "This Agile Life", "http://www.thisagilelife.com/130", "24.9.2017");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
 INSERT INTO Tag (tag) VALUES ("automation");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("Joe Anderson on using Retrospectives for self-development as well as team development","As Scrum Masters we are intimately familiar with Retrospectives. We plan, organize and facilitate retrospectives for our team members and even larger chunks of the organization. But when was the last time you did your own personal retrospective?", "podcast");
-INSERT INTO Podcast (vinkki, tekija, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Joe Anderson", "http://scrum-master-toolbox.org/2017/11/podcast/joe-anderson-on-using-retrospectives-for-self-development-as-well-as-team-development/", "30.11.2017");
+INSERT INTO Podcast (vinkki, tekija, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Joe Anderson", "Scrum Master Toolbox Podcast", "http://scrum-master-toolbox.org/2017/11/podcast/joe-anderson-on-using-retrospectives-for-self-development-as-well-as-team-development/", "30.11.2017");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
 INSERT INTO Tag (tag) VALUES ("scrum");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));
 
 INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES ("Donald Ewart the 3 steps to mastery for Scrum teams","Podcast discussed leadership. "Powerful Questions" is recommended as a tool that helps Scrum Masters to initiate right kind of discussions with the team.", "podcast");
-INSERT INTO Podcast (vinkki, tekija, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Donald Ewart", "http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/", "16.11.2017");
+INSERT INTO Podcast (vinkki, tekija, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),"Donald Ewart", "Scrum Master Toolbox Podcast", "http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/", "16.11.2017");
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "scrum" LIMIT 1));
 INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = "ohtu" LIMIT 1));
