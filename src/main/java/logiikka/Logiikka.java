@@ -50,18 +50,16 @@ public class Logiikka {
         Video uusiVideo = videoDao.haeVideo(id);
         return uusiVideo;
     }
-    
+
     private Blogi lisaaBlogi(Blogi blogi) {
         long id = blogiDao.lisaaBlogi(blogi);
         Blogi uusiBlogi = blogiDao.haeBlogi(id);
         return uusiBlogi;
     }
 
-    public boolean VinkinPoisto(Vinkki Poistettava){
-      System.out.println("Logiikassa Poistettava " + Poistettava.getId());
-      return vinkkiDao.PoistaVinkki(Poistettava);
+    public boolean VinkinPoisto(Vinkki Poistettava) {
+        return vinkkiDao.PoistaVinkki(Poistettava);
     }
-
 
     public List<Vinkki> haeKaikkiVinkit() {
         return vinkkiDao.kaikkiVinkitJaTiedot();

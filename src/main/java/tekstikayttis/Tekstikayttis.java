@@ -36,12 +36,12 @@ public class Tekstikayttis {
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
                 this.vinkkienJaTietojenTulostus();
-            }  else if(valinta.equals("3")){
-              if (this.vinkkienTulostusPoistamiseen()){
-                  this.io.print("Vinkki Poistettu");
-              }
+            } else if (valinta.equals("3")) {
+                if (this.vinkkienTulostusPoistamiseen()) {
+                    this.io.print("Vinkki poistettu.");
+                }
             } else {
-              this.io.print("Virheellinen valinta");
+                this.io.print("Virheellinen valinta");
             }
             valinta = this.tulostaToiminnallisuudet();
         }
@@ -49,7 +49,7 @@ public class Tekstikayttis {
     }
 
     /*
-    *  Vinkin lisääminen
+     *  Vinkin lisääminen
      */
     public void vinkinLisays() {
         //kun lisaystoiminto valitaan, selvitetään ensin tyyppi
@@ -66,7 +66,7 @@ public class Tekstikayttis {
             this.kirjanLisays();
         } else if (komento.equals("2")) {
             this.videonLisays();
-        } else if(komento.equals("3")){
+        } else if (komento.equals("3")) {
             this.bloginLisays();
         } else if (komento.equals("0")) {
             return;
@@ -75,8 +75,8 @@ public class Tekstikayttis {
             this.vinkinLisays();
         }
     }
-    
-    public void bloginLisays(){
+
+    public void bloginLisays() {
         this.io.print("");
         String otsikko = kysyKentta("otsikko");
         String kuvaus = kysyKentta("kuvaus");
@@ -84,12 +84,12 @@ public class Tekstikayttis {
         String nimi = kysyKentta("nimi");
         String url = kysyKentta("url");
         String pvm = kysyKentta("pvm");
-        
+
         Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
 
         this.io.print("");
-        
+
         lisaaVinkkiJaTulostaTiedot(lisattava);
     }
 
@@ -176,48 +176,47 @@ public class Tekstikayttis {
     }
 
     public boolean vinkkienTulostusPoistamiseen() {
-      List<Vinkki> vinkit = logiikka.kaikkiVinkit();
-      boolean deleted = false;
-      if (vinkit.size() == 0) {
-          this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
-      } else {
+        List<Vinkki> vinkit = logiikka.kaikkiVinkit();
+        boolean deleted = false;
+        if (vinkit.isEmpty()) {
+            this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
+        } else {
 
-          this.io.print("Kaikki vinkit:");
-          this.io.print("**************");
+            this.io.print("Kaikki vinkit:");
+            this.io.print("**************");
 
-          for (Vinkki vinkki : vinkit) {
-              this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() +  "\n");
+            for (Vinkki vinkki : vinkit) {
+                this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() + "\n");
 
-          }
-          this.io.print("0) Peruuta poisto.");
-          this.io.print("Valitse vinkki, joka haluat poistaa (ID): \n");
-          String PoistettavaID = io.nextLine();
-              if (PoistettavaID.equals("0")) {
-                  this.io.print("Vinkin poisto peruttu.\n");
-                  return false;
-              }
-          for (Vinkki vinkki : vinkit){
-              if (String.valueOf(vinkki.getId()).equals(PoistettavaID)){
-                  this.io.print("Haluatko varmasti poistaa seuraavan vinkin?(1 = Kyllä)");
-                  this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() + " | " +  "\n");
-                  String varmistus = io.nextLine();
+            }
+            this.io.print("0: Peruuta poisto.");
+            this.io.print("Valitse vinkki, joka haluat poistaa (ID): \n");
+            String PoistettavaID = io.nextLine();
+            if (PoistettavaID.equals("0")) {
+                this.io.print("Vinkin poisto peruttu.\n");
+                return false;
+            }
+            for (Vinkki vinkki : vinkit) {
+                if (String.valueOf(vinkki.getId()).equals(PoistettavaID)) {
+                    this.io.print("Haluatko varmasti poistaa seuraavan vinkin?(1: Kyllä)");
+                    this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() + " | " + "\n");
+                    String varmistus = io.nextLine();
 
-                  if (varmistus.equals("1")){
-                      deleted = logiikka.VinkinPoisto(vinkki);
-                  }
+                    if (varmistus.equals("1")) {
+                        deleted = logiikka.VinkinPoisto(vinkki);
+                    }
 
-                  return deleted;
-              }
+                    return deleted;
+                }
 
-          }
-          if (!deleted){
-              this.io.print("Väärä ID");
-              return deleted;
-          }
+            }
+            if (!deleted) {
+                this.io.print("Väärä ID");
+                return deleted;
+            }
 
-
-      }
-      return deleted;
+        }
+        return deleted;
     }
 
     /**
@@ -249,14 +248,15 @@ public class Tekstikayttis {
         String validoitava = this.io.nextLine();
         String komento = "";
         while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals("k")) {
-            System.out.println(kentanTyyppi + " väärässä muodossa");
-            System.out.println("Haluatko syöttää uuden? k/e");
+            this.io.print(kentanTyyppi + " väärässä muodossa");
+            this.io.print("Haluatko syöttää uuden? k/e");
+
             komento = this.io.nextLine();
             if (komento.equals("k")) {
                 validoitava = this.io.nextLine();
                 komento = "";
             } else {
-                System.out.println(kentanTyyppi + " ei tallennettu");
+                this.io.print(kentanTyyppi + " ei tallennettu");
                 validoitava = "";
                 break;
             }

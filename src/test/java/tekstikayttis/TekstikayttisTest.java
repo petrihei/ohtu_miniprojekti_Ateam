@@ -1,5 +1,6 @@
 package tekstikayttis;
 
+import dao.KirjaDAO;
 import dao.Tietokanta;
 import java.util.List;
 import logiikka.Logiikka;
@@ -7,7 +8,7 @@ import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import tietokantaobjektit.Tag;
+import tietokantaobjektit.*;
 
 /**
  *
@@ -41,6 +42,7 @@ public class TekstikayttisTest {
         assertEquals("Valitse toiminnallisuus:", io.outputs.get(4));
     }
 
+    //Kirjan lisäys
     @Test
     public void kirjanLisayksenOtsikkoToimii() {
         IOStub io = new IOStub("1", "Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", "tag");
@@ -85,6 +87,7 @@ public class TekstikayttisTest {
         }
     }
 
+    //Videon lisäys
     @Test
     public void videonLisayksenOtsikkoToimii() {
         IOStub io = new IOStub("2", "Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", "tag");
@@ -137,6 +140,24 @@ public class TekstikayttisTest {
         }
     }
 
+    // Blogin lisäys
+    @Test
+    public void bloginLisaysOikeillaTiedoillaToimii() {
+        IOStub io = new IOStub("blogipostauksen otsikko", "blogipostauksen kuvaus",
+                "blogipostauksen tekijä", "blogipostauksen nimi", "www.blogger.com/blog",
+                "2017-12-01", "tag, test");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.bloginLisays();
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "blogipostaus: blogipostauksen otsikko"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: blogipostauksen kuvaus"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kirjoittaja: blogipostauksen tekijä"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Nimi: blogipostauksen nimi"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.blogger.com/blog"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
+    }
+
     @Test
     public void kayttoliittymaToimii() {
         IOStub io = new IOStub("0");
@@ -177,6 +198,52 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tagi1 tagi2"));
 
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "blogipostaus: blogipostauksen otsikko"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: blogipostauksen kuvaus"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kirjoittaja: blogipostauksen tekijä"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Nimi: blogipostauksen nimi"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.blogger.com/blog"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
+    }
+
+    @Test
+    public void vinkkiPoistetaanKunOikeaId() {
+        KirjaDAO kirjaDAO = new KirjaDAO(db);
+        long vinkki = kirjaDAO.lisaaKirja(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
+
+        IOStub io = new IOStub(vinkki + "", "1");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.vinkkienTulostusPoistamiseen();
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), vinkki + " | kirja | Marxin Pääoma | paras"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Valitse vinkki, joka haluat poistaa (ID):"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Haluatko varmasti poistaa seuraavan vinkin?(1: Kyllä)"));
+
+    }
+
+    @Test
+    public void vinkkiaEiPoistetaKunVaaraId() {
+        IOStub io = new IOStub("k", "1");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.vinkkienTulostusPoistamiseen();
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "0: Peruuta poisto."));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Valitse vinkki, joka haluat poistaa (ID):"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Väärä ID"));
+    }
+
+    @Test
+    public void poistonVoiPerua() {
+        IOStub io = new IOStub("0");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.vinkkienTulostusPoistamiseen();
+
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "0: Peruuta poisto."));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Vinkin poisto peruttu"));
     }
 
     private boolean arrayContainsSubstring(List<String> list, String substr) {
