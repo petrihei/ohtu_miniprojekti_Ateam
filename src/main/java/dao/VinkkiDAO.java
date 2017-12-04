@@ -113,8 +113,8 @@ public class VinkkiDAO {
         
         // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
         String query = "SELECT vinkki.otsikko, vinkki.kuvaus, vinkki.tyyppi, kirja.isbn, kirja.kirjailija, video.tekija, "
-                + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.url AS blogi_url, "
-                + "blogi.pvm AS blogi_pvm, podcast.tekija AS podcast_tekija, podcast.url AS podcast_url,"
+                + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.nimi AS blogi_nimi, blogi.url AS blogi_url, "
+                + "blogi.pvm AS blogi_pvm, podcast.tekija AS podcast_tekija, podcast.nimi AS podcast_nimi, podcast.url AS podcast_url,"
                 + "podcast.pvm AS podcast_pvm, R.tagit "
                 + "FROM Vinkki "
                 + "LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki "
@@ -153,6 +153,7 @@ public class VinkkiDAO {
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
                             result.getString("kirjoittaja"),
+                            result.getString("blogi_nimi"),
                             result.getString("blogi_url"),
                             result.getString("blogi_pvm")
                     );

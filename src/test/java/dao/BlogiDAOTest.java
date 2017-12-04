@@ -22,27 +22,28 @@ public class BlogiDAOTest {
 
     @Test
     public void bloginVoiLisata() {
-        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03");
+        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
         long id = dao.lisaaBlogi(lisattava);
         assertTrue(id != -1);
     }
 
     @Test
     public void bloginVoiHakea() {
-        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03");
+        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
         long id = dao.lisaaBlogi(lisattava);
         Blogi lisatty = dao.haeBlogi(id);
 
         assertEquals("Ots", lisatty.getOtsikko());
         assertEquals("kuv", lisatty.getKuvaus());
         assertEquals("kirj", lisatty.getKirjoittaja());
+        assertEquals("nimi", lisatty.getNimi());
         assertEquals("url", lisatty.getUrl());
         assertEquals("2017-12-03", lisatty.getPvm());
     }
 
     @Test
     public void bloginVoiLisataTagilla() {
-        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03");
+        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
         lisattava.lisaaTag(new Tag("tagi"));
         long id = dao.lisaaBlogi(lisattava);
         assertTrue(id != -1);
@@ -50,7 +51,7 @@ public class BlogiDAOTest {
 
     @Test
     public void haetullaBlogillaOnTagit() {
-        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03");
+        Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
         lisattava.lisaaTag(new Tag("tagi1"));
         lisattava.lisaaTag(new Tag("tagi2"));
 
@@ -65,7 +66,7 @@ public class BlogiDAOTest {
     public void huonoTietokantaPalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
     }
 
     @Test
@@ -79,7 +80,7 @@ public class BlogiDAOTest {
     public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
     }
 
     @Test
