@@ -27,13 +27,79 @@ public class Stepdefs {
         inputs.add("1");
     }
 
-    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" are "
-            + "and isbn \"ISBN 978-0-596-52068-7\" and author \"testi kirjailja\" and tags \"([^\"]*)\" are entered$")
-    public void title_and_description_are_and_isbn_and_author_and_tags_are_entered(String title, String description, String isbn, String author, String tags) {
+    @Given("^type video is selected$")
+    public void type_video_is_selected() throws Throwable {
+        inputs.add("2");
+    }
+
+    @Given("^type blog is selected$")
+    public void type_blog_is_selected() throws Throwable {
+        inputs.add("3");
+    }
+
+    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
+            + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+
+//    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
+//            + "and isbn \"ISBN 978-0-596-52068-7\" and author \"testi kirjailja\" and tags \"([^\"]*)\" are entered$")
+    public void title_and_description_and_isbn_and_author_and_tags_are_entered(String title,
+            String description, String isbn, String author, String tags) {
         inputs.add(title);
         inputs.add(description);
         inputs.add(isbn);
         inputs.add(author);
+        inputs.add(tags);
+        inputs.add("0");
+
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kayttoliittyma();
+    }
+
+    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
+            + "and wrong isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+    public void title_and_description_and_wrong_isbn_are_entered(String title,
+            String description, String isbn, String author, String tags) {
+        inputs.add(title);
+        inputs.add(description);
+        inputs.add(isbn);
+        inputs.add(author);
+        inputs.add(tags);
+
+        inputs.add("0");
+
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kirjanLisays();
+    }
+
+    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" and creator \"([^\"]*)\" "
+            + "and url \"([^\"]*)\" and date \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+    public void title_and_description_and_creator_and_url_and_date_and_tags_are_entered(String title,
+            String description, String creator, String url, String date, String tags) throws Throwable {
+        inputs.add(title);
+        inputs.add(description);
+        inputs.add(creator);
+        inputs.add(url);
+        inputs.add(date);
+        inputs.add(tags);
+        inputs.add("0");
+
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kayttoliittyma();
+    }
+
+    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" and creator \"([^\"]*)\" "
+            + "and name \"([^\"]*)\" and url \"([^\"]*)\" and date \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+    public void title_and_description_and_creator_and_name_and_url_and_date_and_tags_are_entered(
+            String title, String description, String creator, String name, String url, String date, String tags) throws Throwable {
+        inputs.add(title);
+        inputs.add(description);
+        inputs.add(creator);
+        inputs.add(name);
+        inputs.add(url);
+        inputs.add(date);
         inputs.add(tags);
         inputs.add("0");
 
