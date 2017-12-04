@@ -24,7 +24,7 @@ public class Logiikka {
     public List<Vinkki> kaikkiVinkit() {
         return vinkkiDao.kaikkiVinkit();
     }
-    
+
     public Vinkki lisaaVinkki(Vinkki vinkki) {
         // TODO: Käytä super-DAO:n lisaaVinkki-metodia
         if (vinkki.getTyyppi().equals("kirja")) {
@@ -44,7 +44,7 @@ public class Logiikka {
         Kirja uusiKirja = kirjaDao.haeKirja(id);
         return uusiKirja;
     }
-    
+
     private Video lisaaVideo(Video video) {
         long id = videoDao.lisaaVideo(video);
         Video uusiVideo = videoDao.haeVideo(id);
@@ -56,6 +56,12 @@ public class Logiikka {
         Blogi uusiBlogi = blogiDao.haeBlogi(id);
         return uusiBlogi;
     }
+
+    public boolean VinkinPoisto(Vinkki Poistettava){
+      System.out.println("Logiikassa Poistettava " + Poistettava.getId());
+      return vinkkiDao.PoistaVinkki(Poistettava);
+    }
+
 
     public List<Vinkki> haeKaikkiVinkit() {
         return vinkkiDao.kaikkiVinkitJaTiedot();

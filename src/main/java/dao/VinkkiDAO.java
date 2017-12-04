@@ -51,7 +51,7 @@ public class VinkkiDAO {
             // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
-        
+
         if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
             return -1;
         }
@@ -64,7 +64,7 @@ public class VinkkiDAO {
         for (Tag tag : tagit) {
             // Lisätään tag.
             long tagId = tagDao.lisaaTag(tag);
-            
+
             // Liitetään tag Vinkkiin.
             String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
 
@@ -110,7 +110,7 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
-        
+
         // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
         String query = "SELECT vinkki.otsikko, vinkki.kuvaus, vinkki.tyyppi, kirja.isbn, kirja.kirjailija, video.tekija, "
                 + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.nimi AS blogi_nimi, blogi.url AS blogi_url, "
@@ -176,7 +176,55 @@ public class VinkkiDAO {
             // Tietokanta-luokka tekee virheilmoituksen.
             return null;
         }
-        
+
         return vinkit;
+    }
+
+    public boolean PoistaVinkki(Vinkki poistettava){
+        Long PoistettavaID = poistettava.getId();
+        String query = "SELECT tag FROM VinkkiTag where vinkki = " + PoistettavaID;
+        try (Connection conn = this.db.getConnection();) {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            List<Integer> Tag_ids = new  ArrayList<Integer>();
+
+            while (result.next()) {
+                Tag_ids.add(result.getInt("tag"));
+
+            }
+            for(int tagID : Tag_ids){
+                query = "SELECT Count() from VinkkiTag WHERE tag = " + tagID;
+                stmt = conn.prepareStatement(query);
+                result = stmt.executeQuery();
+                while (result.next()){
+                    int TagCounter = result.getInt("Count()");
+
+                    if (TagCounter == 1){
+                        query = "Delete from VinkkiTag where vinkki = " + PoistettavaID ;
+                        stmt = conn.prepareStatement(query);
+                        stmt.executeUpdate();
+                        query = "Delete from Tag where tag_id = "+ tagID;
+                        stmt = conn.prepareStatement(query);
+                        stmt.executeUpdate();
+                    } else {
+                        query = "Delete from VinkkiTag where vinkki = " + PoistettavaID;
+                        stmt = conn.prepareStatement(query);
+                        stmt.executeUpdate();
+                    }
+                }
+            }
+            String PoistettavanTyyppi = poistettava.getTyyppi();
+            query = "Delete from " + PoistettavanTyyppi + " WHERE vinkki = " + PoistettavaID + ";";
+            stmt = conn.prepareStatement(query);
+            stmt.executeUpdate();
+            query = "DELETE FROM Vinkki WHERE vinkki_id = " + PoistettavaID;
+            stmt = conn.prepareStatement(query);
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println("SQL kysely epäonnistui: " + ex);
+        }
+        return false;
     }
 }
