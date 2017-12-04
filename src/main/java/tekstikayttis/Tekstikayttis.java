@@ -35,8 +35,12 @@ public class Tekstikayttis {
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
                 this.vinkkienJaTietojenTulostus();
+            }  else if(valinta.equals("3")){
+              if (this.vinkkienTulostusPoistamiseen()){
+                  this.io.print("Vinkki Poistettu");
+              }
             } else {
-                this.io.print("Virheellinen valinta");
+              this.io.print("Virheellinen valinta");
             }
             valinta = this.tulostaToiminnallisuudet();
         }
@@ -80,7 +84,7 @@ public class Tekstikayttis {
         kysyTagit(lisattava);
 
         this.io.print("");
-        
+
         lisaaVinkkiJaTulostaTiedot(lisattava);
     }
 
@@ -98,7 +102,7 @@ public class Tekstikayttis {
 
         lisaaVinkkiJaTulostaTiedot(lisattava);
     }
-    
+
     private void lisaaVinkkiJaTulostaTiedot(Vinkki lisattava) {
         if (this.logiikka.lisaaVinkki(lisattava) != null) {
             this.io.print("Seuraavat tiedot tallennettu:");
@@ -116,6 +120,7 @@ public class Tekstikayttis {
         this.io.print("Valitse toiminnallisuus:");
         this.io.print("1: Lisää vinkkilistaan");
         this.io.print("2: Selaa vinkkejä");
+        this.io.print("3: Poista vinkki");
         this.io.print("0: Poistu");
         this.io.print("");
         return this.io.nextLine();
@@ -147,6 +152,51 @@ public class Tekstikayttis {
             }
         }
 
+    }
+
+    public boolean vinkkienTulostusPoistamiseen() {
+      List<Vinkki> vinkit = logiikka.kaikkiVinkit();
+      boolean deleted = false;
+      if (vinkit.size() == 0) {
+          this.io.print("Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.");
+      } else {
+
+          this.io.print("Kaikki vinkit:");
+          this.io.print("**************");
+
+          for (Vinkki vinkki : vinkit) {
+              this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() +  "\n");
+
+          }
+          this.io.print("0) Peruuta poisto.");
+          this.io.print("Valitse vinkki, joka haluat poistaa (ID): \n");
+          String PoistettavaID = io.nextLine();
+              if (PoistettavaID.equals("0")) {
+                  this.io.print("Vinkin poisto peruttu.\n");
+                  return false;
+              }
+          for (Vinkki vinkki : vinkit){
+              if (String.valueOf(vinkki.getId()).equals(PoistettavaID)){
+                  this.io.print("Haluatko varmasti poistaa seuraavan vinkin?(1 = Kyllä)");
+                  this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() + " | " +  "\n");
+                  String varmistus = io.nextLine();
+
+                  if (varmistus.equals("1")){
+                      deleted = logiikka.VinkinPoisto(vinkki);
+                  }
+
+                  return deleted;
+              }
+
+          }
+          if (!deleted){
+              this.io.print("Väärä ID");
+              return deleted;
+          }
+
+
+      }
+      return deleted;
     }
 
     /**
