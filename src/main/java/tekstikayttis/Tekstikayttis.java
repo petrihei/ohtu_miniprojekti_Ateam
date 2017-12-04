@@ -8,6 +8,7 @@ import logiikka.Logiikka;
 import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Video;
+import tietokantaobjektit.Blogi;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -51,8 +52,9 @@ public class Tekstikayttis {
         //ja sen mukaan kysytään lisätietoja
         this.io.print("");
         this.io.print("Minkätyyppisen vinkin haluat lisätä? Valitse alta:");
-        this.io.print("2: Video");
         this.io.print("1: Kirja");
+        this.io.print("2: Video");
+        this.io.print("3: Blogi");
         this.io.print("0: Peruuta");
         String komento = this.io.nextLine();
 
@@ -60,12 +62,30 @@ public class Tekstikayttis {
             this.kirjanLisays();
         } else if (komento.equals("2")) {
             this.videonLisays();
+        } else if(komento.equals("3")){
+            this.bloginLisays();
         } else if (komento.equals("0")) {
             return;
         } else {
             this.io.print("Valitse toiminto listasta!");
             this.vinkinLisays();
         }
+    }
+    
+    public void bloginLisays(){
+        this.io.print("");
+        String otsikko = kysyKentta("otsikko");
+        String kuvaus = kysyKentta("kuvaus");
+        String tekija = kysyKentta("tekijä");
+        String url = kysyKentta("url");
+        String pvm = kysyKentta("pvm");
+        
+        Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, url, pvm);
+        kysyTagit(lisattava);
+
+        this.io.print("");
+        
+        lisaaVinkkiJaTulostaTiedot(lisattava);
     }
 
     public void videonLisays() {

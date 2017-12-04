@@ -11,12 +11,14 @@ public class Logiikka {
     private VinkkiDAO vinkkiDao;
     private KirjaDAO kirjaDao;
     private VideoDAO videoDao;
+    private BlogiDAO blogiDao;
 
     public Logiikka(Tietokanta db) {
         this.db = db;
         this.vinkkiDao = new VinkkiDAO(db);
         this.kirjaDao = new KirjaDAO(db);
         this.videoDao = new VideoDAO(db);
+        this.blogiDao = new BlogiDAO(db);
     }
 
     public List<Vinkki> kaikkiVinkit() {
@@ -31,6 +33,9 @@ public class Logiikka {
         if (vinkki.getTyyppi().equals("video")) {
             return lisaaVideo((Video) vinkki);
         }
+        if (vinkki.getTyyppi().equals("blogi")) {
+            return lisaaBlogi((Blogi) vinkki);
+        }
         return null;
     }
 
@@ -44,6 +49,12 @@ public class Logiikka {
         long id = videoDao.lisaaVideo(video);
         Video uusiVideo = videoDao.haeVideo(id);
         return uusiVideo;
+    }
+    
+    private Blogi lisaaBlogi(Blogi blogi) {
+        long id = blogiDao.lisaaBlogi(blogi);
+        Blogi uusiBlogi = blogiDao.haeBlogi(id);
+        return uusiBlogi;
     }
 
     public List<Vinkki> haeKaikkiVinkit() {

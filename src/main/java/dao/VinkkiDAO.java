@@ -144,6 +144,14 @@ public class VinkkiDAO {
                             result.getString("url"),
                             result.getString("pvm")
                     );
+                } else if(tyyppi.equals("blogi")) {
+                    vinkki = new Blogi(
+                            result.getString("otsikko"),
+                            result.getString("kuvaus"),
+                            result.getString("kirjoittaja"),
+                            result.getString("url"),
+                            result.getString("pvm")
+                    );
                 } else {
                     System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
                     continue;
