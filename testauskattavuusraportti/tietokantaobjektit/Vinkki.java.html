@@ -16,10 +16,10 @@ public class Vinkki {
     protected String tyyppi;
     protected List&lt;Tag&gt; tagit;
 
-    // Toistaiseksi ainut konstruktori. Ylikuormitus myÃ¶hemmin.
+    // Toistaiseksi ainut konstruktori. Ylikuormitus myöhemmin.
 <span class="fc" id="L20">    public Vinkki(String otsikko, String kuvaus, String tyyppi) {</span>
-<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (otsikko == null) {</span>
-<span class="fc" id="L22">            throw new IllegalArgumentException(&quot;Otsikko ei saa olla null.&quot;);</span>
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (otsikko == null) {</span>
+<span class="nc" id="L22">            throw new IllegalArgumentException(&quot;Otsikko ei saa olla null.&quot;);</span>
         }
 <span class="fc" id="L24">        this.otsikko = otsikko;</span>
 <span class="fc" id="L25">        this.kuvaus = kuvaus;</span>
@@ -72,7 +72,7 @@ public class Vinkki {
     }
 
     public long getId() {
-<span class="fc" id="L75">        return id;</span>
+<span class="nc" id="L75">        return id;</span>
     }
 
     public void lisaaTag(Tag tag) {

@@ -23,17 +23,17 @@ public class IOStub implements IO{
 <span class="fc" id="L23">        this.outputs = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L24">    }</span>
 
-<span class="fc" id="L26">    public IOStub(ArrayList&lt;String&gt; inputs){</span>
-<span class="fc" id="L27">        this.inputList = inputs;</span>
-<span class="fc" id="L28">        this.outputs = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L29">    }</span>
+<span class="nc" id="L26">    public IOStub(ArrayList&lt;String&gt; inputs){</span>
+<span class="nc" id="L27">        this.inputList = inputs;</span>
+<span class="nc" id="L28">        this.outputs = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L29">    }</span>
 
     public String nextLine() {
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (inputs != null){</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (inputs != null){</span>
 <span class="fc" id="L33">            return inputs[mones++];</span>
         }
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (inputList != null){</span>
-<span class="fc" id="L36">            return inputList.get(mones++);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (inputList != null){</span>
+<span class="nc" id="L36">            return inputList.get(mones++);</span>
         }
 <span class="nc" id="L38">        return null;</span>
     }

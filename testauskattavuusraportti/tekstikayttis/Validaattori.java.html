@@ -16,12 +16,12 @@
 <span class="fc" id="L16">        return palautettava;</span>
     }
     
-    // validoi, ettÃ¤ nimi koostuu vain kirjaimista sekÃ¤ vÃ¤liviivasta
-    //ja on yli yhden merkin pitkÃ¤. Saa sisÃ¤ltÃ¤Ã¤ vÃ¤lilyÃ¶nnin.
+    // validoi, että nimi koostuu vain kirjaimista sekä väliviivasta
+    //ja on yli yhden merkin pitkä. Saa sisältää välilyönnin.
     @Override
     public boolean validoiNimi(String nimi) {
 <span class="fc" id="L23">        boolean palautettava = false;</span>
-<span class="fc" id="L24">        String regex = &quot;^[a-Ã¶A-Ã– \\-]{2,}&quot;;</span>
+<span class="fc" id="L24">        String regex = &quot;^[a-öA-Ö \\-]{2,}&quot;;</span>
 <span class="fc bfc" id="L25" title="All 2 branches covered.">        if (nimi.matches(regex)) {</span>
 <span class="fc" id="L26">            palautettava = true;</span>
         }

@@ -10,29 +10,44 @@ public class Logiikka {
     private Tietokanta db;
     private VinkkiDAO vinkkiDao;
     private KirjaDAO kirjaDao;
+    private VideoDAO videoDao;
 
-<span class="fc" id="L14">    public Logiikka(Tietokanta db) {</span>
-<span class="fc" id="L15">        this.db = db;</span>
-<span class="fc" id="L16">        this.vinkkiDao = new VinkkiDAO(db);</span>
-<span class="fc" id="L17">        this.kirjaDao = new KirjaDAO(db);</span>
-<span class="fc" id="L18">    }</span>
-
-    public boolean lisaaVinkki(Vinkki vinkki) {
-<span class="nc bnc" id="L21" title="All 2 branches missed.">        return vinkkiDao.lisaaVinkki(vinkki) != -1;</span>
-    }
+<span class="fc" id="L15">    public Logiikka(Tietokanta db) {</span>
+<span class="fc" id="L16">        this.db = db;</span>
+<span class="fc" id="L17">        this.vinkkiDao = new VinkkiDAO(db);</span>
+<span class="fc" id="L18">        this.kirjaDao = new KirjaDAO(db);</span>
+<span class="fc" id="L19">        this.videoDao = new VideoDAO(db);</span>
+<span class="fc" id="L20">    }</span>
 
     public List&lt;Vinkki&gt; kaikkiVinkit() {
-<span class="fc" id="L25">        return vinkkiDao.kaikkiVinkit();</span>
+<span class="fc" id="L23">        return vinkkiDao.kaikkiVinkit();</span>
+    }
+    
+    public Vinkki lisaaVinkki(Vinkki vinkki) {
+        // TODO: Käytä super-DAO:n lisaaVinkki-metodia
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (vinkki.getTyyppi().equals(&quot;kirja&quot;)) {</span>
+<span class="fc" id="L29">            return lisaaKirja((Kirja) vinkki);</span>
+        }
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (vinkki.getTyyppi().equals(&quot;video&quot;)) {</span>
+<span class="fc" id="L32">            return lisaaVideo((Video) vinkki);</span>
+        }
+<span class="nc" id="L34">        return null;</span>
     }
 
-    public Kirja lisaaKirja(Kirja kirja) {
-<span class="fc" id="L29">        long id = kirjaDao.lisaaKirja(kirja);</span>
-<span class="fc" id="L30">        Kirja uusiKirja = kirjaDao.haeKirja(id);</span>
-<span class="fc" id="L31">        return uusiKirja;</span>
+    private Kirja lisaaKirja(Kirja kirja) {
+<span class="fc" id="L38">        long id = kirjaDao.lisaaKirja(kirja);</span>
+<span class="fc" id="L39">        Kirja uusiKirja = kirjaDao.haeKirja(id);</span>
+<span class="fc" id="L40">        return uusiKirja;</span>
+    }
+    
+    private Video lisaaVideo(Video video) {
+<span class="fc" id="L44">        long id = videoDao.lisaaVideo(video);</span>
+<span class="fc" id="L45">        Video uusiVideo = videoDao.haeVideo(id);</span>
+<span class="fc" id="L46">        return uusiVideo;</span>
     }
 
     public List&lt;Vinkki&gt; haeKaikkiVinkit() {
-<span class="fc" id="L35">        return vinkkiDao.kaikkiVinkitJaTiedot();</span>
+<span class="fc" id="L50">        return vinkkiDao.kaikkiVinkitJaTiedot();</span>
     }
 
 }
