@@ -41,40 +41,42 @@ public class KirjaDAO {
                     }
 <span class="fc bfc" id="L42" title="All 2 branches covered.">                } while(result.next());</span>
             }
-<span class="pc bpc" id="L44" title="10 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="fc" id="L45">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
-<span class="fc" id="L46">        }</span>
+<span class="pc bpc" id="L44" title="9 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="fc" id="L45">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="fc" id="L46">        } catch (NullPointerException ex) {</span>
+            // Tietokanta-luokka tekee virheilmoituksen.
+<span class="fc" id="L48">        }</span>
         
-<span class="fc" id="L48">        return kirja;</span>
+<span class="fc" id="L50">        return kirja;</span>
     }
 
     public long lisaaKirja(Kirja lisattava) {
-        // LisÃ¤tÃ¤Ã¤n ensin Vinkki.
-<span class="fc" id="L53">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
-<span class="fc" id="L54">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
+        // Lisätään ensin Vinkki.
+<span class="fc" id="L55">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
+<span class="fc" id="L56">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (vinkkiId == -1) {</span>
-<span class="fc" id="L57">            return -1;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (vinkkiId == -1) {</span>
+<span class="fc" id="L59">            return -1;</span>
         }
 
-        // LisÃ¤tÃ¤Ã¤n Kirja ja yhdistetÃ¤Ã¤n Vinkkiin.
-<span class="fc" id="L61">        String kirjaAddQuery = &quot;INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)&quot;;</span>
+        // Lisätään Kirja ja yhdistetään Vinkkiin.
+<span class="fc" id="L63">        String kirjaAddQuery = &quot;INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)&quot;;</span>
 
-<span class="pc" id="L63">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L64">                PreparedStatement st = conn.prepareStatement(kirjaAddQuery)) {</span>
-<span class="fc" id="L65">            st.setLong(1, vinkkiId);</span>
-<span class="fc" id="L66">            st.setString(2, lisattava.getIsbn());</span>
-<span class="fc" id="L67">            st.setString(3, lisattava.getKirjailija());</span>
-<span class="fc" id="L68">            st.executeUpdate();</span>
+<span class="pc" id="L65">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L66">                PreparedStatement st = conn.prepareStatement(kirjaAddQuery)) {</span>
+<span class="fc" id="L67">            st.setLong(1, vinkkiId);</span>
+<span class="fc" id="L68">            st.setString(2, lisattava.getIsbn());</span>
+<span class="fc" id="L69">            st.setString(3, lisattava.getKirjailija());</span>
+<span class="fc" id="L70">            st.executeUpdate();</span>
 
-<span class="pc bpc" id="L70" title="12 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="nc" id="L71">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
+<span class="pc bpc" id="L72" title="12 of 16 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc" id="L73">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
             //TBD Poista vinkki
-<span class="nc" id="L73">            return -1;</span>
-<span class="fc" id="L74">        }</span>
-<span class="fc" id="L75">        lisattava.setId(vinkkiId);</span>
+<span class="nc" id="L75">            return -1;</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">        lisattava.setId(vinkkiId);</span>
 
-<span class="fc" id="L77">        return vinkkiId;</span>
+<span class="fc" id="L79">        return vinkkiId;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
