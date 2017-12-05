@@ -39,9 +39,6 @@ public class Stepdefs {
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
             + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
-
-//    @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
-//            + "and isbn \"ISBN 978-0-596-52068-7\" and author \"testi kirjailja\" and tags \"([^\"]*)\" are entered$")
     public void title_and_description_and_isbn_and_author_and_tags_are_entered(String title,
             String description, String isbn, String author, String tags) {
         inputs.add(title);
