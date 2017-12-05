@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VinkkiDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">VinkkiDAO.java</span></div><h1>VinkkiDAO.java</h1><pre class="source lang-java linenums">package dao;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VinkkiDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">VinkkiDAO.java</span></div><h1>VinkkiDAO.java</h1><pre class="source lang-java linenums">package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -190,18 +190,18 @@ public class VinkkiDAO {
     }
 
     public boolean PoistaVinkki(Vinkki poistettava){
-<span class="nc" id="L193">        Long PoistettavaID = poistettava.getId();</span>
-<span class="nc" id="L194">        String query = &quot;SELECT tag FROM VinkkiTag where vinkki = &quot; + PoistettavaID;</span>
-<span class="nc" id="L195">        try (Connection conn = this.db.getConnection();) {</span>
-<span class="nc" id="L196">            PreparedStatement stmt = conn.prepareStatement(query);</span>
-<span class="nc" id="L197">            ResultSet result = stmt.executeQuery();</span>
-<span class="nc" id="L198">            List&lt;Integer&gt; Tag_ids = new  ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L193">        Long PoistettavaID = poistettava.getId();</span>
+<span class="fc" id="L194">        String query = &quot;SELECT tag FROM VinkkiTag where vinkki = &quot; + PoistettavaID;</span>
+<span class="pc" id="L195">        try (Connection conn = this.db.getConnection();) {</span>
+<span class="fc" id="L196">            PreparedStatement stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L197">            ResultSet result = stmt.executeQuery();</span>
+<span class="fc" id="L198">            List&lt;Integer&gt; Tag_ids = new  ArrayList&lt;Integer&gt;();</span>
 
-<span class="nc bnc" id="L200" title="All 2 branches missed.">            while (result.next()) {</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            while (result.next()) {</span>
 <span class="nc" id="L201">                Tag_ids.add(result.getInt(&quot;tag&quot;));</span>
 
             }
-<span class="nc bnc" id="L204" title="All 2 branches missed.">            for(int tagID : Tag_ids){</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            for(int tagID : Tag_ids){</span>
 <span class="nc" id="L205">                query = &quot;SELECT Count() from VinkkiTag WHERE tag = &quot; + tagID;</span>
 <span class="nc" id="L206">                stmt = conn.prepareStatement(query);</span>
 <span class="nc" id="L207">                result = stmt.executeQuery();</span>
@@ -222,16 +222,16 @@ public class VinkkiDAO {
                     }
 <span class="nc" id="L223">                }</span>
 <span class="nc" id="L224">            }</span>
-<span class="nc" id="L225">            String PoistettavanTyyppi = poistettava.getTyyppi();</span>
-<span class="nc" id="L226">            query = &quot;Delete from &quot; + PoistettavanTyyppi + &quot; WHERE vinkki = &quot; + PoistettavaID + &quot;;&quot;;</span>
-<span class="nc" id="L227">            stmt = conn.prepareStatement(query);</span>
-<span class="nc" id="L228">            stmt.executeUpdate();</span>
-<span class="nc" id="L229">            query = &quot;DELETE FROM Vinkki WHERE vinkki_id = &quot; + PoistettavaID;</span>
-<span class="nc" id="L230">            stmt = conn.prepareStatement(query);</span>
-<span class="nc" id="L231">            stmt.executeUpdate();</span>
-<span class="nc" id="L232">            return true;</span>
+<span class="fc" id="L225">            String PoistettavanTyyppi = poistettava.getTyyppi();</span>
+<span class="fc" id="L226">            query = &quot;Delete from &quot; + PoistettavanTyyppi + &quot; WHERE vinkki = &quot; + PoistettavaID + &quot;;&quot;;</span>
+<span class="fc" id="L227">            stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L228">            stmt.executeUpdate();</span>
+<span class="fc" id="L229">            query = &quot;DELETE FROM Vinkki WHERE vinkki_id = &quot; + PoistettavaID;</span>
+<span class="fc" id="L230">            stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L231">            stmt.executeUpdate();</span>
+<span class="fc" id="L232">            return true;</span>
 
-<span class="nc bnc" id="L234" title="All 8 branches missed.">        } catch (SQLException ex) {</span>
+<span class="pc bpc" id="L234" title="6 of 8 branches missed.">        } catch (SQLException ex) {</span>
 <span class="nc" id="L235">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
         }
 <span class="nc" id="L237">        return false;</span>
