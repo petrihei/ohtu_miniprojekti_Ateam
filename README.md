@@ -30,8 +30,6 @@ http://htmlpreview.github.io/?https://github.com/petrihei/ohtu_miniprojekti_Atea
 
 
 ## Ohjelman asennus- ja käyttöohje
-* gradle build
-* gradle run
-* Tallenna vinkkejä
-* Voit tallentaa kirjoja, videoita, blogeja sekä podcasteja
-* Voit myös poistaa vinkkejä
+* lataa jar-tiedosto uusimmasta releasesta https://github.com/petrihei/ohtu_miniprojekti_Ateam/releases/tag/v0.2
+* lataa myös pakattu lähdekoodi (sisältää tietokannan)
+* aja tietokannan (tietokanta.db) sisältävässä kansiossa java -jar <jar-tiedoston-nimi>
