@@ -79,6 +79,7 @@ public class Tekstikayttis {
             this.vinkinLisays();
         }
     }
+
     
     public void podcastinLisays(){
         this.io.print("");
@@ -88,12 +89,13 @@ public class Tekstikayttis {
         String nimi = kysyKentta("nimi");
         String url = kysyKentta("url");
         String pvm = kysyKentta("pvm");
+
         
         Podcast lisattava = new Podcast(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
 
         this.io.print("");
-        
+
         lisaaVinkkiJaTulostaTiedot(lisattava);
     }
 

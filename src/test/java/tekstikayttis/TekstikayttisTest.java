@@ -139,7 +139,7 @@ public class TekstikayttisTest {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
     }
-    
+
     @Test
     public void podcastinLisayksenOtsikkoToimii() {
         IOStub io = new IOStub("4", "Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
@@ -163,7 +163,7 @@ public class TekstikayttisTest {
         kayttis.podcastinLisays();
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: podcastin tekijä"));
     }
-    
+
     @Test
     public void podcastinLisayksenNimiToimii() {
         IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
@@ -257,7 +257,7 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.video.com/watch"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tagi1 tagi2"));
-        
+
         assertTrue(arrayContainsSubstring(io.getOutputs(), "podcast-jakso: Podcastin otsikko"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: podcastin kuvaus"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: podcastin tekijä"));
@@ -274,7 +274,6 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
     }
 
-    //Poistamisen testit
     @Test
     public void vinkkiPoistetaanKunOikeaId() {
         KirjaDAO kirjaDAO = new KirjaDAO(db);
@@ -288,7 +287,6 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), vinkki + " | kirja | Marxin Pääoma | paras"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Valitse vinkki, joka haluat poistaa (ID):"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Haluatko varmasti poistaa seuraavan vinkin?(1: Kyllä)"));
-        //assertTrue(arrayContainsSubstring(io.getOutputs(), "Vinkki poistettu."));
 
     }
 

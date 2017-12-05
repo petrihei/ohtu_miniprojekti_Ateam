@@ -61,6 +61,7 @@ public class Logiikka {
         Blogi uusiBlogi = blogiDao.haeBlogi(id);
         return uusiBlogi;
     }
+<<<<<<< HEAD
     
     private Vinkki lisaaPodcast(Podcast podcast) {
         long id = podcastDao.lisaaPodcast(podcast);
@@ -68,6 +69,9 @@ public class Logiikka {
         return uusiPodcast;
     }
     
+=======
+
+>>>>>>> c434a2f3083af2dc8f313292957f538b0a827d8b
     public boolean VinkinPoisto(Vinkki Poistettava) {
         return vinkkiDao.PoistaVinkki(Poistettava);
     }
