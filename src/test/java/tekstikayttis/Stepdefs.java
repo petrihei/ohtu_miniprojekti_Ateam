@@ -3,11 +3,13 @@ package tekstikayttis;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dao.KirjaDAO;
 import dao.Tietokanta;
 import java.util.ArrayList;
 import java.util.List;
 import logiikka.Logiikka;
 import static org.junit.Assert.*;
+import tietokantaobjektit.Kirja;
 
 public class Stepdefs {
 
@@ -20,6 +22,11 @@ public class Stepdefs {
     @Given("^command save tip is selected$")
     public void command_save_selected() {
         inputs.add("1");
+    }
+
+    @Given("^command delete tip is selected$")
+    public void command_delete_selected() {
+        inputs.add("3");
     }
 
     @Given("^type book is selected$")
@@ -98,6 +105,29 @@ public class Stepdefs {
         inputs.add(url);
         inputs.add(date);
         inputs.add(tags);
+        inputs.add("0");
+
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kayttoliittyma();
+    }
+
+    @When("^existing tip is deleted$")
+    public void existing_tip_is_deleted() throws Throwable {
+        KirjaDAO kirjaDAO = new KirjaDAO(db);
+        long vinkki = kirjaDAO.lisaaKirja(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
+        inputs.add("" + vinkki);
+        inputs.add("1");
+        inputs.add("0");
+
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kayttoliittyma();
+    }
+
+    @When("^non-existing tip is deleted$")
+    public void non_existing_tip_is_deleted() throws Throwable {
+        inputs.add("k");
         inputs.add("0");
 
         io = new IOStub(inputs);

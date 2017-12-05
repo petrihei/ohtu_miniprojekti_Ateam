@@ -274,6 +274,7 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tag test"));
     }
 
+    //Poistamisen testit
     @Test
     public void vinkkiPoistetaanKunOikeaId() {
         KirjaDAO kirjaDAO = new KirjaDAO(db);
@@ -287,6 +288,7 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), vinkki + " | kirja | Marxin Pääoma | paras"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Valitse vinkki, joka haluat poistaa (ID):"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Haluatko varmasti poistaa seuraavan vinkin?(1: Kyllä)"));
+        //assertTrue(arrayContainsSubstring(io.getOutputs(), "Vinkki poistettu."));
 
     }
 
