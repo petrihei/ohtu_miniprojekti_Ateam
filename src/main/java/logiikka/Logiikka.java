@@ -12,6 +12,7 @@ public class Logiikka {
     private KirjaDAO kirjaDao;
     private VideoDAO videoDao;
     private BlogiDAO blogiDao;
+    private PodcastDAO podcastDao;
 
     public Logiikka(Tietokanta db) {
         this.db = db;
@@ -19,6 +20,7 @@ public class Logiikka {
         this.kirjaDao = new KirjaDAO(db);
         this.videoDao = new VideoDAO(db);
         this.blogiDao = new BlogiDAO(db);
+        this.podcastDao = new PodcastDAO(db);
     }
 
     public List<Vinkki> kaikkiVinkit() {
@@ -35,6 +37,9 @@ public class Logiikka {
         }
         if (vinkki.getTyyppi().equals("blogi")) {
             return lisaaBlogi((Blogi) vinkki);
+        }
+        if (vinkki.getTyyppi().equals("podcast")) {
+            return lisaaPodcast((Podcast) vinkki);
         }
         return null;
     }
@@ -56,7 +61,13 @@ public class Logiikka {
         Blogi uusiBlogi = blogiDao.haeBlogi(id);
         return uusiBlogi;
     }
-
+    
+    private Vinkki lisaaPodcast(Podcast podcast) {
+        long id = podcastDao.lisaaPodcast(podcast);
+        Podcast uusiPodcast = podcastDao.haePodcast(id);
+        return uusiPodcast;
+    }
+    
     public boolean VinkinPoisto(Vinkki Poistettava){
       System.out.println("Logiikassa Poistettava " + Poistettava.getId());
       return vinkkiDao.PoistaVinkki(Poistettava);
@@ -66,5 +77,4 @@ public class Logiikka {
     public List<Vinkki> haeKaikkiVinkit() {
         return vinkkiDao.kaikkiVinkitJaTiedot();
     }
-
 }

@@ -157,6 +157,15 @@ public class VinkkiDAO {
                             result.getString("blogi_url"),
                             result.getString("blogi_pvm")
                     );
+                } else if(tyyppi.equals("podcast")) {
+                    vinkki = new Podcast(
+                            result.getString("otsikko"),
+                            result.getString("kuvaus"),
+                            result.getString("podcast_tekija"),
+                            result.getString("podcast_nimi"),
+                            result.getString("podcast_url"),
+                            result.getString("podcast_pvm")
+                    );
                 } else {
                     System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
                     continue;

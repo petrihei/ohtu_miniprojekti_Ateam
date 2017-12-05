@@ -9,6 +9,7 @@ import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Video;
 import tietokantaobjektit.Blogi;
+import tietokantaobjektit.Podcast;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -59,6 +60,7 @@ public class Tekstikayttis {
         this.io.print("1: Kirja");
         this.io.print("2: Video");
         this.io.print("3: Blogi");
+        this.io.print("4: Podcast");
         this.io.print("0: Peruuta");
         String komento = this.io.nextLine();
 
@@ -68,12 +70,31 @@ public class Tekstikayttis {
             this.videonLisays();
         } else if(komento.equals("3")){
             this.bloginLisays();
+        } else if(komento.equals("4")){
+            this.podcastinLisays();
         } else if (komento.equals("0")) {
             return;
         } else {
             this.io.print("Valitse toiminto listasta!");
             this.vinkinLisays();
         }
+    }
+    
+    public void podcastinLisays(){
+        this.io.print("");
+        String otsikko = kysyKentta("otsikko");
+        String kuvaus = kysyKentta("kuvaus");
+        String tekija = kysyKentta("tekijä");
+        String nimi = kysyKentta("nimi");
+        String url = kysyKentta("url");
+        String pvm = kysyKentta("pvm");
+        
+        Podcast lisattava = new Podcast(otsikko, kuvaus, tekija, nimi, url, pvm);
+        kysyTagit(lisattava);
+
+        this.io.print("");
+        
+        lisaaVinkkiJaTulostaTiedot(lisattava);
     }
     
     public void bloginLisays(){

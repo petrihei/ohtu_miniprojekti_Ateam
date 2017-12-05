@@ -136,6 +136,66 @@ public class TekstikayttisTest {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
     }
+    
+    @Test
+    public void podcastinLisayksenOtsikkoToimii() {
+        IOStub io = new IOStub("4", "Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.vinkinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "podcast-jakso: Podcastin otsikko"));
+    }
+
+    @Test
+    public void podcastinLisayksenKuvausToimii() {
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: podcastin kuvaus"));
+    }
+
+    @Test
+    public void podcastinLisayksenTekijaToimii() {
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: podcastin tekijä"));
+    }
+    
+    @Test
+    public void podcastinLisayksenNimiToimii() {
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Podcastin nimi: podcastin nimi"));
+    }
+
+    @Test
+    public void podcastinLisayksenUrlToimii() {
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.podcast.fm/listen"));
+    }
+
+    @Test
+    public void podcastinLisayksenPvmToimii() {
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", "tag");
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-05"));
+    }
+
+    @Test
+    public void podcastinLisayksenTagitToimii() {
+        String tagit = "tagi1, tagi2";
+        IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", tagit);
+        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.podcastinLisays();
+        List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
+        for (Tag tag : tagiLista) {
+            assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
+        }
+    }
 
     @Test
     public void kayttoliittymaToimii() {
@@ -176,7 +236,13 @@ public class TekstikayttisTest {
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.video.com/watch"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-01"));
         assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tagi1 tagi2"));
-
+        
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "podcast-jakso: Podcastin otsikko"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kuvaus: podcastin kuvaus"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tekijä: podcastin tekijä"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Url: www.podcast.fm/listen"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Pvm: 2017-12-05"));
+        assertTrue(arrayContainsSubstring(io.getOutputs(), "Tagit: tagi1 tagi2"));
     }
 
     private boolean arrayContainsSubstring(List<String> list, String substr) {
