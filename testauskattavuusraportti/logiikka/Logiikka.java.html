@@ -61,20 +61,19 @@ public class Logiikka {
 <span class="fc" id="L61">        Blogi uusiBlogi = blogiDao.haeBlogi(id);</span>
 <span class="fc" id="L62">        return uusiBlogi;</span>
     }
-    
+
     private Vinkki lisaaPodcast(Podcast podcast) {
 <span class="fc" id="L66">        long id = podcastDao.lisaaPodcast(podcast);</span>
 <span class="fc" id="L67">        Podcast uusiPodcast = podcastDao.haePodcast(id);</span>
 <span class="fc" id="L68">        return uusiPodcast;</span>
     }
     
-
     public boolean VinkinPoisto(Vinkki Poistettava) {
-<span class="fc" id="L73">        return vinkkiDao.PoistaVinkki(Poistettava);</span>
+<span class="fc" id="L72">        return vinkkiDao.PoistaVinkki(Poistettava);</span>
     }
 
     public List&lt;Vinkki&gt; haeKaikkiVinkit() {
-<span class="fc" id="L77">        return vinkkiDao.kaikkiVinkitJaTiedot();</span>
+<span class="fc" id="L76">        return vinkkiDao.kaikkiVinkitJaTiedot();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
