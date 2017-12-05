@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tekstikayttis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tekstikayttis</a> &gt; <span class="el_source">Tekstikayttis.java</span></div><h1>Tekstikayttis.java</h1><pre class="source lang-java linenums">package tekstikayttis;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tekstikayttis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tekstikayttis</a> &gt; <span class="el_source">Tekstikayttis.java</span></div><h1>Tekstikayttis.java</h1><pre class="source lang-java linenums">package tekstikayttis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,8 @@ import logiikka.Logiikka;
 import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Video;
+import tietokantaobjektit.Blogi;
+import tietokantaobjektit.Podcast;
 
 /**
  * Created by hanna-leena on 17/11/17.
@@ -18,30 +20,34 @@ public class Tekstikayttis {
     private IO io;
     private Validoija validointi;
 
-<span class="fc" id="L21">    public Tekstikayttis(Logiikka l, IO io) {</span>
-<span class="fc" id="L22">        this.logiikka = l;</span>
-<span class="fc" id="L23">        this.io = io;</span>
-<span class="fc" id="L24">        this.validointi = new Validaattori();</span>
-<span class="fc" id="L25">        io.print(&quot;***********************&quot;);</span>
-<span class="fc" id="L26">        io.print(&quot;*     Vinkkilista     *&quot;);</span>
+<span class="fc" id="L23">    public Tekstikayttis(Logiikka l, IO io) {</span>
+<span class="fc" id="L24">        this.logiikka = l;</span>
+<span class="fc" id="L25">        this.io = io;</span>
+<span class="fc" id="L26">        this.validointi = new Validaattori();</span>
 <span class="fc" id="L27">        io.print(&quot;***********************&quot;);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L28">        io.print(&quot;*     Vinkkilista     *&quot;);</span>
+<span class="fc" id="L29">        io.print(&quot;***********************&quot;);</span>
+<span class="fc" id="L30">    }</span>
 
     public void kayttoliittyma() {
-<span class="fc" id="L31">        String valinta = this.tulostaToiminnallisuudet();</span>
-<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        while (!valinta.equals(&quot;0&quot;)) {</span>
+<span class="fc" id="L33">        String valinta = this.tulostaToiminnallisuudet();</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        while (!valinta.equals(&quot;0&quot;)) {</span>
 
-<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (valinta.equals(&quot;1&quot;)) {</span>
-<span class="nc" id="L35">                this.vinkinLisays();</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">            } else if (valinta.equals(&quot;2&quot;)) {</span>
-<span class="nc" id="L37">                this.vinkkienJaTietojenTulostus();</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (valinta.equals(&quot;1&quot;)) {</span>
+<span class="nc" id="L37">                this.vinkinLisays();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            } else if (valinta.equals(&quot;2&quot;)) {</span>
+<span class="nc" id="L39">                this.vinkkienJaTietojenTulostus();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            }  else if(valinta.equals(&quot;3&quot;)){</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">              if (this.vinkkienTulostusPoistamiseen()){</span>
+<span class="nc" id="L42">                  this.io.print(&quot;Vinkki Poistettu&quot;);</span>
+              }
             } else {
-<span class="nc" id="L39">                this.io.print(&quot;Virheellinen valinta&quot;);</span>
+<span class="nc" id="L45">              this.io.print(&quot;Virheellinen valinta&quot;);</span>
             }
-<span class="nc" id="L41">            valinta = this.tulostaToiminnallisuudet();</span>
+<span class="nc" id="L47">            valinta = this.tulostaToiminnallisuudet();</span>
         }
-<span class="fc" id="L43">        this.io.print(&quot;Kiitos vinkkilistan käytöstä!&quot;);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L49">        this.io.print(&quot;Kiitos vinkkilistan käytöstä!&quot;);</span>
+<span class="fc" id="L50">    }</span>
 
     /*
     *  Vinkin lisääminen
@@ -49,171 +55,257 @@ public class Tekstikayttis {
     public void vinkinLisays() {
         //kun lisaystoiminto valitaan, selvitetään ensin tyyppi
         //ja sen mukaan kysytään lisätietoja
-<span class="fc" id="L52">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L53">        this.io.print(&quot;Minkätyyppisen vinkin haluat lisätä? Valitse alta:&quot;);</span>
-<span class="fc" id="L54">        this.io.print(&quot;2: Video&quot;);</span>
-<span class="fc" id="L55">        this.io.print(&quot;1: Kirja&quot;);</span>
-<span class="fc" id="L56">        this.io.print(&quot;0: Peruuta&quot;);</span>
-<span class="fc" id="L57">        String komento = this.io.nextLine();</span>
+<span class="fc" id="L58">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L59">        this.io.print(&quot;Minkätyyppisen vinkin haluat lisätä? Valitse alta:&quot;);</span>
+<span class="fc" id="L60">        this.io.print(&quot;1: Kirja&quot;);</span>
+<span class="fc" id="L61">        this.io.print(&quot;2: Video&quot;);</span>
+<span class="fc" id="L62">        this.io.print(&quot;3: Blogi&quot;);</span>
+<span class="fc" id="L63">        this.io.print(&quot;4: Podcast&quot;);</span>
+<span class="fc" id="L64">        this.io.print(&quot;0: Peruuta&quot;);</span>
+<span class="fc" id="L65">        String komento = this.io.nextLine();</span>
 
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (komento.equals(&quot;1&quot;)) {</span>
-<span class="fc" id="L60">            this.kirjanLisays();</span>
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        } else if (komento.equals(&quot;2&quot;)) {</span>
-<span class="fc" id="L62">            this.videonLisays();</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        } else if (komento.equals(&quot;0&quot;)) {</span>
-<span class="nc" id="L64">            return;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (komento.equals(&quot;1&quot;)) {</span>
+<span class="fc" id="L68">            this.kirjanLisays();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        } else if (komento.equals(&quot;2&quot;)) {</span>
+<span class="fc" id="L70">            this.videonLisays();</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        } else if(komento.equals(&quot;3&quot;)){</span>
+<span class="nc" id="L72">            this.bloginLisays();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        } else if(komento.equals(&quot;4&quot;)){</span>
+<span class="fc" id="L74">            this.podcastinLisays();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        } else if (komento.equals(&quot;0&quot;)) {</span>
+<span class="nc" id="L76">            return;</span>
         } else {
-<span class="nc" id="L66">            this.io.print(&quot;Valitse toiminto listasta!&quot;);</span>
-<span class="nc" id="L67">            this.vinkinLisays();</span>
+<span class="nc" id="L78">            this.io.print(&quot;Valitse toiminto listasta!&quot;);</span>
+<span class="nc" id="L79">            this.vinkinLisays();</span>
         }
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L81">    }</span>
+    
+    public void podcastinLisays(){
+<span class="fc" id="L84">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L85">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
+<span class="fc" id="L86">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
+<span class="fc" id="L87">        String tekija = kysyKentta(&quot;tekijä&quot;);</span>
+<span class="fc" id="L88">        String nimi = kysyKentta(&quot;nimi&quot;);</span>
+<span class="fc" id="L89">        String url = kysyKentta(&quot;url&quot;);</span>
+<span class="fc" id="L90">        String pvm = kysyKentta(&quot;pvm&quot;);</span>
+        
+<span class="fc" id="L92">        Podcast lisattava = new Podcast(otsikko, kuvaus, tekija, nimi, url, pvm);</span>
+<span class="fc" id="L93">        kysyTagit(lisattava);</span>
+
+<span class="fc" id="L95">        this.io.print(&quot;&quot;);</span>
+        
+<span class="fc" id="L97">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
+<span class="fc" id="L98">    }</span>
+    
+    public void bloginLisays(){
+<span class="nc" id="L101">        this.io.print(&quot;&quot;);</span>
+<span class="nc" id="L102">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
+<span class="nc" id="L103">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
+<span class="nc" id="L104">        String tekija = kysyKentta(&quot;tekijä&quot;);</span>
+<span class="nc" id="L105">        String nimi = kysyKentta(&quot;nimi&quot;);</span>
+<span class="nc" id="L106">        String url = kysyKentta(&quot;url&quot;);</span>
+<span class="nc" id="L107">        String pvm = kysyKentta(&quot;pvm&quot;);</span>
+        
+<span class="nc" id="L109">        Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, nimi, url, pvm);</span>
+<span class="nc" id="L110">        kysyTagit(lisattava);</span>
+
+<span class="nc" id="L112">        this.io.print(&quot;&quot;);</span>
+        
+<span class="nc" id="L114">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
+<span class="nc" id="L115">    }</span>
 
     public void videonLisays() {
-<span class="fc" id="L72">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L73">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
-<span class="fc" id="L74">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
-<span class="fc" id="L75">        String tekija = kysyKentta(&quot;tekijä&quot;);</span>
-<span class="fc" id="L76">        String url = kysyKentta(&quot;url&quot;);</span>
-<span class="fc" id="L77">        String pvm = kysyKentta(&quot;pvm&quot;);</span>
+<span class="fc" id="L118">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L119">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
+<span class="fc" id="L120">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
+<span class="fc" id="L121">        String tekija = kysyKentta(&quot;tekijä&quot;);</span>
+<span class="fc" id="L122">        String url = kysyKentta(&quot;url&quot;);</span>
+<span class="fc" id="L123">        String pvm = kysyKentta(&quot;pvm&quot;);</span>
 
-<span class="fc" id="L79">        Video lisattava = new Video(otsikko, kuvaus, tekija, url, pvm);</span>
-<span class="fc" id="L80">        kysyTagit(lisattava);</span>
+<span class="fc" id="L125">        Video lisattava = new Video(otsikko, kuvaus, tekija, url, pvm);</span>
+<span class="fc" id="L126">        kysyTagit(lisattava);</span>
 
-<span class="fc" id="L82">        this.io.print(&quot;&quot;);</span>
-        
-<span class="fc" id="L84">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L128">        this.io.print(&quot;&quot;);</span>
+
+<span class="fc" id="L130">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
+<span class="fc" id="L131">    }</span>
 
     public void kirjanLisays() {
-<span class="fc" id="L88">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L89">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
-<span class="fc" id="L90">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
+<span class="fc" id="L134">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L135">        String otsikko = kysyKentta(&quot;otsikko&quot;);</span>
+<span class="fc" id="L136">        String kuvaus = kysyKentta(&quot;kuvaus&quot;);</span>
 
-<span class="fc" id="L92">        Kirja lisattava = new Kirja(otsikko, kuvaus);</span>
-<span class="fc" id="L93">        kysyIsbn(lisattava);</span>
-<span class="fc" id="L94">        kysyKirjailija(lisattava);</span>
-<span class="fc" id="L95">        kysyTagit(lisattava);</span>
+<span class="fc" id="L138">        Kirja lisattava = new Kirja(otsikko, kuvaus);</span>
+<span class="fc" id="L139">        kysyIsbn(lisattava);</span>
+<span class="fc" id="L140">        kysyKirjailija(lisattava);</span>
+<span class="fc" id="L141">        kysyTagit(lisattava);</span>
 
-<span class="fc" id="L97">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L143">        this.io.print(&quot;&quot;);</span>
 
-<span class="fc" id="L99">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
-<span class="fc" id="L100">    }</span>
-    
+<span class="fc" id="L145">        lisaaVinkkiJaTulostaTiedot(lisattava);</span>
+<span class="fc" id="L146">    }</span>
+
     private void lisaaVinkkiJaTulostaTiedot(Vinkki lisattava) {
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (this.logiikka.lisaaVinkki(lisattava) != null) {</span>
-<span class="fc" id="L104">            this.io.print(&quot;Seuraavat tiedot tallennettu:&quot;);</span>
-<span class="fc" id="L105">            this.io.print(lisattava.toString());</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (this.logiikka.lisaaVinkki(lisattava) != null) {</span>
+<span class="fc" id="L150">            this.io.print(&quot;Seuraavat tiedot tallennettu:&quot;);</span>
+<span class="fc" id="L151">            this.io.print(lisattava.toString());</span>
         } else {
-<span class="nc" id="L107">            this.io.print(&quot;Tallennus epäonnistui&quot;);</span>
+<span class="fc" id="L153">            this.io.print(&quot;Tallennus epäonnistui&quot;);</span>
         }
-<span class="fc" id="L109">    }</span>
+<span class="fc" id="L155">    }</span>
 
     /**
      * Tulostus
      */
     public String tulostaToiminnallisuudet() {
-<span class="fc" id="L115">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L116">        this.io.print(&quot;Valitse toiminnallisuus:&quot;);</span>
-<span class="fc" id="L117">        this.io.print(&quot;1: Lisää vinkkilistaan&quot;);</span>
-<span class="fc" id="L118">        this.io.print(&quot;2: Selaa vinkkejä&quot;);</span>
-<span class="fc" id="L119">        this.io.print(&quot;0: Poistu&quot;);</span>
-<span class="fc" id="L120">        this.io.print(&quot;&quot;);</span>
-<span class="fc" id="L121">        return this.io.nextLine();</span>
+<span class="fc" id="L161">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L162">        this.io.print(&quot;Valitse toiminnallisuus:&quot;);</span>
+<span class="fc" id="L163">        this.io.print(&quot;1: Lisää vinkkilistaan&quot;);</span>
+<span class="fc" id="L164">        this.io.print(&quot;2: Selaa vinkkejä&quot;);</span>
+<span class="fc" id="L165">        this.io.print(&quot;3: Poista vinkki&quot;);</span>
+<span class="fc" id="L166">        this.io.print(&quot;0: Poistu&quot;);</span>
+<span class="fc" id="L167">        this.io.print(&quot;&quot;);</span>
+<span class="fc" id="L168">        return this.io.nextLine();</span>
     }
 
     public void vinkkienTulostus() {
-<span class="fc" id="L125">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
-<span class="nc" id="L127">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
+<span class="fc" id="L172">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
+<span class="nc" id="L174">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
         } else {
-<span class="fc" id="L129">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
-<span class="fc" id="L130">            this.io.print(&quot;**************&quot;);</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
-<span class="fc" id="L132">                this.io.print(vinkki.toString());</span>
-<span class="fc" id="L133">                this.io.print(&quot;*****  \n&quot;);</span>
-<span class="fc" id="L134">            }</span>
+<span class="fc" id="L176">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="fc" id="L177">            this.io.print(&quot;**************&quot;);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
+<span class="fc" id="L179">                this.io.print(vinkki.toString());</span>
+<span class="fc" id="L180">                this.io.print(&quot;*****  \n&quot;);</span>
+<span class="fc" id="L181">            }</span>
         }
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L183">    }</span>
 
     public void vinkkienJaTietojenTulostus() {
-<span class="fc" id="L139">        List&lt;Vinkki&gt; vinkit = logiikka.haeKaikkiVinkit();</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
-<span class="nc" id="L141">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
+<span class="fc" id="L186">        List&lt;Vinkki&gt; vinkit = logiikka.haeKaikkiVinkit();</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
+<span class="nc" id="L188">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
         } else {
-<span class="fc" id="L143">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
-<span class="fc" id="L144">            this.io.print(&quot;**************&quot;);</span>
-<span class="fc bfc" id="L145" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
-<span class="fc" id="L146">                this.io.print(vinkki.toString() + &quot;\n&quot;);</span>
-<span class="fc" id="L147">            }</span>
+<span class="fc" id="L190">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="fc" id="L191">            this.io.print(&quot;**************&quot;);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
+<span class="fc" id="L193">                this.io.print(vinkki.toString() + &quot;\n&quot;);</span>
+<span class="fc" id="L194">            }</span>
         }
 
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L197">    }</span>
+
+    public boolean vinkkienTulostusPoistamiseen() {
+<span class="nc" id="L200">      List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
+<span class="nc" id="L201">      boolean deleted = false;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">      if (vinkit.size() == 0) {</span>
+<span class="nc" id="L203">          this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
+      } else {
+
+<span class="nc" id="L206">          this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="nc" id="L207">          this.io.print(&quot;**************&quot;);</span>
+
+<span class="nc bnc" id="L209" title="All 2 branches missed.">          for (Vinkki vinkki : vinkit) {</span>
+<span class="nc" id="L210">              this.io.print(vinkki.getId() + &quot; | &quot; + vinkki.getTyyppi() + &quot; | &quot; + vinkki.getOtsikko() + &quot; | &quot; + vinkki.getKuvaus() +  &quot;\n&quot;);</span>
+
+<span class="nc" id="L212">          }</span>
+<span class="nc" id="L213">          this.io.print(&quot;0) Peruuta poisto.&quot;);</span>
+<span class="nc" id="L214">          this.io.print(&quot;Valitse vinkki, joka haluat poistaa (ID): \n&quot;);</span>
+<span class="nc" id="L215">          String PoistettavaID = io.nextLine();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">              if (PoistettavaID.equals(&quot;0&quot;)) {</span>
+<span class="nc" id="L217">                  this.io.print(&quot;Vinkin poisto peruttu.\n&quot;);</span>
+<span class="nc" id="L218">                  return false;</span>
+              }
+<span class="nc bnc" id="L220" title="All 2 branches missed.">          for (Vinkki vinkki : vinkit){</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">              if (String.valueOf(vinkki.getId()).equals(PoistettavaID)){</span>
+<span class="nc" id="L222">                  this.io.print(&quot;Haluatko varmasti poistaa seuraavan vinkin?(1 = Kyllä)&quot;);</span>
+<span class="nc" id="L223">                  this.io.print(vinkki.getId() + &quot; | &quot; + vinkki.getTyyppi() + &quot; | &quot; + vinkki.getOtsikko() + &quot; | &quot; + vinkki.getKuvaus() + &quot; | &quot; +  &quot;\n&quot;);</span>
+<span class="nc" id="L224">                  String varmistus = io.nextLine();</span>
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                  if (varmistus.equals(&quot;1&quot;)){</span>
+<span class="nc" id="L227">                      deleted = logiikka.VinkinPoisto(vinkki);</span>
+                  }
+
+<span class="nc" id="L230">                  return deleted;</span>
+              }
+
+<span class="nc" id="L233">          }</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">          if (!deleted){</span>
+<span class="nc" id="L235">              this.io.print(&quot;Väärä ID&quot;);</span>
+<span class="nc" id="L236">              return deleted;</span>
+          }
+
+
+      }
+<span class="nc" id="L241">      return deleted;</span>
+    }
 
     /**
      * Syötteen kysyminen
      */
     private String kysyKentta(String kentanTyyppi) {
-<span class="fc" id="L156">        this.io.print(&quot;Anna vinkin &quot; + kentanTyyppi + &quot;:&quot;);</span>
-<span class="fc" id="L157">        return this.io.nextLine();</span>
+<span class="fc" id="L248">        this.io.print(&quot;Anna vinkin &quot; + kentanTyyppi + &quot;:&quot;);</span>
+<span class="fc" id="L249">        return this.io.nextLine();</span>
     }
 
     private void kysyTagit(Vinkki lisattava) {
-<span class="fc" id="L161">        this.io.print(&quot;Anna lukuvinkin tagit. Erota eri tagit pilkulla:&quot;);</span>
-<span class="fc" id="L162">        String tagSyote = this.io.nextLine();</span>
-<span class="fc" id="L163">        List&lt;Tag&gt; tagit = this.tagienErottaminen(tagSyote);</span>
-<span class="fc" id="L164">        lisattava.setTagit(tagit);</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L253">        this.io.print(&quot;Anna lukuvinkin tagit. Erota eri tagit pilkulla:&quot;);</span>
+<span class="fc" id="L254">        String tagSyote = this.io.nextLine();</span>
+<span class="fc" id="L255">        List&lt;Tag&gt; tagit = this.tagienErottaminen(tagSyote);</span>
+<span class="fc" id="L256">        lisattava.setTagit(tagit);</span>
+<span class="fc" id="L257">    }</span>
 
     private void kysyIsbn(Kirja lisattava) {
-<span class="fc" id="L168">        this.io.print(&quot;Anna kirjan ISBN:&quot;);</span>
-<span class="fc" id="L169">        lisattava.setIsbn(kysyValidoitava(&quot;ISBN&quot;));</span>
-<span class="fc" id="L170">    }</span>
+<span class="fc" id="L260">        this.io.print(&quot;Anna kirjan ISBN:&quot;);</span>
+<span class="fc" id="L261">        lisattava.setIsbn(kysyValidoitava(&quot;ISBN&quot;));</span>
+<span class="fc" id="L262">    }</span>
 
     private void kysyKirjailija(Kirja lisattava) {
-<span class="fc" id="L173">        this.io.print(&quot;Anna kirjan kirjoittaja:&quot;);</span>
-<span class="fc" id="L174">        lisattava.setKirjailija(kysyValidoitava(&quot;Kirjailija&quot;));</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L265">        this.io.print(&quot;Anna kirjan kirjoittaja:&quot;);</span>
+<span class="fc" id="L266">        lisattava.setKirjailija(kysyValidoitava(&quot;Kirjailija&quot;));</span>
+<span class="fc" id="L267">    }</span>
 
     private String kysyValidoitava(String kentanTyyppi) {
-<span class="fc" id="L178">        String validoitava = this.io.nextLine();</span>
-<span class="fc" id="L179">        String komento = &quot;&quot;;</span>
-<span class="pc bpc" id="L180" title="2 of 4 branches missed.">        while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals(&quot;k&quot;)) {</span>
-<span class="nc" id="L181">            System.out.println(kentanTyyppi + &quot; väärässä muodossa&quot;);</span>
-<span class="nc" id="L182">            System.out.println(&quot;Haluatko syöttää uuden? k/e&quot;);</span>
-<span class="nc" id="L183">            komento = this.io.nextLine();</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (komento.equals(&quot;k&quot;)) {</span>
-<span class="nc" id="L185">                validoitava = this.io.nextLine();</span>
-<span class="nc" id="L186">                komento = &quot;&quot;;</span>
+<span class="fc" id="L270">        String validoitava = this.io.nextLine();</span>
+<span class="fc" id="L271">        String komento = &quot;&quot;;</span>
+<span class="pc bpc" id="L272" title="2 of 4 branches missed.">        while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L273">            System.out.println(kentanTyyppi + &quot; väärässä muodossa&quot;);</span>
+<span class="nc" id="L274">            System.out.println(&quot;Haluatko syöttää uuden? k/e&quot;);</span>
+<span class="nc" id="L275">            komento = this.io.nextLine();</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if (komento.equals(&quot;k&quot;)) {</span>
+<span class="nc" id="L277">                validoitava = this.io.nextLine();</span>
+<span class="nc" id="L278">                komento = &quot;&quot;;</span>
             } else {
-<span class="nc" id="L188">                System.out.println(kentanTyyppi + &quot; ei tallennettu&quot;);</span>
-<span class="nc" id="L189">                validoitava = &quot;&quot;;</span>
-<span class="nc" id="L190">                break;</span>
+<span class="nc" id="L280">                System.out.println(kentanTyyppi + &quot; ei tallennettu&quot;);</span>
+<span class="nc" id="L281">                validoitava = &quot;&quot;;</span>
+<span class="nc" id="L282">                break;</span>
             }
         }
-<span class="fc" id="L193">        return validoitava;</span>
+<span class="fc" id="L285">        return validoitava;</span>
     }
 
     private boolean validoiSyote(String validoitava, String kentanTyyppi) {
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (kentanTyyppi.equals(&quot;Kirjailija&quot;)) {</span>
-<span class="fc" id="L198">            return this.validointi.validoiNimi(validoitava);</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (kentanTyyppi.equals(&quot;Kirjailija&quot;)) {</span>
+<span class="fc" id="L290">            return this.validointi.validoiNimi(validoitava);</span>
         }
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (kentanTyyppi.equals(&quot;ISBN&quot;)) {</span>
-<span class="fc" id="L201">            return this.validointi.validoiISBN(validoitava);</span>
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">        if (kentanTyyppi.equals(&quot;ISBN&quot;)) {</span>
+<span class="fc" id="L293">            return this.validointi.validoiISBN(validoitava);</span>
         }
-<span class="nc" id="L203">        return false;</span>
+<span class="nc" id="L295">        return false;</span>
     }
 
     /**
      * Apumetodit
      */
     public List&lt;Tag&gt; tagienErottaminen(String syote) {
-<span class="fc" id="L210">        List&lt;Tag&gt; tagLista = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L211">        String tagit[] = syote.split(&quot;,&quot;);</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">        for (int i = 0; i &lt; tagit.length; i++) {</span>
-<span class="fc" id="L213">            String lisattava = tagit[i].trim();</span>
-<span class="fc" id="L214">            tagLista.add(new Tag(lisattava));</span>
+<span class="fc" id="L302">        List&lt;Tag&gt; tagLista = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L303">        String tagit[] = syote.split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        for (int i = 0; i &lt; tagit.length; i++) {</span>
+<span class="fc" id="L305">            String lisattava = tagit[i].trim();</span>
+<span class="fc" id="L306">            tagLista.add(new Tag(lisattava));</span>
         }
-<span class="fc" id="L216">        return tagLista;</span>
+<span class="fc" id="L308">        return tagLista;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
