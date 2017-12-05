@@ -33,3 +33,5 @@ http://htmlpreview.github.io/?https://github.com/petrihei/ohtu_miniprojekti_Atea
 * gradle build
 * gradle run
 * Tallenna vinkkejä
+* Voit tallentaa kirjoja, videoita, blogeja sekä podcasteja
+* Voit myös poistaa vinkkejä
