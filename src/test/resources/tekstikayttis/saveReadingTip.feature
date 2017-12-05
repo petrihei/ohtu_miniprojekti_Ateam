@@ -31,3 +31,9 @@ Feature: A new reading tip can be saved
     And type blog is selected
     When title "testiblogi" and description "testikuvaus" and creator "testitekijä" and name "postaksen nimi" and url "www.blogger.com/blog" and date "2017-12-01" and tags "blog, tag" are entered
     Then system will respond with message "Seuraavat tiedot tallennettu:"
+
+    Scenario: Saving a reading tip of type podcast is successful
+    Given command save tip is selected
+    And type podcast is selected
+    When title "testicast" and description "testikuvaus" and creator "testitekijä" and name "podcastin nimi" and url "www.podcast.com/listen" and date "2017-12-01" and tags "podcast, tag" are entered
+    Then system will respond with message "Seuraavat tiedot tallennettu:"

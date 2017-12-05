@@ -44,6 +44,11 @@ public class Stepdefs {
         inputs.add("3");
     }
 
+    @Given("^type podcast is selected$")
+    public void type_podcast_is_selected() throws Throwable {
+        inputs.add("4");
+    }
+
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
             + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
     public void title_and_description_and_isbn_and_author_and_tags_are_entered(String title,
