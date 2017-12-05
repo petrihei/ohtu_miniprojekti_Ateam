@@ -10,7 +10,7 @@ import tietokantaobjektit.*;
  * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
  */
 public class VinkkiDAO {
-
+    
     private Tietokanta db;
 
     /**
@@ -95,7 +95,10 @@ public class VinkkiDAO {
                 ResultSet result = stmt.executeQuery()) {
 
             while (result.next()) {
-                vinkit.add(new Vinkki(result.getLong("vinkki_id"), result.getString("otsikko"), result.getString("kuvaus"), result.getString("tyyppi")));
+                vinkit.add(new Vinkki(result.getLong("vinkki_id"),
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("tyyppi")));
             }
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
@@ -133,14 +136,14 @@ public class VinkkiDAO {
             while (result.next()) {
                 String tyyppi = result.getString("tyyppi");
                 Vinkki vinkki;
-                if(tyyppi.equals("kirja")) {
+                if (tyyppi.equals("kirja")) {
                     vinkki = new Kirja(
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
                             result.getString("ISBN"),
                             result.getString("kirjailija")
                     );
-                } else if(tyyppi.equals("video")) {
+                } else if (tyyppi.equals("video")) {
                     vinkki = new Video(
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
@@ -148,7 +151,7 @@ public class VinkkiDAO {
                             result.getString("video_url"),
                             result.getString("video_pvm")
                     );
-                } else if(tyyppi.equals("blogi")) {
+                } else if (tyyppi.equals("blogi")) {
                     vinkki = new Blogi(
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
@@ -157,7 +160,7 @@ public class VinkkiDAO {
                             result.getString("blogi_url"),
                             result.getString("blogi_pvm")
                     );
-                } else if(tyyppi.equals("podcast")) {
+                } else if (tyyppi.equals("podcast")) {
                     vinkki = new Podcast(
                             result.getString("otsikko"),
                             result.getString("kuvaus"),
@@ -170,7 +173,7 @@ public class VinkkiDAO {
                     System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
                     continue;
                 }
-                if(result.getString("tagit") != null) {
+                if (result.getString("tagit") != null) {
                     String[] tagitString = result.getString("tagit").split(",");
                     for (String tagString : tagitString) {
                         vinkki.lisaaTag(new Tag(tagString));
@@ -189,44 +192,44 @@ public class VinkkiDAO {
         return vinkit;
     }
 
-    public boolean PoistaVinkki(Vinkki poistettava){
-        Long PoistettavaID = poistettava.getId();
-        String query = "SELECT tag FROM VinkkiTag where vinkki = " + PoistettavaID;
+    public boolean poistaVinkki(Vinkki poistettava) {
+        Long poistettavaID = poistettava.getId();
+        String query = "SELECT tag FROM VinkkiTag where vinkki = " + poistettavaID;
         try (Connection conn = this.db.getConnection();) {
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet result = stmt.executeQuery();
-            List<Integer> Tag_ids = new  ArrayList<Integer>();
+            List<Integer> Tag_ids = new ArrayList<Integer>();
 
             while (result.next()) {
                 Tag_ids.add(result.getInt("tag"));
 
             }
-            for(int tagID : Tag_ids){
+            for (int tagID : Tag_ids) {
                 query = "SELECT Count() from VinkkiTag WHERE tag = " + tagID;
                 stmt = conn.prepareStatement(query);
                 result = stmt.executeQuery();
-                while (result.next()){
+                while (result.next()) {
                     int TagCounter = result.getInt("Count()");
 
-                    if (TagCounter == 1){
-                        query = "Delete from VinkkiTag where vinkki = " + PoistettavaID ;
+                    if (TagCounter == 1) {
+                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
-                        query = "Delete from Tag where tag_id = "+ tagID;
+                        query = "Delete from Tag where tag_id = " + tagID;
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
                     } else {
-                        query = "Delete from VinkkiTag where vinkki = " + PoistettavaID;
+                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
                     }
                 }
             }
             String PoistettavanTyyppi = poistettava.getTyyppi();
-            query = "Delete from " + PoistettavanTyyppi + " WHERE vinkki = " + PoistettavaID + ";";
+            query = "Delete from " + PoistettavanTyyppi + " WHERE vinkki = " + poistettavaID + ";";
             stmt = conn.prepareStatement(query);
             stmt.executeUpdate();
-            query = "DELETE FROM Vinkki WHERE vinkki_id = " + PoistettavaID;
+            query = "DELETE FROM Vinkki WHERE vinkki_id = " + poistettavaID;
             stmt = conn.prepareStatement(query);
             stmt.executeUpdate();
             return true;

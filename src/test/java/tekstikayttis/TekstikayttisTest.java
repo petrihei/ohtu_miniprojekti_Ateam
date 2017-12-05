@@ -7,7 +7,6 @@ import logiikka.Logiikka;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 import tietokantaobjektit.*;
 
 /**
@@ -277,7 +276,7 @@ public class TekstikayttisTest {
     @Test
     public void vinkkiPoistetaanKunOikeaId() {
         KirjaDAO kirjaDAO = new KirjaDAO(db);
-        long vinkki = kirjaDAO.lisaaKirja(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
+        long vinkki = kirjaDAO.lisaaVinkki(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
 
         IOStub io = new IOStub(vinkki + "", "1");
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);

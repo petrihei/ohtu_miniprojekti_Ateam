@@ -20,15 +20,15 @@ public class KirjaDAOTest {
     @Test
     public void kirjanVoiLisata() {
         Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
-        long id = dao.lisaaKirja(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
     
     @Test
     public void kirjanVoiHakea() {
         Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
-        long id = dao.lisaaKirja(lisattava);
-        Kirja lisatty = dao.haeKirja(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Kirja lisatty = (Kirja) dao.haeVinkki(id);
         
         assertEquals("Ots", lisatty.getOtsikko());
         assertEquals("kuv", lisatty.getKuvaus());
@@ -40,7 +40,7 @@ public class KirjaDAOTest {
     public void kirjanVoiLisataTagilla() {
         Kirja lisattava = new Kirja("Ots", "kuv", "isb", "kirj");
         lisattava.lisaaTag(new Tag("tagi"));
-        long id = dao.lisaaKirja(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
     
@@ -50,8 +50,8 @@ public class KirjaDAOTest {
         lisattava.lisaaTag(new Tag("tagi1"));
         lisattava.lisaaTag(new Tag("tagi2"));
 
-        long id = dao.lisaaKirja(lisattava);
-        Kirja lisatty = dao.haeKirja(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Kirja lisatty = (Kirja) dao.haeVinkki(id);
         
         assertEquals("tagi1", lisatty.getTagit().get(0).getTag());
         assertEquals("tagi2", lisatty.getTagit().get(1).getTag());
@@ -61,33 +61,33 @@ public class KirjaDAOTest {
     public void huonoTietokantaPalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         KirjaDAO huonoDao = new KirjaDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaKirja(new Kirja("Ots", "kuv", "isb", "kirj")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Kirja("Ots", "kuv", "isb", "kirj")));
     }
     
     @Test
     public void huonoTietokantaPalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         KirjaDAO huonoDao = new KirjaDAO(huonoDB);
-        assertEquals(null, huonoDao.haeKirja(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
     
     @Test
     public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("");
         KirjaDAO huonoDao = new KirjaDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaKirja(new Kirja("Ots", "kuv", "isb", "kirj")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Kirja("Ots", "kuv", "isb", "kirj")));
     }
     
     @Test
     public void huonoTietokantaosoitePalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("");
         KirjaDAO huonoDao = new KirjaDAO(huonoDB);
-        assertEquals(null, huonoDao.haeKirja(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
     
     @Test
     public void olemattomanKirjanHakuPalauttaaNull() {
-        assertEquals(null, dao.haeKirja(-1l));
+        assertEquals(null, (Kirja) dao.haeVinkki(-1l));
     }
     
 }

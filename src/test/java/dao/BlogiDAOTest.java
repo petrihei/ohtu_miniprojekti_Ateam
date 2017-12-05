@@ -1,9 +1,6 @@
 package dao;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tietokantaobjektit.Blogi;
@@ -23,15 +20,15 @@ public class BlogiDAOTest {
     @Test
     public void bloginVoiLisata() {
         Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
-        long id = dao.lisaaBlogi(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
 
     @Test
     public void bloginVoiHakea() {
         Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
-        long id = dao.lisaaBlogi(lisattava);
-        Blogi lisatty = dao.haeBlogi(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Blogi lisatty = (Blogi) dao.haeVinkki(id);
 
         assertEquals("Ots", lisatty.getOtsikko());
         assertEquals("kuv", lisatty.getKuvaus());
@@ -45,7 +42,7 @@ public class BlogiDAOTest {
     public void bloginVoiLisataTagilla() {
         Blogi lisattava = new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03");
         lisattava.lisaaTag(new Tag("tagi"));
-        long id = dao.lisaaBlogi(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
 
@@ -55,8 +52,8 @@ public class BlogiDAOTest {
         lisattava.lisaaTag(new Tag("tagi1"));
         lisattava.lisaaTag(new Tag("tagi2"));
 
-        long id = dao.lisaaBlogi(lisattava);
-        Blogi lisatty = dao.haeBlogi(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Blogi lisatty = (Blogi) dao.haeVinkki(id);
 
         assertEquals("tagi1", lisatty.getTagit().get(0).getTag());
         assertEquals("tagi2", lisatty.getTagit().get(1).getTag());
@@ -66,32 +63,32 @@ public class BlogiDAOTest {
     public void huonoTietokantaPalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
     }
 
     @Test
     public void huonoTietokantaPalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(null, huonoDao.haeBlogi(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
 
     @Test
     public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaBlogi(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Blogi("Ots", "kuv", "kirj", "nimi", "url", "2017-12-03")));
     }
 
     @Test
     public void huonoTietokantaosoitePalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("");
         BlogiDAO huonoDao = new BlogiDAO(huonoDB);
-        assertEquals(null, huonoDao.haeBlogi(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
 
     @Test
     public void olemattomanBloginHakuPalauttaaNull() {
-        assertEquals(null, dao.haeBlogi(-1l));
+        assertEquals(null, dao.haeVinkki(-1l));
     }
 }

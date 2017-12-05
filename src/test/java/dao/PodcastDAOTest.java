@@ -1,9 +1,6 @@
 package dao;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tietokantaobjektit.Podcast;
@@ -23,15 +20,15 @@ public class PodcastDAOTest {
     @Test
     public void podcastinVoiLisata() {
         Podcast lisattava = new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03");
-        long id = dao.lisaaPodcast(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
 
     @Test
     public void podcastinVoiHakea() {
         Podcast lisattava = new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03");
-        long id = dao.lisaaPodcast(lisattava);
-        Podcast lisatty = dao.haePodcast(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Podcast lisatty = (Podcast) dao.haeVinkki(id);
 
         assertEquals("Ots", lisatty.getOtsikko());
         assertEquals("kuv", lisatty.getKuvaus());
@@ -45,7 +42,7 @@ public class PodcastDAOTest {
     public void podcastinVoiLisataTagilla() {
         Podcast lisattava = new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03");
         lisattava.lisaaTag(new Tag("tagi"));
-        long id = dao.lisaaPodcast(lisattava);
+        long id = dao.lisaaVinkki(lisattava);
         assertTrue(id != -1);
     }
 
@@ -55,8 +52,8 @@ public class PodcastDAOTest {
         lisattava.lisaaTag(new Tag("tagi1"));
         lisattava.lisaaTag(new Tag("tagi2"));
 
-        long id = dao.lisaaPodcast(lisattava);
-        Podcast lisatty = dao.haePodcast(id);
+        long id = dao.lisaaVinkki(lisattava);
+        Podcast lisatty = (Podcast) dao.haeVinkki(id);
 
         assertEquals("tagi1", lisatty.getTagit().get(0).getTag());
         assertEquals("tagi2", lisatty.getTagit().get(1).getTag());
@@ -66,32 +63,32 @@ public class PodcastDAOTest {
     public void huonoTietokantaPalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         PodcastDAO huonoDao = new PodcastDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaPodcast(new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03")));
     }
 
     @Test
     public void huonoTietokantaPalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("jdbc:sqlite:TyhjaTestausTietokanta.db");
         PodcastDAO huonoDao = new PodcastDAO(huonoDB);
-        assertEquals(null, huonoDao.haePodcast(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
 
     @Test
     public void huonoTietokantaosoitePalauttaaNeg1Lisatessa() {
         Tietokanta huonoDB = new Tietokanta("");
         PodcastDAO huonoDao = new PodcastDAO(huonoDB);
-        assertEquals(-1, huonoDao.lisaaPodcast(new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03")));
+        assertEquals(-1, huonoDao.lisaaVinkki(new Podcast("Ots", "kuv", "tek", "nimi", "url", "2017-12-03")));
     }
 
     @Test
     public void huonoTietokantaosoitePalauttaaNullHakiessa() {
         Tietokanta huonoDB = new Tietokanta("");
         PodcastDAO huonoDao = new PodcastDAO(huonoDB);
-        assertEquals(null, huonoDao.haePodcast(1));
+        assertEquals(null, huonoDao.haeVinkki(1));
     }
 
     @Test
     public void olemattomanPodcastnHakuPalauttaaNull() {
-        assertEquals(null, dao.haePodcast(-1l));
+        assertEquals(null, dao.haeVinkki(-1l));
     }
 }
