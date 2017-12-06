@@ -39,12 +39,4 @@ public class VideoDAO extends TyyppiDAO {
                 result.getString("url"),
                 result.getString("pvm"));
     }
-
-    @Override
-    protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException {
-        Video video = (Video) lisattava;
-        st.setString(2, video.getTekija());
-        st.setString(3, video.getUrl());
-        st.setString(4, video.getPvm());
-    }
 }

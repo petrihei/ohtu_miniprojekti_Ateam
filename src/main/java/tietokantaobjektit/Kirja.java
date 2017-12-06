@@ -1,5 +1,8 @@
 package tietokantaobjektit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Kirja extends Vinkki {
 
     private String isbn;
@@ -29,6 +32,14 @@ public class Kirja extends Vinkki {
 
     public void setKirjailija(String kirjailija) {
         this.kirjailija = kirjailija;
+    }
+    
+    @Override
+    public List<String> tyypinTiedotJarjestyksessa() {
+        ArrayList<String> tiedot = (ArrayList) new ArrayList();
+        tiedot.add(this.isbn);
+        tiedot.add(this.kirjailija);
+        return tiedot;
     }
 
     @Override

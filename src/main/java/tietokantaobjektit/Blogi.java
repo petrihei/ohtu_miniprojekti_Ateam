@@ -1,5 +1,8 @@
 package tietokantaobjektit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Blogi extends Vinkki {
     
     private String kirjoittaja;
@@ -49,6 +52,16 @@ public class Blogi extends Vinkki {
 
     public void setPvm(String pvm) {
         this.pvm = pvm;
+    }
+    
+    @Override
+    public List<String> tyypinTiedotJarjestyksessa() {
+        ArrayList<String> tiedot = (ArrayList) new ArrayList();
+        tiedot.add(this.kirjoittaja);
+        tiedot.add(this.nimi);
+        tiedot.add(this.url);
+        tiedot.add(this.pvm);
+        return tiedot;
     }
     
     @Override

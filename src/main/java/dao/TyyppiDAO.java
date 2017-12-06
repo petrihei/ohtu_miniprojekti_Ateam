@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Vinkki;
 
@@ -17,14 +19,9 @@ abstract public class TyyppiDAO {
 
     abstract protected Vinkki luoVinkkiResultista(ResultSet result) throws SQLException;
 
-    abstract protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException;
-
     public Vinkki haeVinkki(long id) {
         Vinkki vinkki = null;
-        try (Connection conn = this.db.getConnection();
-                PreparedStatement st = conn.prepareStatement(hakuSql())) {
-            st.setLong(1, id);
-            ResultSet result = st.executeQuery();
+        try (ResultSet result = teeKysely(hakuSql(), new ArrayList(), id)) {
             vinkki = luoVinkkiTageilla(result);
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
@@ -51,8 +48,25 @@ abstract public class TyyppiDAO {
         lisattava.setId(vinkkiId);
         return vinkkiId;
     }
+    
+    private ResultSet teeKysely(String sql, List<String> tiedot, long id) throws SQLException {
+        PreparedStatement st = valmisteleKysely(sql);
+        asetaVinkinTiedotParametreiksi(st, tiedot, id);
+        return st.executeQuery();
+    }
 
-    private void lisaaTagitResultista(ResultSet result, Vinkki vinkki) throws SQLException {
+    private void suoritaLause(String sql, List<String> tiedot, long id) throws SQLException {
+        PreparedStatement st = valmisteleKysely(sql);
+        asetaVinkinTiedotParametreiksi(st, tiedot, id);
+        st.executeUpdate();
+    }
+
+    private PreparedStatement valmisteleKysely(String sql) throws SQLException {
+        Connection conn = this.db.getConnection();
+        return conn.prepareStatement(sql);
+    }
+
+    private void lisaaVinkilleTagitResultista(ResultSet result, Vinkki vinkki) throws SQLException {
         do {
             String tagString = result.getString("tag");
             if (tagString != null) {
@@ -63,11 +77,8 @@ abstract public class TyyppiDAO {
     }
 
     private boolean lisaaTyyppiTietokantaan(Vinkki lisattava, long vinkkiId) {
-        try (Connection conn = this.db.getConnection();
-                PreparedStatement st = conn.prepareStatement(lisaysSql())) {
-            st.setLong(1, vinkkiId);
-            asetaVinkinTiedotParametreiksi(st, lisattava);
-            st.executeUpdate();
+        try {
+            suoritaLause(lisaysSql(), lisattava.tyypinTiedotJarjestyksessa(), vinkkiId);
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
             //TBD Poista vinkki
@@ -80,8 +91,15 @@ abstract public class TyyppiDAO {
         Vinkki vinkki = null;
         if (result.next()) {
             vinkki = luoVinkkiResultista(result);
-            lisaaTagitResultista(result, vinkki);
+            lisaaVinkilleTagitResultista(result, vinkki);
         }
         return vinkki;
+    }
+
+    private void asetaVinkinTiedotParametreiksi(PreparedStatement st, List<String> tiedot, long id) throws SQLException {
+        st.setLong(1, id);
+        for (int i = 2; i <= tiedot.size() + 1; i++) {
+            st.setString(i, tiedot.get(i - 2));
+        }
     }
 }

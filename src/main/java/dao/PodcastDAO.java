@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Podcast;
@@ -35,14 +34,5 @@ public class PodcastDAO extends TyyppiDAO {
                 result.getString("nimi"),
                 result.getString("url"),
                 result.getString("pvm"));
-    }
-
-    @Override
-    protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException {
-        Podcast podcast = (Podcast) lisattava;
-        st.setString(2, podcast.getTekija());
-        st.setString(3, podcast.getNimi());
-        st.setString(4, podcast.getUrl());
-        st.setString(5, podcast.getPvm());
     }
 }

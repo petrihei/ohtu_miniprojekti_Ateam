@@ -1,7 +1,5 @@
 package dao;
 
-import dao.Tietokanta;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Blogi;
@@ -36,14 +34,5 @@ public class BlogiDAO extends TyyppiDAO {
                 result.getString("nimi"),
                 result.getString("url"),
                 result.getString("pvm"));
-    }
-
-    @Override
-    protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException {
-        Blogi blogi = (Blogi) lisattava;
-        st.setString(2, blogi.getKirjoittaja());
-        st.setString(3, blogi.getNimi());
-        st.setString(4, blogi.getUrl());
-        st.setString(5, blogi.getPvm());
     }
 }

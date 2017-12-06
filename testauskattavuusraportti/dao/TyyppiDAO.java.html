@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Vinkki;
 
-<span class="fc" id="L10">abstract public class TyyppiDAO {</span>
+<span class="fc" id="L12">abstract public class TyyppiDAO {</span>
 
     protected Tietokanta db;
 
@@ -17,72 +19,88 @@ import tietokantaobjektit.Vinkki;
 
     abstract protected Vinkki luoVinkkiResultista(ResultSet result) throws SQLException;
 
-    abstract protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException;
-
     public Vinkki haeVinkki(long id) {
 <span class="fc" id="L23">        Vinkki vinkki = null;</span>
-<span class="pc" id="L24">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L25">                PreparedStatement st = conn.prepareStatement(hakuSql())) {</span>
-<span class="fc" id="L26">            st.setLong(1, id);</span>
-<span class="fc" id="L27">            ResultSet result = st.executeQuery();</span>
-<span class="fc" id="L28">            vinkki = luoVinkkiTageilla(result);</span>
-<span class="pc bpc" id="L29" title="9 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="fc" id="L30">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
-<span class="fc" id="L31">        } catch (NullPointerException ex) {</span>
+<span class="pc" id="L24">        try (ResultSet result = teeKysely(hakuSql(), new ArrayList(), id)) {</span>
+<span class="fc" id="L25">            vinkki = luoVinkkiTageilla(result);</span>
+<span class="pc bpc" id="L26" title="6 of 8 branches missed.">        } catch (SQLException ex) {</span>
+<span class="fc" id="L27">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="fc" id="L28">        } catch (NullPointerException ex) {</span>
             // Tietokanta-luokka tekee virheilmoituksen.
-<span class="fc" id="L33">        }</span>
-<span class="fc" id="L34">        return vinkki;</span>
+<span class="fc" id="L30">        }</span>
+<span class="fc" id="L31">        return vinkki;</span>
     }
 
     public long lisaaVinkki(Vinkki lisattava) {
         // Lisätään ensin Vinkki.
-<span class="fc" id="L39">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
-<span class="fc" id="L40">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
+<span class="fc" id="L36">        VinkkiDAO vinkkiDao = new VinkkiDAO(db);</span>
+<span class="fc" id="L37">        long vinkkiId = vinkkiDao.lisaaVinkki(lisattava);</span>
 
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (vinkkiId == -1) {</span>
-<span class="fc" id="L43">            return -1;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (vinkkiId == -1) {</span>
+<span class="fc" id="L40">            return -1;</span>
         }
 
         // Lisätään Kirja/Blogi/etc ja yhdistetään Vinkkiin.
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (!lisaaTyyppiTietokantaan(lisattava, vinkkiId)) {</span>
-<span class="fc" id="L48">            return -1;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (!lisaaTyyppiTietokantaan(lisattava, vinkkiId)) {</span>
+<span class="fc" id="L45">            return -1;</span>
         }
 
-<span class="fc" id="L51">        lisattava.setId(vinkkiId);</span>
-<span class="fc" id="L52">        return vinkkiId;</span>
+<span class="fc" id="L48">        lisattava.setId(vinkkiId);</span>
+<span class="fc" id="L49">        return vinkkiId;</span>
+    }
+    
+    private ResultSet teeKysely(String sql, List&lt;String&gt; tiedot, long id) throws SQLException {
+<span class="fc" id="L53">        PreparedStatement st = valmisteleKysely(sql);</span>
+<span class="fc" id="L54">        asetaVinkinTiedotParametreiksi(st, tiedot, id);</span>
+<span class="fc" id="L55">        return st.executeQuery();</span>
     }
 
-    private void lisaaTagitResultista(ResultSet result, Vinkki vinkki) throws SQLException {
+    private void suoritaLause(String sql, List&lt;String&gt; tiedot, long id) throws SQLException {
+<span class="fc" id="L59">        PreparedStatement st = valmisteleKysely(sql);</span>
+<span class="fc" id="L60">        asetaVinkinTiedotParametreiksi(st, tiedot, id);</span>
+<span class="fc" id="L61">        st.executeUpdate();</span>
+<span class="fc" id="L62">    }</span>
+
+    private PreparedStatement valmisteleKysely(String sql) throws SQLException {
+<span class="fc" id="L65">        Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L66">        return conn.prepareStatement(sql);</span>
+    }
+
+    private void lisaaVinkilleTagitResultista(ResultSet result, Vinkki vinkki) throws SQLException {
         do {
-<span class="fc" id="L57">            String tagString = result.getString(&quot;tag&quot;);</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (tagString != null) {</span>
-<span class="fc" id="L59">                Tag tag = new Tag(tagString);</span>
-<span class="fc" id="L60">                vinkki.lisaaTag(tag);</span>
+<span class="fc" id="L71">            String tagString = result.getString(&quot;tag&quot;);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (tagString != null) {</span>
+<span class="fc" id="L73">                Tag tag = new Tag(tagString);</span>
+<span class="fc" id="L74">                vinkki.lisaaTag(tag);</span>
             }
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        } while (result.next());</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        } while (result.next());</span>
+<span class="fc" id="L77">    }</span>
 
     private boolean lisaaTyyppiTietokantaan(Vinkki lisattava, long vinkkiId) {
-<span class="fc" id="L66">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L67">                PreparedStatement st = conn.prepareStatement(lisaysSql())) {</span>
-<span class="fc" id="L68">            st.setLong(1, vinkkiId);</span>
-<span class="fc" id="L69">            asetaVinkinTiedotParametreiksi(st, lisattava);</span>
-<span class="fc" id="L70">            st.executeUpdate();</span>
-<span class="pc bpc" id="L71" title="8 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="fc" id="L72">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+        try {
+<span class="fc" id="L81">            suoritaLause(lisaysSql(), lisattava.tyypinTiedotJarjestyksessa(), vinkkiId);</span>
+<span class="fc" id="L82">        } catch (SQLException ex) {</span>
+<span class="fc" id="L83">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
             //TBD Poista vinkki
-<span class="fc" id="L74">            return false;</span>
-<span class="fc" id="L75">        }</span>
-<span class="fc" id="L76">        return true;</span>
+<span class="fc" id="L85">            return false;</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        return true;</span>
     }
 
     private Vinkki luoVinkkiTageilla(ResultSet result) throws SQLException {
-<span class="fc" id="L80">        Vinkki vinkki = null;</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (result.next()) {</span>
-<span class="fc" id="L82">            vinkki = luoVinkkiResultista(result);</span>
-<span class="fc" id="L83">            lisaaTagitResultista(result, vinkki);</span>
+<span class="fc" id="L91">        Vinkki vinkki = null;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (result.next()) {</span>
+<span class="fc" id="L93">            vinkki = luoVinkkiResultista(result);</span>
+<span class="fc" id="L94">            lisaaVinkilleTagitResultista(result, vinkki);</span>
         }
-<span class="fc" id="L85">        return vinkki;</span>
+<span class="fc" id="L96">        return vinkki;</span>
     }
+
+    private void asetaVinkinTiedotParametreiksi(PreparedStatement st, List&lt;String&gt; tiedot, long id) throws SQLException {
+<span class="fc" id="L100">        st.setLong(1, id);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for (int i = 2; i &lt;= tiedot.size() + 1; i++) {</span>
+<span class="fc" id="L102">            st.setString(i, tiedot.get(i - 2));</span>
+        }
+<span class="fc" id="L104">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
@@ -33,12 +32,5 @@ public class KirjaDAO extends TyyppiDAO {
     @Override
     protected String lisaysSql() {
         return "INSERT INTO Kirja (vinkki, ISBN, kirjailija) values (?, ?, ?)";
-    }
-
-    @Override
-    protected void asetaVinkinTiedotParametreiksi(PreparedStatement st, Vinkki lisattava) throws SQLException {
-        Kirja kirja = (Kirja) lisattava;
-        st.setString(2, kirja.getIsbn());
-        st.setString(3, kirja.getKirjailija());
     }
 }
