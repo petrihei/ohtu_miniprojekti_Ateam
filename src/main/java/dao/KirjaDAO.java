@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Vinkki;
 
-public class KirjaDAO extends BoundaryBase {
+public class KirjaDAO extends TyyppiDAO {
 
     public KirjaDAO(Tietokanta db) {
         this.db = db;
@@ -19,7 +19,7 @@ public class KirjaDAO extends BoundaryBase {
                 + " LEFT JOIN (SELECT * FROM Tag, VinkkiTag"
                 + " WHERE Tag.tag_id = VinkkiTag.tag) AS R"
                 + " ON Vinkki.vinkki_id = R.vinkki"
-                + " WHERE vinkki.vinkki_id = ? ;";
+                + " WHERE vinkki.vinkki_id = ?";
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Vinkki;
 
-abstract public class BoundaryBase {
+abstract public class TyyppiDAO {
 
     protected Tietokanta db;
 
@@ -25,17 +25,7 @@ abstract public class BoundaryBase {
                 PreparedStatement st = conn.prepareStatement(hakuSql())) {
             st.setLong(1, id);
             ResultSet result = st.executeQuery();
-
-            if (result.next()) {
-                vinkki = luoVinkkiResultista(result);
-                do {
-                    String tagString = result.getString("tag");
-                    if (tagString != null) {
-                        Tag tag = new Tag(tagString);
-                        vinkki.lisaaTag(tag);
-                    }
-                } while (result.next());
-            }
+            vinkki = luoVinkkiTageilla(result);
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
         } catch (NullPointerException ex) {
@@ -54,19 +44,44 @@ abstract public class BoundaryBase {
         }
 
         // Lisätään Kirja/Blogi/etc ja yhdistetään Vinkkiin.
-        try (Connection conn = this.db.getConnection();
-                PreparedStatement st = conn.prepareStatement(lisaysSql())) {
-            st.setLong(1, vinkkiId);
-            asetaVinkinTiedotParametreiksi(st, lisattava);
-            st.executeUpdate();
-
-        } catch (SQLException ex) {
-            System.out.println("SQL kysely epäonnistui: " + ex);
-            //TBD Poista vinkki
+        if (!lisaaTyyppiTietokantaan(lisattava, vinkkiId)) {
             return -1;
         }
 
         lisattava.setId(vinkkiId);
         return vinkkiId;
+    }
+
+    private void lisaaTagitResultista(ResultSet result, Vinkki vinkki) throws SQLException {
+        do {
+            String tagString = result.getString("tag");
+            if (tagString != null) {
+                Tag tag = new Tag(tagString);
+                vinkki.lisaaTag(tag);
+            }
+        } while (result.next());
+    }
+
+    private boolean lisaaTyyppiTietokantaan(Vinkki lisattava, long vinkkiId) {
+        try (Connection conn = this.db.getConnection();
+                PreparedStatement st = conn.prepareStatement(lisaysSql())) {
+            st.setLong(1, vinkkiId);
+            asetaVinkinTiedotParametreiksi(st, lisattava);
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("SQL kysely epäonnistui: " + ex);
+            //TBD Poista vinkki
+            return false;
+        }
+        return true;
+    }
+
+    private Vinkki luoVinkkiTageilla(ResultSet result) throws SQLException {
+        Vinkki vinkki = null;
+        if (result.next()) {
+            vinkki = luoVinkkiResultista(result);
+            lisaaTagitResultista(result, vinkki);
+        }
+        return vinkki;
     }
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import tietokantaobjektit.Podcast;
 import tietokantaobjektit.Vinkki;
 
-public class PodcastDAO extends BoundaryBase {
+public class PodcastDAO extends TyyppiDAO {
 
     public PodcastDAO(Tietokanta db) {
         this.db = db;

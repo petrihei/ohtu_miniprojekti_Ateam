@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import tietokantaobjektit.Blogi;
 import tietokantaobjektit.Vinkki;
 
-public class BlogiDAO extends BoundaryBase {
+public class BlogiDAO extends TyyppiDAO {
 
     public BlogiDAO(Tietokanta db) {
         this.db = db;
