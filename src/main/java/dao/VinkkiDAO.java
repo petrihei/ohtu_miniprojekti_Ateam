@@ -251,49 +251,14 @@ public class VinkkiDAO {
 
     public boolean poistaVinkki(Vinkki poistettava) {
         Long poistettavaID = poistettava.getId();
-        String query = "SELECT tag FROM VinkkiTag where vinkki = " + poistettavaID;
+        String query = "DELETE FROM Vinkki WHERE vinkki_id = ?;";
         try (Connection conn = this.db.getConnection();) {
             PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet result = stmt.executeQuery();
-            List<Integer> Tag_ids = new ArrayList<Integer>();
-
-            while (result.next()) {
-                Tag_ids.add(result.getInt("tag"));
-
-            }
-            for (int tagID : Tag_ids) {
-                query = "SELECT Count() from VinkkiTag WHERE tag = " + tagID;
-                stmt = conn.prepareStatement(query);
-                result = stmt.executeQuery();
-                while (result.next()) {
-                    int TagCounter = result.getInt("Count()");
-
-                    if (TagCounter == 1) {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                        query = "Delete from Tag where tag_id = " + tagID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                    } else {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                    }
-                }
-            }
-            String PoistettavanTyyppi = poistettava.getTyyppi();
-            query = "Delete from " + PoistettavanTyyppi + " WHERE vinkki = " + poistettavaID + ";";
-            stmt = conn.prepareStatement(query);
-            stmt.executeUpdate();
-            query = "DELETE FROM Vinkki WHERE vinkki_id = " + poistettavaID;
-            stmt = conn.prepareStatement(query);
-            stmt.executeUpdate();
-            return true;
-
+            stmt.setLong(1, poistettavaID);
+            return stmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+            return false;
         }
-        return false;
     }
 }

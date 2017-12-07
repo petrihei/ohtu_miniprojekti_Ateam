@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TagDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">TagDAO.java</span></div><h1>TagDAO.java</h1><pre class="source lang-java linenums">package dao;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TagDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">TagDAO.java</span></div><h1>TagDAO.java</h1><pre class="source lang-java linenums">package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +27,7 @@ public class TagDAO {
 <span class="fc" id="L27">            uusiId = rs.getLong(1);</span>
             
 <span class="pc bpc" id="L29" title="7 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="fc" id="L30">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="fc" id="L30">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
 <span class="fc" id="L31">            return -1;</span>
 <span class="fc" id="L32">        } catch (NullPointerException ex) {</span>
             // Tietokanta-luokka tekee virheilmoituksen.
@@ -48,7 +48,7 @@ public class TagDAO {
 <span class="fc" id="L48">            result.next();</span>
 <span class="fc" id="L49">            tag = new Tag(result.getString(&quot;tag&quot;));</span>
 <span class="pc bpc" id="L50" title="9 of 16 branches missed.">        } catch (SQLException ex) {</span>
-<span class="fc" id="L51">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="fc" id="L51">            System.out.println(&quot;SQL kysely epÃ¤onnistui: &quot; + ex);</span>
 <span class="fc" id="L52">        } catch (NullPointerException ex) {</span>
             // Tietokanta-luokka tekee virheilmoituksen.
 <span class="fc" id="L54">        }</span>

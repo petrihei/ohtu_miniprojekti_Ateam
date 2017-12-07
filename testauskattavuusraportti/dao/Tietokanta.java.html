@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tietokanta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">Tietokanta.java</span></div><h1>Tietokanta.java</h1><pre class="source lang-java linenums">package dao;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tietokanta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">Tietokanta.java</span></div><h1>Tietokanta.java</h1><pre class="source lang-java linenums">package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,16 +8,16 @@ import org.sqlite.SQLiteOpenMode;
 
 /**
  *
- * @author Chamion Luokka kaikkien DAOjen yhteiskäyttöön.
+ * @author Chamion Luokka kaikkien DAOjen yhteiskÃ¤yttÃ¶Ã¶n.
  */
 public class Tietokanta {
 
     private String jdbcOsoite;
 
     /**
-     * Parametri &quot;jdbc:sqlite:TietokantaTest1.db&quot; näyttää toimivan.
+     * Parametri &quot;jdbc:sqlite:TietokantaTest1.db&quot; nÃ¤yttÃ¤Ã¤ toimivan.
      *
-     * @param jdbcAddress osoite, joka osoittaa käytettävään tietokantaan.
+     * @param jdbcAddress osoite, joka osoittaa kÃ¤ytettÃ¤vÃ¤Ã¤n tietokantaan.
      */
 <span class="fc" id="L22">    public Tietokanta(String jdbcOsoite) {</span>
 <span class="fc" id="L23">        this.jdbcOsoite = jdbcOsoite;</span>
@@ -33,11 +33,11 @@ public class Tietokanta {
         try {
 <span class="fc" id="L34">            SQLiteConfig config = new SQLiteConfig();</span>
 <span class="fc" id="L35">            config.resetOpenMode(SQLiteOpenMode.CREATE); // Ei salli tietokannan luomista.</span>
-<span class="fc" id="L36">            config.enforceForeignKeys(true); // Foreign key ei saa osoittaa tyhjään</span>
+<span class="fc" id="L36">            config.enforceForeignKeys(true); // Foreign key ei saa osoittaa tyhjÃ¤Ã¤n</span>
 <span class="fc" id="L37">            conn = DriverManager.getConnection(this.jdbcOsoite, config.toProperties());</span>
 <span class="fc" id="L38">        } catch (SQLException e) {</span>
-            // Älähtää, jos jdbcAddress on huono.
-<span class="fc" id="L40">            System.err.println(&quot;Yhteyden muodostus tietokantaan epäonnistui, &quot; + e);</span>
+            // Ã„lÃ¤htÃ¤Ã¤, jos jdbcAddress on huono.
+<span class="fc" id="L40">            System.err.println(&quot;Yhteyden muodostus tietokantaan epÃ¤onnistui, &quot; + e);</span>
 <span class="fc" id="L41">            return null;</span>
 <span class="fc" id="L42">        }</span>
 <span class="fc" id="L43">        return conn;</span>
