@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import tietokantaobjektit.*;
 
 /**
@@ -113,71 +116,19 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
-
-        // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
-        String query = "SELECT vinkki.otsikko, vinkki.kuvaus, vinkki.tyyppi, kirja.isbn, kirja.kirjailija, video.tekija, "
-                + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.nimi AS blogi_nimi, blogi.url AS blogi_url, "
-                + "blogi.pvm AS blogi_pvm, podcast.tekija AS podcast_tekija, podcast.nimi AS podcast_nimi, podcast.url AS podcast_url,"
-                + "podcast.pvm AS podcast_pvm, R.tagit "
-                + "FROM Vinkki "
-                + "LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki "
-                + "LEFT OUTER JOIN Video ON Vinkki.vinkki_id = Video.vinkki "
-                + "LEFT OUTER JOIN Blogi ON Vinkki.vinkki_id = Blogi.vinkki "
-                + "LEFT OUTER JOIN Podcast ON Vinkki.vinkki_id = Podcast.vinkki "
-                + "LEFT OUTER JOIN ("
-                + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
-                + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
-                + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
-                + ") GROUP BY vinkki"
-                + ") AS R ON Vinkki.vinkki_id = R.vinkki;";
+        
+        String query = rakennaKaikkiTiedotQuery();
+        
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
             while (result.next()) {
                 String tyyppi = result.getString("tyyppi");
-                Vinkki vinkki;
-                if (tyyppi.equals("kirja")) {
-                    vinkki = new Kirja(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("ISBN"),
-                            result.getString("kirjailija")
-                    );
-                } else if (tyyppi.equals("video")) {
-                    vinkki = new Video(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("tekija"),
-                            result.getString("video_url"),
-                            result.getString("video_pvm")
-                    );
-                } else if (tyyppi.equals("blogi")) {
-                    vinkki = new Blogi(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("kirjoittaja"),
-                            result.getString("blogi_nimi"),
-                            result.getString("blogi_url"),
-                            result.getString("blogi_pvm")
-                    );
-                } else if (tyyppi.equals("podcast")) {
-                    vinkki = new Podcast(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("podcast_tekija"),
-                            result.getString("podcast_nimi"),
-                            result.getString("podcast_url"),
-                            result.getString("podcast_pvm")
-                    );
-                } else {
-                    System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+                
+                Vinkki vinkki = parsiVinkkiResultista(result);
+                
+                if(vinkki == null) {
                     continue;
-                }
-                if (result.getString("tagit") != null) {
-                    String[] tagitString = result.getString("tagit").split(",");
-                    for (String tagString : tagitString) {
-                        vinkki.lisaaTag(new Tag(tagString));
-                    }
                 }
                 vinkit.add(vinkki);
             }
@@ -190,6 +141,112 @@ public class VinkkiDAO {
         }
 
         return vinkit;
+    }
+    
+    // Apumetodi metodille kaikkiVinkitJaTiedot
+    private Vinkki parsiVinkkiResultista(ResultSet result) throws SQLException {
+        String tyyppi = result.getString("tyyppi");
+        Vinkki vinkki;
+        if (tyyppi.equals("kirja")) {
+            vinkki = new Kirja(
+                    result.getString("otsikko"),
+                    result.getString("kuvaus"),
+                    result.getString("kirja_ISBN"),
+                    result.getString("kirja_kirjailija")
+            );
+        } else if (tyyppi.equals("video")) {
+            vinkki = new Video(
+                    result.getString("otsikko"),
+                    result.getString("kuvaus"),
+                    result.getString("video_tekija"),
+                    result.getString("video_url"),
+                    result.getString("video_pvm")
+            );
+        } else if (tyyppi.equals("blogi")) {
+            vinkki = new Blogi(
+                    result.getString("otsikko"),
+                    result.getString("kuvaus"),
+                    result.getString("blogi_kirjoittaja"),
+                    result.getString("blogi_nimi"),
+                    result.getString("blogi_url"),
+                    result.getString("blogi_pvm")
+            );
+        } else if (tyyppi.equals("podcast")) {
+            vinkki = new Podcast(
+                    result.getString("otsikko"),
+                    result.getString("kuvaus"),
+                    result.getString("podcast_tekija"),
+                    result.getString("podcast_nimi"),
+                    result.getString("podcast_url"),
+                    result.getString("podcast_pvm")
+            );
+        } else {
+            System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+            return null;
+        }
+        if (result.getString("tagit") != null) {
+            String[] tagitString = result.getString("tagit").split(",");
+            for (String tagString : tagitString) {
+                vinkki.lisaaTag(new Tag(tagString));
+            }
+        }
+        return vinkki;
+    }
+    
+    // Apumetodi metodille kaikkiVinkitJaTiedot
+    private String rakennaKaikkiTiedotQuery() {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
+        
+        String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
+        String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
+        String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
+        String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
+        
+        upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
+        upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
+        upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
+        upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
+        
+        queryBuilder.append(", R.tagit ");
+        queryBuilder.append("FROM Vinkki ");
+        
+        upotaLiitto("Kirja", queryBuilder);
+        upotaLiitto("Video", queryBuilder);
+        upotaLiitto("Blogi", queryBuilder);
+        upotaLiitto("Podcast", queryBuilder);
+        
+        queryBuilder.append("LEFT OUTER JOIN ("
+                + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
+                + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
+                + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
+                + ") GROUP BY vinkki"
+                + ") AS R ON Vinkki.vinkki_id = R.vinkki;");
+        
+        return queryBuilder.toString();
+    }
+    
+    // apumetodi apumetodille rakennaKaikkiTiedotQuery
+    private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
+        for(String sarake : sarakkeet) {
+            queryBuilder.append(", ");
+            queryBuilder.append(taulunNimi);
+            queryBuilder.append(".");
+            queryBuilder.append(sarake);
+            queryBuilder.append(" AS ");
+            queryBuilder.append(taulunNimi.toLowerCase());
+            queryBuilder.append("_");
+            queryBuilder.append(sarake);
+        }
+    }
+    
+    // apumetodi apumetodille rakennaKaikkiTiedotQuery
+    private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
+        queryBuilder.append("LEFT JOIN ");
+        queryBuilder.append(taulunNimi);
+        queryBuilder.append(" ON ");
+        queryBuilder.append(taulunNimi);
+        queryBuilder.append(".vinkki = Vinkki.vinkki_id ");
     }
 
     public boolean poistaVinkki(Vinkki poistettava) {
