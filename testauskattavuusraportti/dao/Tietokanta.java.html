@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tietokanta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">Tietokanta.java</span></div><h1>Tietokanta.java</h1><pre class="source lang-java linenums">package dao;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tietokanta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">Tietokanta.java</span></div><h1>Tietokanta.java</h1><pre class="source lang-java linenums">package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 
@@ -17,9 +19,9 @@ public class Tietokanta {
      *
      * @param jdbcAddress osoite, joka osoittaa käytettävään tietokantaan.
      */
-<span class="fc" id="L20">    public Tietokanta(String jdbcOsoite) {</span>
-<span class="fc" id="L21">        this.jdbcOsoite = jdbcOsoite;</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L22">    public Tietokanta(String jdbcOsoite) {</span>
+<span class="fc" id="L23">        this.jdbcOsoite = jdbcOsoite;</span>
+<span class="fc" id="L24">    }</span>
 
     /**
      * Luo yhteyden tietokantaan sqlite driverin avulla.
@@ -29,24 +31,90 @@ public class Tietokanta {
     public Connection getConnection() {
         Connection conn;
         try {
-<span class="fc" id="L32">            SQLiteConfig config = new SQLiteConfig();</span>
-<span class="fc" id="L33">            config.resetOpenMode(SQLiteOpenMode.CREATE); // Ei salli tietokannan luomista.</span>
-<span class="fc" id="L34">            config.enforceForeignKeys(true); // Foreign key ei saa osoittaa tyhjään</span>
-<span class="fc" id="L35">            conn = DriverManager.getConnection(this.jdbcOsoite, config.toProperties());</span>
-<span class="fc" id="L36">        } catch (SQLException e) {</span>
+<span class="fc" id="L34">            SQLiteConfig config = new SQLiteConfig();</span>
+<span class="fc" id="L35">            config.resetOpenMode(SQLiteOpenMode.CREATE); // Ei salli tietokannan luomista.</span>
+<span class="fc" id="L36">            config.enforceForeignKeys(true); // Foreign key ei saa osoittaa tyhjään</span>
+<span class="fc" id="L37">            conn = DriverManager.getConnection(this.jdbcOsoite, config.toProperties());</span>
+<span class="fc" id="L38">        } catch (SQLException e) {</span>
             // Älähtää, jos jdbcAddress on huono.
-<span class="fc" id="L38">            System.err.println(&quot;Yhteyden muodostus tietokantaan epäonnistui, &quot; + e);</span>
-<span class="fc" id="L39">            return null;</span>
-<span class="fc" id="L40">        }</span>
-<span class="fc" id="L41">        return conn;</span>
+<span class="fc" id="L40">            System.err.println(&quot;Yhteyden muodostus tietokantaan epäonnistui, &quot; + e);</span>
+<span class="fc" id="L41">            return null;</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">        return conn;</span>
     }
 
     public void poistaKaikki() {
         // TODO
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L48">    }</span>
 
     public void lisaaTestiData() {
+<span class="nc" id="L51">        List&lt;String&gt; lauseet = sqliteLauseet();</span>
+<span class="nc" id="L52">        try (Connection conn = getConnection()) {</span>
+<span class="nc" id="L53">            Statement st = conn.createStatement();</span>
+
+            // suoritetaan komennot
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            for (String lause : lauseet) {</span>
+<span class="nc" id="L57">                System.out.println(&quot;Running command &gt;&gt; &quot; + lause);</span>
+<span class="nc" id="L58">                st.executeUpdate(lause);</span>
+<span class="nc" id="L59">            }</span>
+
+<span class="nc bnc" id="L61" title="All 8 branches missed.">        } catch (Throwable t) {</span>
+            // jos tietokantataulu on jo olemassa, ei komentoja suoriteta
+<span class="nc" id="L63">            System.out.println(&quot;Error &gt;&gt; &quot; + t.getMessage());</span>
+<span class="nc" id="L64">        }</span>
+
         // TODO
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L67">    }</span>
+
+    private List&lt;String&gt; sqliteLauseet() {
+<span class="nc" id="L70">        ArrayList&lt;String&gt; lista = new ArrayList&lt;&gt;();</span>
+//        lista.add(&quot;CREATE TABLE Vinkki (vinkki_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, &quot; 
+//                + &quot;otsikko TEXT NOT NULL, kuvaus TEXT, tyyppi TEXT NOT NULL DEFAULT 'kirja');&quot;);
+//        lista.add(&quot;CREATE TABLE Tag (tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, tag TEXT NOT NULL);&quot;);
+//        lista.add(&quot;CREATE TABLE VinkkiTag (vinkki INTEGER NOT NULL, tag INTEGER NOT NULL, &quot;
+//                + &quot;FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id), &quot;
+//                + &quot;FOREIGN KEY(tag) REFERENCES Tag(tag_id));&quot;);
+//        lista.add(&quot;CREATE TABLE Kirja (vinkki INTEGER NOT NULL, ISBN TEXT, &quot;
+//                + &quot;kirjailija TEXT, FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id));&quot;);
+//        lista.add(&quot;CREATE TABLE Video (vinkki INTEGER NOT NULL, tekija TEXT, &quot;
+//                + &quot;url TEXT NOT NULL, pvm TEXT, FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id));&quot;);
+//        lista.add(&quot;CREATE TABLE Blogi (vinkki INTEGER NOT NULL, kirjoittaja TEXT, nimi TEXT, &quot; 
+//                + &quot;url TEXT NOT NULL, pvm TEXT, FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id));&quot;);
+//        lista.add(&quot;CREATE TABLE Podcast (vinkki INTEGER NOT NULL, tekija TEXT, nimi TEXT, &quot; 
+//                + &quot;url TEXT NOT NULL, pvm TEXT, FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id));&quot;);
+
+        //kirja
+<span class="nc" id="L87">        lista.add(&quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\&quot;Introduction to Algorithms\&quot;,\&quot;The algorithms are described in English and in a pseudocode designed to be readable by anyone who has done a little programming.\&quot;, \&quot;kirja\&quot;);&quot;);</span>
+<span class="nc" id="L88">        lista.add(&quot;INSERT INTO Kirja (vinkki, ISBN, kirjailija) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\&quot;9780262033848\&quot; ,\&quot;James Cormen\&quot;);&quot;);</span>
+<span class="nc" id="L89">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;algoritmit\&quot;);&quot;);</span>
+<span class="nc" id="L90">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));&quot;);</span>
+<span class="nc" id="L91">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;Tira\&quot;);&quot;);</span>
+<span class="nc" id="L92">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));&quot;);</span>
+
+        //podcast
+<span class="nc" id="L95">        lista.add(&quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\&quot;Donald Ewart the 3 steps to mastery for Scrum teams.\&quot;, \&quot;Powerful Questions is recommended as a tool that helps Scrum Masters to initiate right kind of discussions with the team.\&quot;, \&quot;podcast\&quot;);&quot;);</span>
+<span class="nc" id="L96">        lista.add(&quot;INSERT INTO Podcast (vinkki, tekija, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\&quot;Donald Ewart\&quot;, \&quot;Scrum Master Toolbox Podcast\&quot;, \&quot;http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/\&quot;, \&quot;16.11.2017\&quot;);&quot;);</span>
+<span class="nc" id="L97">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;scrum\&quot;);&quot;);</span>
+<span class="nc" id="L98">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;ohtu\&quot;);&quot;);</span>
+<span class="nc" id="L99">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \&quot;scrum\&quot; LIMIT 1));&quot;);</span>
+<span class="nc" id="L100">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \&quot;ohtu\&quot; LIMIT 1));&quot;);</span>
+
+        //blogi
+<span class="nc" id="L103">        lista.add(&quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\&quot;Remote Agile Teams\&quot;,\&quot;Results of a survey about how agile teams work when team members don't work in the same place.\&quot;, \&quot;blogi\&quot;);&quot;);</span>
+<span class="nc" id="L104">        lista.add(&quot;INSERT INTO Blogi (vinkki, kirjoittaja, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\&quot;Sam Laing\&quot;, \&quot;Growing Agile Blog\&quot;, \&quot;https://www.growingagile.co.za/2017/07/remote-agile-teams/\&quot;, \&quot;25.7.2017\&quot;);&quot;);</span>
+<span class="nc" id="L105">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;agile\&quot;);&quot;);</span>
+<span class="nc" id="L106">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \&quot;agile\&quot; LIMIT 1));&quot;);</span>
+<span class="nc" id="L107">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \&quot;ohtu\&quot; LIMIT 1));&quot;);</span>
+
+        //video
+<span class="nc" id="L110">        lista.add(&quot;INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\&quot;60 Second Scrum Organizing the Product Backlog\&quot;,\&quot;Is your Product Backlog growing too large to manage?  Here are some tips to get it under control.\&quot;, \&quot;video\&quot;);&quot;);</span>
+<span class="nc" id="L111">        lista.add(&quot;INSERT INTO Video (vinkki, tekija, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\&quot;Angela Druckman\&quot;, \&quot;https://www.youtube.com/watch?v=g92anflQgyY\&quot;, \&quot;26.11.2012\&quot;);&quot;);</span>
+<span class="nc" id="L112">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \&quot;ohtu\&quot; LIMIT 1));&quot;);</span>
+<span class="nc" id="L113">        lista.add(&quot;INSERT INTO Tag (tag) VALUES (\&quot;product backlog\&quot;);&quot;);</span>
+<span class="nc" id="L114">        lista.add(&quot;INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));&quot;);</span>
+
+<span class="nc" id="L116">        return lista;</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

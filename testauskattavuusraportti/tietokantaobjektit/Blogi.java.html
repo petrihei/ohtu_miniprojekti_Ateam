@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Blogi.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tietokantaobjektit</a> &gt; <span class="el_source">Blogi.java</span></div><h1>Blogi.java</h1><pre class="source lang-java linenums">package tietokantaobjektit;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Blogi.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tietokantaobjektit</a> &gt; <span class="el_source">Blogi.java</span></div><h1>Blogi.java</h1><pre class="source lang-java linenums">package tietokantaobjektit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Blogi extends Vinkki {
     
@@ -8,63 +11,73 @@ public class Blogi extends Vinkki {
     private String pvm;
     
     public Blogi(String otsikko, String kuvaus) {
-<span class="nc" id="L11">        super(otsikko, kuvaus, &quot;blogi&quot;);</span>
-<span class="nc" id="L12">    }</span>
+<span class="nc" id="L14">        super(otsikko, kuvaus, &quot;blogi&quot;);</span>
+<span class="nc" id="L15">    }</span>
 
     public Blogi(String otsikko, String kuvaus, String kirjoittaja, String nimi, String url, String pvm) {
-<span class="fc" id="L15">        super(otsikko, kuvaus, &quot;blogi&quot;);</span>
-<span class="fc" id="L16">        this.kirjoittaja = kirjoittaja;</span>
-<span class="fc" id="L17">        this.nimi = nimi;</span>
-<span class="fc" id="L18">        this.url = url;</span>
-<span class="fc" id="L19">        this.pvm = pvm;</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L18">        super(otsikko, kuvaus, &quot;blogi&quot;);</span>
+<span class="fc" id="L19">        this.kirjoittaja = kirjoittaja;</span>
+<span class="fc" id="L20">        this.nimi = nimi;</span>
+<span class="fc" id="L21">        this.url = url;</span>
+<span class="fc" id="L22">        this.pvm = pvm;</span>
+<span class="fc" id="L23">    }</span>
 
     public String getKirjoittaja() {
-<span class="fc" id="L23">        return kirjoittaja;</span>
+<span class="fc" id="L26">        return kirjoittaja;</span>
     }
 
     public void setKirjoittaja(String kirjoittaja) {
-<span class="nc" id="L27">        this.kirjoittaja = kirjoittaja;</span>
-<span class="nc" id="L28">    }</span>
+<span class="nc" id="L30">        this.kirjoittaja = kirjoittaja;</span>
+<span class="nc" id="L31">    }</span>
 
     public String getNimi() {
-<span class="fc" id="L31">        return nimi;</span>
+<span class="fc" id="L34">        return nimi;</span>
     }
 
     public void setNimi(String nimi) {
-<span class="nc" id="L35">        this.nimi = nimi;</span>
-<span class="nc" id="L36">    }</span>
+<span class="nc" id="L38">        this.nimi = nimi;</span>
+<span class="nc" id="L39">    }</span>
 
     public String getUrl() {
-<span class="fc" id="L39">        return url;</span>
+<span class="fc" id="L42">        return url;</span>
     }
 
     public void setUrl(String url) {
-<span class="nc" id="L43">        this.url = url;</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L46">        this.url = url;</span>
+<span class="nc" id="L47">    }</span>
 
     public String getPvm() {
-<span class="fc" id="L47">        return pvm;</span>
+<span class="fc" id="L50">        return pvm;</span>
     }
 
     public void setPvm(String pvm) {
-<span class="nc" id="L51">        this.pvm = pvm;</span>
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L54">        this.pvm = pvm;</span>
+<span class="nc" id="L55">    }</span>
+    
+    @Override
+    public List&lt;String&gt; tyypinTiedotJarjestyksessa() {
+<span class="fc" id="L59">        ArrayList&lt;String&gt; tiedot = (ArrayList) new ArrayList();</span>
+<span class="fc" id="L60">        tiedot.add(this.kirjoittaja);</span>
+<span class="fc" id="L61">        tiedot.add(this.nimi);</span>
+<span class="fc" id="L62">        tiedot.add(this.url);</span>
+<span class="fc" id="L63">        tiedot.add(this.pvm);</span>
+<span class="fc" id="L64">        return tiedot;</span>
+    }
     
     @Override
     public String toString() {
-<span class="fc" id="L56">        StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L57">        sb.append(&quot;blogipostaus: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
-<span class="fc" id="L58">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
-<span class="fc" id="L59">                .append(&quot;  Kirjoittaja: &quot;).append(this.kirjoittaja).append(&quot;\n&quot;)</span>
-<span class="fc" id="L60">                .append(&quot;  Nimi: &quot;).append(this.nimi).append(&quot;\n&quot;)</span>
-<span class="fc" id="L61">                .append(&quot;  Url: &quot;).append(this.url).append(&quot;\n&quot;)</span>
-<span class="fc" id="L62">                .append(&quot;  Pvm: &quot;).append(this.pvm).append(&quot;\n&quot;)</span>
-<span class="fc" id="L63">                .append(&quot;  Tagit: &quot;);</span>
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
-<span class="fc" id="L65">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
-<span class="fc" id="L66">        }</span>
-<span class="fc" id="L67">        return sb.toString();</span>
+<span class="fc" id="L69">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L70">        sb.append(&quot;blogipostaus: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
+<span class="fc" id="L71">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
+<span class="fc" id="L72">                .append(&quot;  Kirjoittaja: &quot;).append(this.kirjoittaja).append(&quot;\n&quot;)</span>
+<span class="fc" id="L73">                .append(&quot;  Nimi: &quot;).append(this.nimi).append(&quot;\n&quot;)</span>
+<span class="fc" id="L74">                .append(&quot;  Url: &quot;).append(this.url).append(&quot;\n&quot;)</span>
+<span class="fc" id="L75">                .append(&quot;  Pvm: &quot;).append(this.pvm).append(&quot;\n&quot;)</span>
+<span class="fc" id="L76">                .append(&quot;  Tagit: &quot;);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
+<span class="fc" id="L78">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">        return sb.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

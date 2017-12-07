@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tekstikayttis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tekstikayttis</a> &gt; <span class="el_source">Tekstikayttis.java</span></div><h1>Tekstikayttis.java</h1><pre class="source lang-java linenums">package tekstikayttis;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tekstikayttis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tekstikayttis</a> &gt; <span class="el_source">Tekstikayttis.java</span></div><h1>Tekstikayttis.java</h1><pre class="source lang-java linenums">package tekstikayttis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,10 +70,10 @@ public class Tekstikayttis {
 <span class="fc" id="L70">            this.videonLisays();</span>
 <span class="fc bfc" id="L71" title="All 2 branches covered.">        } else if (komento.equals(&quot;3&quot;)) {</span>
 <span class="fc" id="L72">            this.bloginLisays();</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        } else if(komento.equals(&quot;4&quot;)){</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        } else if(komento.equals(&quot;4&quot;)){</span>
 <span class="fc" id="L74">            this.podcastinLisays();</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        } else if (komento.equals(&quot;0&quot;)) {</span>
-<span class="nc" id="L76">            return;</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        } else if (komento.equals(&quot;0&quot;)) {</span>
+<span class="fc" id="L76">            return;</span>
         } else {
 <span class="nc" id="L78">            this.io.print(&quot;Valitse toiminto listasta!&quot;);</span>
 <span class="nc" id="L79">            this.vinkinLisays();</span>
@@ -148,11 +148,11 @@ public class Tekstikayttis {
 <span class="fc" id="L148">    }</span>
 
     private void lisaaVinkkiJaTulostaTiedot(Vinkki lisattava) {
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (this.logiikka.lisaaVinkki(lisattava) != null) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (this.logiikka.lisaaVinkki(lisattava) != null) {</span>
 <span class="fc" id="L152">            this.io.print(&quot;Seuraavat tiedot tallennettu:&quot;);</span>
 <span class="fc" id="L153">            this.io.print(lisattava.toString());</span>
         } else {
-<span class="nc" id="L155">            this.io.print(&quot;Tallennus epäonnistui&quot;);</span>
+<span class="fc" id="L155">            this.io.print(&quot;Tallennus epäonnistui&quot;);</span>
         }
 <span class="fc" id="L157">    }</span>
 

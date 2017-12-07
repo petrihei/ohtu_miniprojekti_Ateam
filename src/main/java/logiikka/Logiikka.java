@@ -28,7 +28,6 @@ public class Logiikka {
     }
 
     public Vinkki lisaaVinkki(Vinkki vinkki) {
-        // TODO: Käytä super-DAO:n lisaaVinkki-metodia
         if (vinkki.getTyyppi().equals("kirja")) {
             return lisaaKirja((Kirja) vinkki);
         }
@@ -45,31 +44,31 @@ public class Logiikka {
     }
 
     private Kirja lisaaKirja(Kirja kirja) {
-        long id = kirjaDao.lisaaKirja(kirja);
-        Kirja uusiKirja = kirjaDao.haeKirja(id);
+        long id = kirjaDao.lisaaVinkki(kirja);
+        Kirja uusiKirja = (Kirja) kirjaDao.haeVinkki(id);
         return uusiKirja;
     }
 
     private Video lisaaVideo(Video video) {
-        long id = videoDao.lisaaVideo(video);
-        Video uusiVideo = videoDao.haeVideo(id);
+        long id = videoDao.lisaaVinkki(video);
+        Video uusiVideo = (Video) videoDao.haeVinkki(id);
         return uusiVideo;
     }
 
     private Blogi lisaaBlogi(Blogi blogi) {
-        long id = blogiDao.lisaaBlogi(blogi);
-        Blogi uusiBlogi = blogiDao.haeBlogi(id);
+        long id = blogiDao.lisaaVinkki(blogi);
+        Blogi uusiBlogi = (Blogi) blogiDao.haeVinkki(id);
         return uusiBlogi;
     }
 
     private Vinkki lisaaPodcast(Podcast podcast) {
-        long id = podcastDao.lisaaPodcast(podcast);
-        Podcast uusiPodcast = podcastDao.haePodcast(id);
+        long id = podcastDao.lisaaVinkki(podcast);
+        Podcast uusiPodcast = (Podcast) podcastDao.haeVinkki(id);
         return uusiPodcast;
     }
     
     public boolean VinkinPoisto(Vinkki Poistettava) {
-        return vinkkiDao.PoistaVinkki(Poistettava);
+        return vinkkiDao.poistaVinkki(Poistettava);
     }
 
     public List<Vinkki> haeKaikkiVinkit() {

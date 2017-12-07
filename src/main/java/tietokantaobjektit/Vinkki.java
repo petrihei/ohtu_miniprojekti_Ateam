@@ -78,6 +78,13 @@ public class Vinkki {
     public void lisaaTag(Tag tag) {
         this.tagit.add(tag);
     }
+    
+    public List<String> tyypinTiedotJarjestyksessa() {
+        ArrayList<String> tiedot = new ArrayList();
+        tiedot.add(this.otsikko);
+        tiedot.add(this.kuvaus);
+        return tiedot;
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

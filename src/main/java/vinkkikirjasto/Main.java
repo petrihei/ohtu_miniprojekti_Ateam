@@ -1,6 +1,5 @@
 package vinkkikirjasto;
 
-
 import dao.Tietokanta;
 import tekstikayttis.*;
 import logiikka.Logiikka;

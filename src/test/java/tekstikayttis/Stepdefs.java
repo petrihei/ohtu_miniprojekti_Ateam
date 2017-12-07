@@ -120,7 +120,7 @@ public class Stepdefs {
     @When("^existing tip is deleted$")
     public void existing_tip_is_deleted() throws Throwable {
         KirjaDAO kirjaDAO = new KirjaDAO(db);
-        long vinkki = kirjaDAO.lisaaKirja(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
+        long vinkki = kirjaDAO.lisaaVinkki(new Kirja("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx"));
         inputs.add("" + vinkki);
         inputs.add("1");
         inputs.add("0");
