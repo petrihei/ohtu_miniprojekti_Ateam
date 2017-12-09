@@ -26,6 +26,7 @@ public class Vinkki {
         this.kuvaus = kuvaus;
         this.tyyppi = tyyppi;
         this.tagit = new ArrayList<>();
+        this.relatedCourses = new ArrayList<>();
     }
     
     public Vinkki(Long id,String otsikko, String kuvaus, String tyyppi){
@@ -76,7 +77,7 @@ public class Vinkki {
         return tagit;
     }
     
-    public List<RelatedCourse> getRealtedCourses() {
+    public List<RelatedCourse> getRelatedCourses() {
         if (this.tagit == null){
             System.out.println("vinkki ei liity yhteenkään kurssiin");
         }

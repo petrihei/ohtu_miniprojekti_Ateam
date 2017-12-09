@@ -26,14 +26,14 @@ public class RelatedCourseDAOTest {
     }
     
     @Test
-    public void taginVoiLisata() {
+    public void relatedCoursenVoiLisata() {
         RelatedCourse lisattava = new RelatedCourse("Tagi");
         long id = dao.lisaaTag(lisattava);
         assertTrue(id != -1);
     }
     
     @Test
-    public void taginVoiHakea() {
+    public void relatedCoursenVoiHakea() {
         RelatedCourse lisattava = new RelatedCourse("Tagi");
         long id = dao.lisaaTag(lisattava);
         RelatedCourse lisatty = dao.haeTag(id);

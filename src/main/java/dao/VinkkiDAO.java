@@ -54,17 +54,21 @@ public class VinkkiDAO {
             // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
+        
+        List<SuperTag> superTagit = new ArrayList<>();
+        superTagit.addAll(lisattava.getTagit());
+        superTagit.addAll(lisattava.getRelatedCourses());
 
-        if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
+        if (!lisaaVinkkiTag(superTagit, vinkkiId)) {
             return -1;
         }
 
         return vinkkiId;
     }
 
-    public boolean lisaaVinkkiTag(List<Tag> tagit, long vinkkiId) {
+    public boolean lisaaVinkkiTag(List<SuperTag> tagit, long vinkkiId) {
         TagDAO tagDao = new TagDAO(db);
-        for (Tag tag : tagit) {
+        for (SuperTag tag : tagit) {
             // Lisätään tag.
             long tagId = tagDao.lisaaTag(tag);
 
@@ -116,6 +120,8 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
+        
+        //Tähän kaikki halutut taginkaltaiset. Katso mallia aiemmista.
         String[] tagTyypit = new String[]{TagDAO.TYYPPI, RelatedCourseDAO.TYYPPI};
         
         String query = rakennaKaikkiTiedotQuery(tagTyypit);
@@ -148,43 +154,46 @@ public class VinkkiDAO {
     private Vinkki parsiVinkkiResultista(ResultSet result, String[] tagTyypit) throws SQLException {
         String tyyppi = result.getString("tyyppi");
         Vinkki vinkki;
-        if (tyyppi.equals("kirja")) {
-            vinkki = new Kirja(
-                    result.getString("otsikko"),
-                    result.getString("kuvaus"),
-                    result.getString("kirja_ISBN"),
-                    result.getString("kirja_kirjailija")
-            );
-        } else if (tyyppi.equals("video")) {
-            vinkki = new Video(
-                    result.getString("otsikko"),
-                    result.getString("kuvaus"),
-                    result.getString("video_tekija"),
-                    result.getString("video_url"),
-                    result.getString("video_pvm")
-            );
-        } else if (tyyppi.equals("blogi")) {
-            vinkki = new Blogi(
-                    result.getString("otsikko"),
-                    result.getString("kuvaus"),
-                    result.getString("blogi_kirjoittaja"),
-                    result.getString("blogi_nimi"),
-                    result.getString("blogi_url"),
-                    result.getString("blogi_pvm")
-            );
-        } else if (tyyppi.equals("podcast")) {
-            vinkki = new Podcast(
-                    result.getString("otsikko"),
-                    result.getString("kuvaus"),
-                    result.getString("podcast_tekija"),
-                    result.getString("podcast_nimi"),
-                    result.getString("podcast_url"),
-                    result.getString("podcast_pvm")
-            );
-        } else {
-            System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
-            return null;
+        //Parsitaan vinkki sen tyypin mukaan.
+        switch (tyyppi) {
+            case "kirja":
+                vinkki = new Kirja(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("kirja_ISBN"),
+                        result.getString("kirja_kirjailija")
+                );  break;
+            case "video":
+                vinkki = new Video(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("video_tekija"),
+                        result.getString("video_url"),
+                        result.getString("video_pvm")
+                );  break;
+            case "blogi":
+                vinkki = new Blogi(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("blogi_kirjoittaja"),
+                        result.getString("blogi_nimi"),
+                        result.getString("blogi_url"),
+                        result.getString("blogi_pvm")
+                );  break;
+            case "podcast":
+                vinkki = new Podcast(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("podcast_tekija"),
+                        result.getString("podcast_nimi"),
+                        result.getString("podcast_url"),
+                        result.getString("podcast_pvm")
+                );  break;
+            default:
+                System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+                return null;
         }
+        //Parsii kaikki taginkaltaiset automaattisesti tagTyypit taulukon ja Vinkki-luokan toimintojen avulla.
         for(String tagTyyppi : tagTyypit) {
             String sarake = tagTyyppi+"_concat";
             if (result.getString(sarake) != null) {
@@ -200,32 +209,37 @@ public class VinkkiDAO {
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private String rakennaKaikkiTiedotQuery(String[] tagTyypit) {
         StringBuilder queryBuilder = new StringBuilder();
+        // Vinkin sarakkeet
         queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
         
+        // Lisätään jokaisen tyyppien tarvitsemat sarakkeet erikseen.
         String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
         String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
         String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
         String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
-        
         upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
         upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
         upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
         upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
         
+        // Taginkaltaisille sarakkeet muodostetaan automaattisesti tagTyypit taulukon avulla.
         upotaTagSarakkeet(tagTyypit, queryBuilder);
         queryBuilder.append(" FROM Vinkki ");
         
+        // Lisätään tyyppien tarvitsemat JOIN:it
         upotaLiitto("Kirja", queryBuilder);
         upotaLiitto("Video", queryBuilder);
         upotaLiitto("Blogi", queryBuilder);
         upotaLiitto("Podcast", queryBuilder);
         
+        // Taginkaltaisten liitot automaattisesti tagTyypit taulukon avulla.
         upotaTagLiitot(tagTyypit, queryBuilder);
         queryBuilder.append(";");
         return queryBuilder.toString();
     }
     
     private void upotaTagSarakkeet(String[] tagTyypit, StringBuilder queryBuilder) {
+        // Saadaan tyyppi_concat sarakkeeseen pilkuilla erotettu lista.
         for(String tyyppi : tagTyypit) {
             queryBuilder.append(", ");
             queryBuilder.append(tyyppi);
@@ -236,6 +250,7 @@ public class VinkkiDAO {
     }
     
     private void upotaTagLiitot(String[] tagTyypit, StringBuilder queryBuilder) {
+        // tehdään taginkaltaisista pilkuilla erotettu lista, joka on sarakkeessa tyyppi_kysely.tyyppi_concat
         for(String tyyppi : tagTyypit) {
             queryBuilder.append("LEFT JOIN (SELECT GROUP_CONCAT(tag) AS ");
             queryBuilder.append(tyyppi);
@@ -251,6 +266,7 @@ public class VinkkiDAO {
     
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
+        // kaikki sarakkeet muodossa Taulu.sarake AS taulu_sarake
         for(String sarake : sarakkeet) {
             queryBuilder.append(", ");
             queryBuilder.append(taulunNimi);
@@ -274,6 +290,7 @@ public class VinkkiDAO {
 
     public boolean poistaVinkki(Vinkki poistettava) {
         Long poistettavaID = poistettava.getId();
+        // Kaikki muut oheishötöt tuhoutuvat automaattisesti, kun Vinkki poistetaan.
         String query = "DELETE FROM Vinkki WHERE vinkki_id = ?;";
         try (Connection conn = this.db.getConnection();) {
             PreparedStatement stmt = conn.prepareStatement(query);
