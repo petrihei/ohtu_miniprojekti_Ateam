@@ -116,8 +116,9 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
+        String[] tagTyypit = new String[]{TagDAO.TYYPPI, RelatedCourseDAO.TYYPPI};
         
-        String query = rakennaKaikkiTiedotQuery();
+        String query = rakennaKaikkiTiedotQuery(tagTyypit);
         
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
@@ -125,7 +126,7 @@ public class VinkkiDAO {
             while (result.next()) {
                 String tyyppi = result.getString("tyyppi");
                 
-                Vinkki vinkki = parsiVinkkiResultista(result);
+                Vinkki vinkki = parsiVinkkiResultista(result, tagTyypit);
                 
                 if(vinkki == null) {
                     continue;
@@ -144,7 +145,7 @@ public class VinkkiDAO {
     }
     
     // Apumetodi metodille kaikkiVinkitJaTiedot
-    private Vinkki parsiVinkkiResultista(ResultSet result) throws SQLException {
+    private Vinkki parsiVinkkiResultista(ResultSet result, String[] tagTyypit) throws SQLException {
         String tyyppi = result.getString("tyyppi");
         Vinkki vinkki;
         if (tyyppi.equals("kirja")) {
@@ -184,17 +185,20 @@ public class VinkkiDAO {
             System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
             return null;
         }
-        if (result.getString("tagit") != null) {
-            String[] tagitString = result.getString("tagit").split(",");
-            for (String tagString : tagitString) {
-                vinkki.lisaaTag(new Tag(tagString));
+        for(String tagTyyppi : tagTyypit) {
+            String sarake = tagTyyppi+"_concat";
+            if (result.getString(sarake) != null) {
+                String[] tagitString = result.getString(sarake).split(",");
+                for (String tagString : tagitString) {
+                    vinkki.lisaaSuperTag(tagString, tagTyyppi);
+                }
             }
         }
         return vinkki;
     }
     
     // Apumetodi metodille kaikkiVinkitJaTiedot
-    private String rakennaKaikkiTiedotQuery() {
+    private String rakennaKaikkiTiedotQuery(String[] tagTyypit) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
         
@@ -208,22 +212,41 @@ public class VinkkiDAO {
         upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
         upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
         
-        queryBuilder.append(", R.tagit ");
-        queryBuilder.append("FROM Vinkki ");
+        upotaTagSarakkeet(tagTyypit, queryBuilder);
+        queryBuilder.append(" FROM Vinkki ");
         
         upotaLiitto("Kirja", queryBuilder);
         upotaLiitto("Video", queryBuilder);
         upotaLiitto("Blogi", queryBuilder);
         upotaLiitto("Podcast", queryBuilder);
         
-        queryBuilder.append("LEFT OUTER JOIN ("
-                + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
-                + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
-                + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
-                + ") GROUP BY vinkki"
-                + ") AS R ON Vinkki.vinkki_id = R.vinkki;");
-        
+        upotaTagLiitot(tagTyypit, queryBuilder);
+        queryBuilder.append(";");
         return queryBuilder.toString();
+    }
+    
+    private void upotaTagSarakkeet(String[] tagTyypit, StringBuilder queryBuilder) {
+        for(String tyyppi : tagTyypit) {
+            queryBuilder.append(", ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely.");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_concat");
+        }
+    }
+    
+    private void upotaTagLiitot(String[] tagTyypit, StringBuilder queryBuilder) {
+        for(String tyyppi : tagTyypit) {
+            queryBuilder.append("LEFT JOIN (SELECT GROUP_CONCAT(tag) AS ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_concat, vinkki FROM (SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag WHERE Tag.tag_id = VinkkiTag.tag AND Tag.tyyppi = '");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("' ORDER BY VinkkiTag.vinkki) GROUP BY vinkki) AS ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely ON Vinkki.vinkki_id = ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely.vinkki ");
+        }
     }
     
     // apumetodi apumetodille rakennaKaikkiTiedotQuery

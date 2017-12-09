@@ -56,15 +56,12 @@ public class Video extends Vinkki  {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.tyyppi).append(": ").append(this.otsikko).append("\n")
-                .append("  Kuvaus: ").append(this.kuvaus).append("\n")
+        toStringPrefix(sb);
+        sb.append("\n")
                 .append("  Tekijä: ").append(this.tekija).append("\n")
                 .append("  Url: ").append(this.url).append("\n")
-                .append("  Pvm: ").append(this.pvm).append("\n")
-                .append("  Tagit: ");
-        for (Tag tag : this.tagit){
-            sb.append(tag.getTag()).append(" ");
-        }
+                .append("  Pvm: ").append(this.pvm).append("\n");
+        toStringSuffix(sb);
         return sb.toString();
     }
 }
