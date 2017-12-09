@@ -14,6 +14,8 @@ kuvaus TEXT,
         tag_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         
 tag TEXT NOT NULL
+        
+tyyppi TEXT NOT NULL DEFAULT "tag";
     );
 
     
