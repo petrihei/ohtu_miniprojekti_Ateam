@@ -11,19 +11,19 @@ import tietokantaobjektit.Video;
 import tietokantaobjektit.Blogi;
 import tietokantaobjektit.Podcast;
 
-/**
- * Created by hanna-leena on 17/11/17.
- */
+
 public class Tekstikayttis {
 
     private Logiikka logiikka;
     private IO io;
     private Validoija validointi;
+    private Tagaaja tagaaja;
 
     public Tekstikayttis(Logiikka l, IO io) {
         this.logiikka = l;
         this.io = io;
         this.validointi = new Validaattori();
+        this.tagaaja = new Tagaaja();
         io.print("***********************");
         io.print("*     Vinkkilista     *");
         io.print("***********************");
@@ -84,7 +84,7 @@ public class Tekstikayttis {
 
     public void podcastinLisays() {
         this.io.print("");
-        String otsikko = kysyKentta("otsikko");
+        String otsikko = kysyKentta("otsikko*");
         String kuvaus = kysyKentta("kuvaus");
         String tekija = kysyKentta("tekijä");
         String nimi = kysyKentta("nimi");
@@ -101,11 +101,11 @@ public class Tekstikayttis {
 
     public void bloginLisays() {
         this.io.print("");
-        String otsikko = kysyKentta("otsikko");
+        String otsikko = kysyKentta("otsikko*");
         String kuvaus = kysyKentta("kuvaus");
         String tekija = kysyKentta("tekijä");
         String nimi = kysyKentta("nimi");
-        String url = kysyKentta("url");
+        String url = kysyKentta("url*");
         String pvm = kysyKentta("pvm");
 
         Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, nimi, url, pvm);
@@ -118,10 +118,10 @@ public class Tekstikayttis {
 
     public void videonLisays() {
         this.io.print("");
-        String otsikko = kysyKentta("otsikko");
+        String otsikko = kysyKentta("otsikko*");
         String kuvaus = kysyKentta("kuvaus");
         String tekija = kysyKentta("tekijä");
-        String url = kysyKentta("url");
+        String url = kysyKentta("url*");
         String pvm = kysyKentta("pvm");
 
         Video lisattava = new Video(otsikko, kuvaus, tekija, url, pvm);
@@ -136,10 +136,11 @@ public class Tekstikayttis {
         this.io.print("");
         String otsikko = kysyKentta("otsikko");
         String kuvaus = kysyKentta("kuvaus");
+        String isbn = kysyKentta("ISBN");
+        String kirjailija = kysyKentta("Kirjailija");
 
-        Kirja lisattava = new Kirja(otsikko, kuvaus);
-        kysyIsbn(lisattava);
-        kysyKirjailija(lisattava);
+        Kirja lisattava = new Kirja(otsikko, kuvaus, isbn, kirjailija);
+        
         kysyTagit(lisattava);
 
         this.io.print("");
@@ -247,66 +248,39 @@ public class Tekstikayttis {
      */
     private String kysyKentta(String kentanTyyppi) {
         this.io.print("Anna vinkin " + kentanTyyppi + ":");
-        return this.io.nextLine();
+        return kysyValidoitava(kentanTyyppi);
     }
 
     private void kysyTagit(Vinkki lisattava) {
         this.io.print("Anna lukuvinkin tagit. Erota eri tagit pilkulla:");
         String tagSyote = this.io.nextLine();
-        List<Tag> tagit = this.tagienErottaminen(tagSyote);
+        List<Tag> tagit = tagaaja.tagienErottaminen(tagSyote);
         lisattava.setTagit(tagit);
-    }
-
-    private void kysyIsbn(Kirja lisattava) {
-        this.io.print("Anna kirjan ISBN:");
-        lisattava.setIsbn(kysyValidoitava("ISBN"));
-    }
-
-    private void kysyKirjailija(Kirja lisattava) {
-        this.io.print("Anna kirjan kirjoittaja:");
-        lisattava.setKirjailija(kysyValidoitava("Kirjailija"));
     }
 
     private String kysyValidoitava(String kentanTyyppi) {
         String validoitava = this.io.nextLine();
-        String komento = "";
-        while (!validoiSyote(validoitava, kentanTyyppi) || komento.equals("k")) {
-            this.io.print(kentanTyyppi + " väärässä muodossa");
-            this.io.print("Haluatko syöttää uuden? k/e");
-
-            komento = this.io.nextLine();
-            if (komento.equals("k")) {
+        String komento = "x";
+        while (!validointi.validoiSyote(validoitava, kentanTyyppi) || komento.equals("k")) {
+            if (kentanTyyppi.substring(kentanTyyppi.length() - 1).equals("*")) {
+                this.io.print(kentanTyyppi.substring(0, kentanTyyppi.length() - 1) + " on pakollinen kenttä. Syötä uusi.");
                 validoitava = this.io.nextLine();
-                komento = "";
+                komento = "x";
             } else {
-                this.io.print(kentanTyyppi + " ei tallennettu");
-                validoitava = "";
-                break;
+                this.io.print(kentanTyyppi + " väärässä muodossa");
+                this.io.print("Haluatko syöttää uuden? k/e");
+
+                komento = this.io.nextLine();
+                if (komento.equals("k")) {
+                    validoitava = this.io.nextLine();
+                    komento = "x";
+                } else {
+                    this.io.print(kentanTyyppi + " ei tallennettu");
+                    validoitava = "";
+                    break;
+                }
             }
         }
         return validoitava;
-    }
-
-    private boolean validoiSyote(String validoitava, String kentanTyyppi) {
-        if (kentanTyyppi.equals("Kirjailija")) {
-            return this.validointi.validoiNimi(validoitava);
-        }
-        if (kentanTyyppi.equals("ISBN")) {
-            return this.validointi.validoiISBN(validoitava);
-        }
-        return false;
-    }
-
-    /**
-     * Apumetodit
-     */
-    public List<Tag> tagienErottaminen(String syote) {
-        List<Tag> tagLista = new ArrayList<>();
-        String tagit[] = syote.split(",");
-        for (int i = 0; i < tagit.length; i++) {
-            String lisattava = tagit[i].trim();
-            tagLista.add(new Tag(lisattava));
-        }
-        return tagLista;
-    }
+    } 
 }

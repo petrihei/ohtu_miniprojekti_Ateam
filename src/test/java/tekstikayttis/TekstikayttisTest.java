@@ -17,6 +17,7 @@ public class TekstikayttisTest {
 
     private Tietokanta db;
     private Logiikka logiikka;
+    private Tagaaja tagaaja;
 
 //    @BeforeClass
 //    public void initTietokannanData() {
@@ -79,8 +80,9 @@ public class TekstikayttisTest {
         String tagit = "tag, test";
         IOStub io = new IOStub("Marxin Pääoma", "paras", "ISBN 978-0-596-52068-7", "Marx", tagit);
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        Tagaaja tagaaja = new Tagaaja();
         kayttis.kirjanLisays();
-        List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
+        List<Tag> tagiLista = tagaaja.tagienErottaminen(tagit);
         for (Tag tag : tagiLista) {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
@@ -132,8 +134,9 @@ public class TekstikayttisTest {
         String tagit = "tagi1, tagi2";
         IOStub io = new IOStub("Videon otsikko", "videon kuvaus", "videon tekijä", "www.video.com/watch", "2017-12-01", tagit);
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        Tagaaja tagaaja = new Tagaaja();
         kayttis.videonLisays();
-        List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
+        List<Tag> tagiLista = tagaaja.tagienErottaminen(tagit);
         for (Tag tag : tagiLista) {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
@@ -192,8 +195,9 @@ public class TekstikayttisTest {
         String tagit = "tagi1, tagi2";
         IOStub io = new IOStub("Podcastin otsikko", "podcastin kuvaus", "podcastin tekijä", "podcastin nimi", "www.podcast.fm/listen", "2017-12-05", tagit);
         Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
+        Tagaaja tagaaja = new Tagaaja();
         kayttis.podcastinLisays();
-        List<Tag> tagiLista = kayttis.tagienErottaminen(tagit);
+        List<Tag> tagiLista = tagaaja.tagienErottaminen(tagit);
         for (Tag tag : tagiLista) {
             assertTrue(arrayContainsSubstring(io.getOutputs(), tag.getTag()));
         }
