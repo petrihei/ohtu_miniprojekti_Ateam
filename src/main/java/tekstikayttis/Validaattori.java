@@ -1,8 +1,7 @@
 package tekstikayttis;
 
-
 public class Validaattori implements Validoija {
-    
+
     // validoi noudattaako parametri ISBN-13 muotoa
     @Override
     public boolean validoiISBN(String isbn) {
@@ -15,7 +14,7 @@ public class Validaattori implements Validoija {
         }
         return palautettava;
     }
-    
+
     // validoi, että nimi koostuu vain kirjaimista sekä väliviivasta
     //ja on yli yhden merkin pitkä. Saa sisältää välilyönnin.
     @Override
@@ -27,5 +26,5 @@ public class Validaattori implements Validoija {
         }
         return palautettava;
     }
-    
+
 }

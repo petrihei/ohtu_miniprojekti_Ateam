@@ -66,7 +66,7 @@ public class Logiikka {
         Podcast uusiPodcast = (Podcast) podcastDao.haeVinkki(id);
         return uusiPodcast;
     }
-    
+
     public boolean VinkinPoisto(Vinkki Poistettava) {
         return vinkkiDao.poistaVinkki(Poistettava);
     }

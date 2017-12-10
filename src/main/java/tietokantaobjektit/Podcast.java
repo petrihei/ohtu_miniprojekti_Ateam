@@ -53,7 +53,7 @@ public class Podcast extends Vinkki {
     public void setPvm(String pvm) {
         this.pvm = pvm;
     }
-    
+
     @Override
     public List<String> tyypinTiedotJarjestyksessa() {
         ArrayList<String> tiedot = (ArrayList) new ArrayList();
@@ -74,7 +74,7 @@ public class Podcast extends Vinkki {
                 .append("  Url: ").append(this.url).append("\n")
                 .append("  Pvm: ").append(this.pvm).append("\n")
                 .append("  Tagit: ");
-        for (Tag tag : this.tagit){
+        for (Tag tag : this.tagit) {
             sb.append(tag.getTag()).append(" ");
         }
         return sb.toString();

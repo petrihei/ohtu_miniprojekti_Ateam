@@ -7,7 +7,7 @@ public class Kirja extends Vinkki {
 
     private String isbn;
     private String kirjailija;
-    
+
     public Kirja(String otsikko, String kuvaus) {
         super(otsikko, kuvaus, "kirja");
     }
@@ -33,7 +33,7 @@ public class Kirja extends Vinkki {
     public void setKirjailija(String kirjailija) {
         this.kirjailija = kirjailija;
     }
-    
+
     @Override
     public List<String> tyypinTiedotJarjestyksessa() {
         ArrayList<String> tiedot = (ArrayList) new ArrayList();
@@ -50,7 +50,7 @@ public class Kirja extends Vinkki {
                 .append("  ISBN: ").append(this.isbn).append("\n")
                 .append("  Kirjailija: ").append(this.kirjailija).append("\n")
                 .append("  Tagit: ");
-        for (Tag tag : this.tagit){
+        for (Tag tag : this.tagit) {
             sb.append(tag.getTag()).append(" ");
         }
         return sb.toString();

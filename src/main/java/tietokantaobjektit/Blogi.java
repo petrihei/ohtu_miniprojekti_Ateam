@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Blogi extends Vinkki {
-    
+
     private String kirjoittaja;
     private String nimi;
     private String url;
     private String pvm;
-    
+
     public Blogi(String otsikko, String kuvaus) {
         super(otsikko, kuvaus, "blogi");
     }
@@ -53,7 +53,7 @@ public class Blogi extends Vinkki {
     public void setPvm(String pvm) {
         this.pvm = pvm;
     }
-    
+
     @Override
     public List<String> tyypinTiedotJarjestyksessa() {
         ArrayList<String> tiedot = (ArrayList) new ArrayList();
@@ -63,7 +63,7 @@ public class Blogi extends Vinkki {
         tiedot.add(this.pvm);
         return tiedot;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -74,7 +74,7 @@ public class Blogi extends Vinkki {
                 .append("  Url: ").append(this.url).append("\n")
                 .append("  Pvm: ").append(this.pvm).append("\n")
                 .append("  Tagit: ");
-        for (Tag tag : this.tagit){
+        for (Tag tag : this.tagit) {
             sb.append(tag.getTag()).append(" ");
         }
         return sb.toString();

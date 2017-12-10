@@ -26,8 +26,8 @@ public class Vinkki {
         this.tyyppi = tyyppi;
         this.tagit = new ArrayList<>();
     }
-    
-    public Vinkki(Long id,String otsikko, String kuvaus, String tyyppi){
+
+    public Vinkki(Long id, String otsikko, String kuvaus, String tyyppi) {
         this(otsikko, kuvaus, tyyppi);
         this.id = id;
     }
@@ -65,7 +65,7 @@ public class Vinkki {
     }
 
     public List<Tag> getTagit() {
-        if (this.tagit == null){
+        if (this.tagit == null) {
             System.out.println("ei tageja");
         }
         return tagit;
@@ -78,7 +78,7 @@ public class Vinkki {
     public void lisaaTag(Tag tag) {
         this.tagit.add(tag);
     }
-    
+
     public List<String> tyypinTiedotJarjestyksessa() {
         ArrayList<String> tiedot = new ArrayList();
         tiedot.add(this.otsikko);
