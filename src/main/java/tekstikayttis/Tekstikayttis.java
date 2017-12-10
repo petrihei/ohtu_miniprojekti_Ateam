@@ -257,7 +257,8 @@ public class Tekstikayttis {
         List<Tag> tagit = tagaaja.tagienErottaminen(tagSyote);
         lisattava.setTagit(tagit);
     }
-
+    
+    //hoitaa validointiin liittyvän viestimisen käyttäjän kanssa
     private String kysyValidoitava(String kentanTyyppi) {
         String validoitava = this.io.nextLine();
         String komento = "x";

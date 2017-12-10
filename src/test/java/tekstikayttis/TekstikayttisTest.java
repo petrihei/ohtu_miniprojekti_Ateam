@@ -9,10 +9,7 @@ import org.junit.Before;
 import static org.junit.Assert.*;
 import tietokantaobjektit.*;
 
-/**
- *
- * @author petriheinonen
- */
+
 public class TekstikayttisTest {
 
     private Tietokanta db;
