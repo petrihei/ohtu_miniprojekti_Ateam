@@ -64,24 +64,25 @@ public class Tekstikayttis {
         this.io.print("0: Peruuta");
         String komento = this.io.nextLine();
 
-        if (komento.equals("1")) {
-            this.kirjanLisays();
-        } else if (komento.equals("2")) {
-            this.videonLisays();
-        } else if (komento.equals("3")) {
-            this.bloginLisays();
-        } else if(komento.equals("4")){
-            this.podcastinLisays();
-        } else if (komento.equals("0")) {
-            return;
-        } else {
-            this.io.print("Valitse toiminto listasta!");
-            this.vinkinLisays();
+        switch (komento) {
+
+            case "1":
+                this.kirjanLisays(); break;
+            case "2":
+                this.videonLisays(); break;
+            case "3":
+                this.bloginLisays(); break;
+            case "4":
+                this.podcastinLisays(); break;
+            case "0":
+                return;
+            default:
+                this.io.print("Valitse toiminto listasta!");
+                this.vinkinLisays();
         }
     }
 
-    
-    public void podcastinLisays(){
+    public void podcastinLisays() {
         this.io.print("");
         String otsikko = kysyKentta("otsikko");
         String kuvaus = kysyKentta("kuvaus");
@@ -90,7 +91,6 @@ public class Tekstikayttis {
         String url = kysyKentta("url");
         String pvm = kysyKentta("pvm");
 
-        
         Podcast lisattava = new Podcast(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
 
@@ -226,7 +226,7 @@ public class Tekstikayttis {
                     String varmistus = io.nextLine();
 
                     if (varmistus.equals("1")) {
-                        deleted = logiikka.VinkinPoisto(vinkki);
+                        deleted = logiikka.poistaVinkki(vinkki);
                     }
 
                     return deleted;

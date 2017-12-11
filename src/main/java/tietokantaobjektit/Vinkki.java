@@ -28,8 +28,8 @@ public class Vinkki {
         this.tagit = new ArrayList<>();
         this.relatedCourses = new ArrayList<>();
     }
-    
-    public Vinkki(Long id,String otsikko, String kuvaus, String tyyppi){
+
+    public Vinkki(Long id, String otsikko, String kuvaus, String tyyppi) {
         this(otsikko, kuvaus, tyyppi);
         this.id = id;
     }
@@ -71,7 +71,7 @@ public class Vinkki {
     }
 
     public List<Tag> getTagit() {
-        if (this.tagit == null){
+        if (this.tagit == null) {
             System.out.println("ei tageja");
         }
         return tagit;

@@ -1,5 +1,6 @@
 package tietokantaobjektit;
 
+
 public class Tag extends SuperTag {
     
     public static final String TYYPPI = "tag";
