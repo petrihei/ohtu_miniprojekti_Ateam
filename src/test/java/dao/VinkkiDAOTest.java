@@ -7,16 +7,10 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tietokantaobjektit.SuperTag;
-import org.junit.BeforeClass;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Vinkki;
 
