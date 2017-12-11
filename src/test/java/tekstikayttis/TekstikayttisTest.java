@@ -104,7 +104,6 @@ public class TekstikayttisTest {
         }
     }
 
-    //Videon lisäys
     @Test
     public void videonLisaysToimii() {
         IOStub io = new IOStub("2", "Videon otsikko", "videon kuvaus", "videon tekijä",
@@ -166,19 +165,6 @@ public class TekstikayttisTest {
         kayttis.kayttoliittyma();
 
         assertEquals("Valitse toiminnallisuus:", io.outputs.get(4));
-    }
-
-    @Test
-    public void vinkkienSelausToimii() {
-        IOStub io = new IOStub("2");
-        Tekstikayttis kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.vinkkienTulostus();
-
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "Kaikki vinkit:"));
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: testikirja\n  Kuvaus: testikuvaus"));
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "kirja: Marxin Pääoma\n  Kuvaus: paras"));
-
-        assertTrue(arrayContainsSubstring(io.getOutputs(), "video: Videon otsikko\n  Kuvaus: videon kuvaus"));
     }
 
     @Test
