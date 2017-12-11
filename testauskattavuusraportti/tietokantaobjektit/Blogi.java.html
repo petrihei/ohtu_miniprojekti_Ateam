@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Blogi extends Vinkki {
-
+    
     private String kirjoittaja;
     private String nimi;
     private String url;
     private String pvm;
-
+    
     public Blogi(String otsikko, String kuvaus) {
 <span class="nc" id="L14">        super(otsikko, kuvaus, &quot;blogi&quot;);</span>
 <span class="nc" id="L15">    }</span>
@@ -53,7 +53,7 @@ public class Blogi extends Vinkki {
     public void setPvm(String pvm) {
 <span class="nc" id="L54">        this.pvm = pvm;</span>
 <span class="nc" id="L55">    }</span>
-
+    
     @Override
     public List&lt;String&gt; tyypinTiedotJarjestyksessa() {
 <span class="fc" id="L59">        ArrayList&lt;String&gt; tiedot = (ArrayList) new ArrayList();</span>
@@ -63,18 +63,21 @@ public class Blogi extends Vinkki {
 <span class="fc" id="L63">        tiedot.add(this.pvm);</span>
 <span class="fc" id="L64">        return tiedot;</span>
     }
-
+    
     @Override
     public String toString() {
 <span class="fc" id="L69">        StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L70">        toStringPrefix(sb, &quot;blogipostaus&quot;);</span>
-<span class="fc" id="L71">        sb.append(&quot;\n&quot;)</span>
+<span class="fc" id="L70">        sb.append(&quot;blogipostaus: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
+<span class="fc" id="L71">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
 <span class="fc" id="L72">                .append(&quot;  Kirjoittaja: &quot;).append(this.kirjoittaja).append(&quot;\n&quot;)</span>
 <span class="fc" id="L73">                .append(&quot;  Nimi: &quot;).append(this.nimi).append(&quot;\n&quot;)</span>
 <span class="fc" id="L74">                .append(&quot;  Url: &quot;).append(this.url).append(&quot;\n&quot;)</span>
-<span class="fc" id="L75">                .append(&quot;  Pvm: &quot;).append(this.pvm).append(&quot;\n&quot;);</span>
-<span class="fc" id="L76">        toStringSuffix(sb);</span>
-<span class="fc" id="L77">        return sb.toString();</span>
+<span class="fc" id="L75">                .append(&quot;  Pvm: &quot;).append(this.pvm).append(&quot;\n&quot;)</span>
+<span class="fc" id="L76">                .append(&quot;  Tagit: &quot;);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
+<span class="fc" id="L78">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">        return sb.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
