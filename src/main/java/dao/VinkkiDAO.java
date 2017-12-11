@@ -129,13 +129,7 @@ public class VinkkiDAO {
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
-            while (result.next()) {
-                Vinkki vinkki = parsiVinkkiResultista(result, tagTyypit);
-                if (vinkki == null) {
-                    continue;
-                }
-                vinkit.add(vinkki);
-            }
+            luoVinkitResultista(vinkit, result, tagTyypit);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e);
             return null;
@@ -151,19 +145,12 @@ public class VinkkiDAO {
         List<Vinkki> vinkit = new ArrayList<>();
 
         String hakuQuery = rakennaHakuQueryQuery();
-        
+
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(hakuQuery)) {
             asetaArvot(stmt, hakuTermi, this.db.sarakeLukumaara());
             ResultSet result = stmt.executeQuery();
-            
-            while (result.next()) {
-                Vinkki vinkki = parsiVinkkiResultista(result);
-                if (vinkki == null) {
-                    continue;
-                }
-                vinkit.add(vinkki);
-            }
+            luoVinkitResultista(vinkit, result);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e);
             return null;
@@ -173,6 +160,16 @@ public class VinkkiDAO {
         }
 
         return vinkit;
+    }
+
+    private void luoVinkitResultista(List<Vinkki> vinkit, ResultSet result) throws SQLException {
+        while (result.next()) {
+            Vinkki vinkki = parsiVinkkiResultista(result);
+            if (vinkki == null) {
+                continue;
+            }
+            vinkit.add(vinkki);
+        }
     }
 
     // Apumetodi metodille kaikkiVinkitJaTiedot
@@ -322,6 +319,7 @@ public class VinkkiDAO {
         }
     }
 
+    // Apumetodi hakuQueryn rakentamiseen.
     private void upotaLikeSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
         String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);
         for (int i = 0; i < sarakkeet.length; i++) {
