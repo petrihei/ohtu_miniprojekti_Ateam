@@ -123,10 +123,7 @@ public class VinkkiDAO {
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
             while (result.next()) {
-                String tyyppi = result.getString("tyyppi");
-
                 Vinkki vinkki = parsiVinkkiResultista(result);
-
                 if (vinkki == null) {
                     continue;
                 }
@@ -154,10 +151,7 @@ public class VinkkiDAO {
             ResultSet result = stmt.executeQuery();
             
             while (result.next()) {
-                String tyyppi = result.getString("tyyppi");
-
                 Vinkki vinkki = parsiVinkkiResultista(result);
-
                 if (vinkki == null) {
                     continue;
                 }
