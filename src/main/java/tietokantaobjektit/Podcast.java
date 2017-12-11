@@ -67,16 +67,13 @@ public class Podcast extends Vinkki {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("podcast-jakso: ").append(this.otsikko).append("\n")
-                .append("  Kuvaus: ").append(this.kuvaus).append("\n")
+        toStringPrefix(sb, "podcast-jakso");
+        sb.append("\n")
                 .append("  Tekijä: ").append(this.tekija).append("\n")
                 .append("  Podcastin nimi: ").append(this.nimi).append("\n")
                 .append("  Url: ").append(this.url).append("\n")
-                .append("  Pvm: ").append(this.pvm).append("\n")
-                .append("  Tagit: ");
-        for (Tag tag : this.tagit) {
-            sb.append(tag.getTag()).append(" ");
-        }
+                .append("  Pvm: ").append(this.pvm).append("\n");
+        toStringSuffix(sb);
         return sb.toString();
     }
 }

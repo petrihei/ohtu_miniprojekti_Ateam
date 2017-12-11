@@ -45,14 +45,11 @@ public class Kirja extends Vinkki {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.tyyppi).append(": ").append(this.otsikko).append("\n")
-                .append("  Kuvaus: ").append(this.kuvaus).append("\n")
+        toStringPrefix(sb);
+        sb.append("\n")
                 .append("  ISBN: ").append(this.isbn).append("\n")
-                .append("  Kirjailija: ").append(this.kirjailija).append("\n")
-                .append("  Tagit: ");
-        for (Tag tag : this.tagit) {
-            sb.append(tag.getTag()).append(" ");
-        }
+                .append("  Kirjailija: ").append(this.kirjailija).append("\n");
+        toStringSuffix(sb);
         return sb.toString();
     }
 }

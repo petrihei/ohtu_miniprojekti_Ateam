@@ -5,12 +5,15 @@
  */
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import tietokantaobjektit.SuperTag;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Vinkki;
 
@@ -42,7 +45,9 @@ public class VinkkiDAOTest {
         VinkkiDAO huonoDao = new VinkkiDAO(huonoDB);
         Vinkki lisattava = new Vinkki("ots", "kuv", "kirja");
         lisattava.lisaaTag(new Tag("doot"));
-        assertFalse(huonoDao.lisaaVinkkiTag(lisattava.getTagit(), 1l));
+        List<SuperTag> tagit = new ArrayList<>();
+        tagit.addAll(lisattava.getTagit());
+        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l));
     }
     
     @Test
@@ -72,7 +77,9 @@ public class VinkkiDAOTest {
         VinkkiDAO huonoDao = new VinkkiDAO(huonoDB);
         Vinkki lisattava = new Vinkki("ots", "kuv", "kirja");
         lisattava.lisaaTag(new Tag("doot"));
-        assertFalse(huonoDao.lisaaVinkkiTag(lisattava.getTagit(), 1l));
+        List<SuperTag> tagit = new ArrayList<>();
+        tagit.addAll(lisattava.getTagit());
+        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l));
     }
     
     @Test

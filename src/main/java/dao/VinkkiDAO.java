@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import tietokantaobjektit.*;
 
 /**
@@ -51,17 +54,21 @@ public class VinkkiDAO {
             // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
+        
+        List<SuperTag> superTagit = new ArrayList<>();
+        superTagit.addAll(lisattava.getTagit());
+        superTagit.addAll(lisattava.getRelatedCourses());
 
-        if (!lisaaVinkkiTag(lisattava.getTagit(), vinkkiId)) {
+        if (!lisaaVinkkiTag(superTagit, vinkkiId)) {
             return -1;
         }
 
         return vinkkiId;
     }
 
-    public boolean lisaaVinkkiTag(List<Tag> tagit, long vinkkiId) {
+    public boolean lisaaVinkkiTag(List<SuperTag> tagit, long vinkkiId) {
         TagDAO tagDao = new TagDAO(db);
-        for (Tag tag : tagit) {
+        for (SuperTag tag : tagit) {
             // Lisätään tag.
             long tagId = tagDao.lisaaTag(tag);
 
@@ -113,71 +120,22 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
-
-        // Tähän lauseeseen ei toivottavasti tarvitse enää koskea ikinä.
-        String query = "SELECT vinkki.otsikko, vinkki.kuvaus, vinkki.tyyppi, kirja.isbn, kirja.kirjailija, video.tekija, "
-                + "video.url AS video_url, video.pvm AS video_pvm, blogi.kirjoittaja, blogi.nimi AS blogi_nimi, blogi.url AS blogi_url, "
-                + "blogi.pvm AS blogi_pvm, podcast.tekija AS podcast_tekija, podcast.nimi AS podcast_nimi, podcast.url AS podcast_url,"
-                + "podcast.pvm AS podcast_pvm, R.tagit "
-                + "FROM Vinkki "
-                + "LEFT OUTER JOIN Kirja ON Vinkki.vinkki_id = Kirja.vinkki "
-                + "LEFT OUTER JOIN Video ON Vinkki.vinkki_id = Video.vinkki "
-                + "LEFT OUTER JOIN Blogi ON Vinkki.vinkki_id = Blogi.vinkki "
-                + "LEFT OUTER JOIN Podcast ON Vinkki.vinkki_id = Podcast.vinkki "
-                + "LEFT OUTER JOIN ("
-                + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
-                + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
-                + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
-                + ") GROUP BY vinkki"
-                + ") AS R ON Vinkki.vinkki_id = R.vinkki;";
+        
+        //Tähän kaikki halutut taginkaltaiset. Katso mallia aiemmista.
+        String[] tagTyypit = new String[]{TagDAO.TYYPPI, RelatedCourseDAO.TYYPPI};
+        
+        String query = rakennaKaikkiTiedotQuery(tagTyypit);
+        
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
             while (result.next()) {
                 String tyyppi = result.getString("tyyppi");
-                Vinkki vinkki;
-                if (tyyppi.equals("kirja")) {
-                    vinkki = new Kirja(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("ISBN"),
-                            result.getString("kirjailija")
-                    );
-                } else if (tyyppi.equals("video")) {
-                    vinkki = new Video(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("tekija"),
-                            result.getString("video_url"),
-                            result.getString("video_pvm")
-                    );
-                } else if (tyyppi.equals("blogi")) {
-                    vinkki = new Blogi(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("kirjoittaja"),
-                            result.getString("blogi_nimi"),
-                            result.getString("blogi_url"),
-                            result.getString("blogi_pvm")
-                    );
-                } else if (tyyppi.equals("podcast")) {
-                    vinkki = new Podcast(
-                            result.getString("otsikko"),
-                            result.getString("kuvaus"),
-                            result.getString("podcast_tekija"),
-                            result.getString("podcast_nimi"),
-                            result.getString("podcast_url"),
-                            result.getString("podcast_pvm")
-                    );
-                } else {
-                    System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+                
+                Vinkki vinkki = parsiVinkkiResultista(result, tagTyypit);
+                
+                if(vinkki == null) {
                     continue;
-                }
-                if (result.getString("tagit") != null) {
-                    String[] tagitString = result.getString("tagit").split(",");
-                    for (String tagString : tagitString) {
-                        vinkki.lisaaTag(new Tag(tagString));
-                    }
                 }
                 vinkit.add(vinkki);
             }
@@ -191,52 +149,156 @@ public class VinkkiDAO {
 
         return vinkit;
     }
+    
+    // Apumetodi metodille kaikkiVinkitJaTiedot
+    private Vinkki parsiVinkkiResultista(ResultSet result, String[] tagTyypit) throws SQLException {
+        String tyyppi = result.getString("tyyppi");
+        Vinkki vinkki;
+        //Parsitaan vinkki sen tyypin mukaan.
+        switch (tyyppi) {
+            case "kirja":
+                vinkki = new Kirja(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("kirja_ISBN"),
+                        result.getString("kirja_kirjailija")
+                );  break;
+            case "video":
+                vinkki = new Video(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("video_tekija"),
+                        result.getString("video_url"),
+                        result.getString("video_pvm")
+                );  break;
+            case "blogi":
+                vinkki = new Blogi(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("blogi_kirjoittaja"),
+                        result.getString("blogi_nimi"),
+                        result.getString("blogi_url"),
+                        result.getString("blogi_pvm")
+                );  break;
+            case "podcast":
+                vinkki = new Podcast(
+                        result.getString("otsikko"),
+                        result.getString("kuvaus"),
+                        result.getString("podcast_tekija"),
+                        result.getString("podcast_nimi"),
+                        result.getString("podcast_url"),
+                        result.getString("podcast_pvm")
+                );  break;
+            default:
+                System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
+                return null;
+        }
+        //Parsii kaikki taginkaltaiset automaattisesti tagTyypit taulukon ja Vinkki-luokan toimintojen avulla.
+        for(String tagTyyppi : tagTyypit) {
+            String sarake = tagTyyppi+"_concat";
+            if (result.getString(sarake) != null) {
+                String[] tagitString = result.getString(sarake).split(",");
+                for (String tagString : tagitString) {
+                    vinkki.lisaaSuperTag(tagString, tagTyyppi);
+                }
+            }
+        }
+        return vinkki;
+    }
+    
+    // Apumetodi metodille kaikkiVinkitJaTiedot
+    private String rakennaKaikkiTiedotQuery(String[] tagTyypit) {
+        StringBuilder queryBuilder = new StringBuilder();
+        // Vinkin sarakkeet
+        queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
+        
+        // Lisätään jokaisen tyyppien tarvitsemat sarakkeet erikseen.
+        String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
+        String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
+        String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
+        String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
+        upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
+        upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
+        upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
+        upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
+        
+        // Taginkaltaisille sarakkeet muodostetaan automaattisesti tagTyypit taulukon avulla.
+        upotaTagSarakkeet(tagTyypit, queryBuilder);
+        queryBuilder.append(" FROM Vinkki ");
+        
+        // Lisätään tyyppien tarvitsemat JOIN:it
+        upotaLiitto("Kirja", queryBuilder);
+        upotaLiitto("Video", queryBuilder);
+        upotaLiitto("Blogi", queryBuilder);
+        upotaLiitto("Podcast", queryBuilder);
+        
+        // Taginkaltaisten liitot automaattisesti tagTyypit taulukon avulla.
+        upotaTagLiitot(tagTyypit, queryBuilder);
+        queryBuilder.append(";");
+        return queryBuilder.toString();
+    }
+    
+    private void upotaTagSarakkeet(String[] tagTyypit, StringBuilder queryBuilder) {
+        // Saadaan tyyppi_concat sarakkeeseen pilkuilla erotettu lista.
+        for(String tyyppi : tagTyypit) {
+            queryBuilder.append(", ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely.");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_concat");
+        }
+    }
+    
+    private void upotaTagLiitot(String[] tagTyypit, StringBuilder queryBuilder) {
+        // tehdään taginkaltaisista pilkuilla erotettu lista, joka on sarakkeessa tyyppi_kysely.tyyppi_concat
+        for(String tyyppi : tagTyypit) {
+            queryBuilder.append("LEFT JOIN (SELECT GROUP_CONCAT(tag) AS ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_concat, vinkki FROM (SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag WHERE Tag.tag_id = VinkkiTag.tag AND Tag.tyyppi = '");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("' ORDER BY VinkkiTag.vinkki) GROUP BY vinkki) AS ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely ON Vinkki.vinkki_id = ");
+            queryBuilder.append(tyyppi);
+            queryBuilder.append("_kysely.vinkki ");
+        }
+    }
+    
+    // apumetodi apumetodille rakennaKaikkiTiedotQuery
+    private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
+        // kaikki sarakkeet muodossa Taulu.sarake AS taulu_sarake
+        for(String sarake : sarakkeet) {
+            queryBuilder.append(", ");
+            queryBuilder.append(taulunNimi);
+            queryBuilder.append(".");
+            queryBuilder.append(sarake);
+            queryBuilder.append(" AS ");
+            queryBuilder.append(taulunNimi.toLowerCase());
+            queryBuilder.append("_");
+            queryBuilder.append(sarake);
+        }
+    }
+    
+    // apumetodi apumetodille rakennaKaikkiTiedotQuery
+    private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
+        queryBuilder.append("LEFT JOIN ");
+        queryBuilder.append(taulunNimi);
+        queryBuilder.append(" ON ");
+        queryBuilder.append(taulunNimi);
+        queryBuilder.append(".vinkki = Vinkki.vinkki_id ");
+    }
 
     public boolean poistaVinkki(Vinkki poistettava) {
         Long poistettavaID = poistettava.getId();
-        String query = "SELECT tag FROM VinkkiTag where vinkki = " + poistettavaID;
+        // Kaikki muut oheishötöt tuhoutuvat automaattisesti, kun Vinkki poistetaan.
+        String query = "DELETE FROM Vinkki WHERE vinkki_id = ?;";
         try (Connection conn = this.db.getConnection();) {
             PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet result = stmt.executeQuery();
-            List<Integer> Tag_ids = new ArrayList<Integer>();
-
-            while (result.next()) {
-                Tag_ids.add(result.getInt("tag"));
-
-            }
-            for (int tagID : Tag_ids) {
-                query = "SELECT Count() from VinkkiTag WHERE tag = " + tagID;
-                stmt = conn.prepareStatement(query);
-                result = stmt.executeQuery();
-                while (result.next()) {
-                    int TagCounter = result.getInt("Count()");
-
-                    if (TagCounter == 1) {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                        query = "Delete from Tag where tag_id = " + tagID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                    } else {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
-                        stmt = conn.prepareStatement(query);
-                        stmt.executeUpdate();
-                    }
-                }
-            }
-            String PoistettavanTyyppi = poistettava.getTyyppi();
-            query = "Delete from " + PoistettavanTyyppi + " WHERE vinkki = " + poistettavaID + ";";
-            stmt = conn.prepareStatement(query);
-            stmt.executeUpdate();
-            query = "DELETE FROM Vinkki WHERE vinkki_id = " + poistettavaID;
-            stmt = conn.prepareStatement(query);
-            stmt.executeUpdate();
-            return true;
-
+            stmt.setLong(1, poistettavaID);
+            return stmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
+            return false;
         }
-        return false;
     }
 }
