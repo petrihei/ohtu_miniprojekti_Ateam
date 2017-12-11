@@ -144,13 +144,14 @@ public class VinkkiDAO {
     public List<Vinkki> hae(String hakuTermi) {
         List<Vinkki> vinkit = new ArrayList<>();
 
-        String hakuQuery = rakennaHakuQueryQuery();
-
+        String[] tagTyypit = new String[]{TagDAO.TYYPPI, RelatedCourseDAO.TYYPPI};
+        String hakuQuery = rakennaHakuQueryQuery(tagTyypit);
+        System.out.println(hakuQuery);
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(hakuQuery)) {
             asetaArvot(stmt, hakuTermi, this.db.sarakeLukumaara());
             ResultSet result = stmt.executeQuery();
-            luoVinkitResultista(vinkit, result);
+            luoVinkitResultista(vinkit, result, tagTyypit);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e);
             return null;
@@ -162,9 +163,9 @@ public class VinkkiDAO {
         return vinkit;
     }
 
-    private void luoVinkitResultista(List<Vinkki> vinkit, ResultSet result) throws SQLException {
+    private void luoVinkitResultista(List<Vinkki> vinkit, ResultSet result, String[] tagTyypit) throws SQLException {
         while (result.next()) {
-            Vinkki vinkki = parsiVinkkiResultista(result);
+            Vinkki vinkki = parsiVinkkiResultista(result, tagTyypit);
             if (vinkki == null) {
                 continue;
             }
@@ -257,14 +258,13 @@ public class VinkkiDAO {
 
         // Taginkaltaisten liitot automaattisesti tagTyypit taulukon avulla.
         upotaTagLiitot(tagTyypit, queryBuilder);
-        queryBuilder.append(";");
 
         return queryBuilder.toString();
     }
 
-    private String rakennaHakuQueryQuery() {
+    private String rakennaHakuQueryQuery(String[] tagTyypit) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append(rakennaKaikkiTiedotQuery());
+        queryBuilder.append(rakennaKaikkiTiedotQuery(tagTyypit));
         queryBuilder.append(" WHERE Vinkki.otsikko LIKE ? OR Vinkki.kuvaus LIKE ? OR Vinkki.tyyppi LIKE ?");
 
         String[] kirjaSarakkeet = this.db.kirjanSarakkeet;
