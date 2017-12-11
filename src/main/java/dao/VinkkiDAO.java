@@ -13,7 +13,7 @@ import tietokantaobjektit.*;
  * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
  */
 public class VinkkiDAO {
-    
+
     private Tietokanta db;
 
     /**
@@ -149,7 +149,15 @@ public class VinkkiDAO {
 
         return vinkit;
     }
-    
+
+    public List<Vinkki> hae(String hakuTermi) {
+        List<Vinkki> vinkit = new ArrayList<>();
+
+        String hakuQuery = rakennaHakuQueryQuery();
+
+        return vinkit;
+    }
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private Vinkki parsiVinkkiResultista(ResultSet result, String[] tagTyypit) throws SQLException {
         String tyyppi = result.getString("tyyppi");
@@ -205,7 +213,7 @@ public class VinkkiDAO {
         }
         return vinkki;
     }
-    
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private String rakennaKaikkiTiedotQuery(String[] tagTyypit) {
         StringBuilder queryBuilder = new StringBuilder();
@@ -217,6 +225,7 @@ public class VinkkiDAO {
         String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
         String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
         String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
+
         upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
         upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
         upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
@@ -267,18 +276,28 @@ public class VinkkiDAO {
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
         // kaikki sarakkeet muodossa Taulu.sarake AS taulu_sarake
-        for(String sarake : sarakkeet) {
+        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);
+        for (int i = 0; i < sarakkeet.length; i++) {
             queryBuilder.append(", ");
             queryBuilder.append(taulunNimi);
             queryBuilder.append(".");
-            queryBuilder.append(sarake);
+            queryBuilder.append(sarakkeet[i]);
             queryBuilder.append(" AS ");
-            queryBuilder.append(taulunNimi.toLowerCase());
-            queryBuilder.append("_");
-            queryBuilder.append(sarake);
+            queryBuilder.append(prefixSarakkeet[i]);
         }
     }
     
+    // apumedoti sarakkeiden nimeämiseen taulun nimellä tyyliin "taulu_sarake"
+    private String[] prefixaaSarakkeet(String taulunNimi, String[] sarakkeet) {
+        String[] prefixattu = new String[sarakkeet.length];
+        
+        for (int i = 0; i < prefixattu.length; i++) {
+            prefixattu[i] = taulunNimi.toLowerCase() + "_" + sarakkeet[i];
+        }
+        
+        return prefixattu;
+    }
+
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
         queryBuilder.append("LEFT JOIN ");
