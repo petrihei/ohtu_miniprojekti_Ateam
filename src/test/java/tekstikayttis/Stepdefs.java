@@ -3,10 +3,8 @@ package tekstikayttis;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dao.KirjaDAO;
-import dao.Tietokanta;
-import java.util.ArrayList;
-import java.util.List;
+import dao.*;
+import java.util.*;
 import logiikka.Logiikka;
 import static org.junit.Assert.*;
 import tietokantaobjektit.Kirja;
@@ -49,6 +47,74 @@ public class Stepdefs {
         inputs.add("4");
     }
 
+    @When("^empty video title is entered$")
+    public void empty_video_title_is_entered() throws Throwable {
+        inputs.add("");
+        inputs.add("testivideo");
+        inputs.add("testikuvaus");
+        inputs.add("testitekijä");
+        inputs.add("www.video.com/watch");
+        inputs.add("2017-12-01");
+        inputs.add("testi, tag");
+        inputs.add("0");
+        aloita();
+    }
+
+    @When("^empty video url is entered$")
+    public void empty_video_url_is_entered() throws Throwable {
+        inputs.add("testivideo");
+        inputs.add("testikuvaus");
+        inputs.add("testitekijä");
+        inputs.add("");
+        inputs.add("www.video.com/watch");
+        inputs.add("2017-12-01");
+        inputs.add("testi, tag");
+        inputs.add("0");
+        aloita();
+    }
+
+    @When("^empty blog title is entered$")
+    public void empty_blog_title_is_entered() throws Throwable {
+        inputs.add("");
+        inputs.add("testiblogi");
+        inputs.add("testikuvaus");
+        inputs.add("testitekijä");
+        inputs.add("postauksen nimi");
+        inputs.add("www.blogs.com/read");
+        inputs.add("2017-12-01");
+        inputs.add("testi, tag");
+        inputs.add("0");
+        aloita();
+    }
+
+    @When("^empty blog url is entered$")
+    public void empty_blog_url_is_entered() throws Throwable {
+        inputs.add("testiblogi");
+        inputs.add("testikuvaus");
+        inputs.add("testitekijä");
+        inputs.add("postauksen nimi");
+        inputs.add("");
+        inputs.add("www.blog.com/read");
+        inputs.add("2017-12-01");
+        inputs.add("testi, tag");
+        inputs.add("0");
+        aloita();
+    }
+
+    @When("^empty podcast title is entered$")
+    public void empty_podcast_title_is_entered() throws Throwable {
+        inputs.add("");
+        inputs.add("testicast");
+        inputs.add("testikuvaus");
+        inputs.add("testitekijä");
+        inputs.add("podcasting nimi");
+        inputs.add("www.podcast.com/listen");
+        inputs.add("2017-12-01");
+        inputs.add("testi, tag");
+        inputs.add("0");
+        aloita();
+    }
+
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
             + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
     public void title_and_description_and_isbn_and_author_and_tags_are_entered(String title,
@@ -59,10 +125,7 @@ public class Stepdefs {
         inputs.add(author);
         inputs.add(tags);
         inputs.add("0");
-
-        io = new IOStub(inputs);
-        kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.kayttoliittyma();
+        aloita();
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
@@ -74,9 +137,8 @@ public class Stepdefs {
         inputs.add(isbn);
         inputs.add(author);
         inputs.add(tags);
-
         inputs.add("0");
-
+//        aloita();
         io = new IOStub(inputs);
         kayttis = new Tekstikayttis(logiikka, io);
         kayttis.kirjanLisays();
@@ -93,10 +155,7 @@ public class Stepdefs {
         inputs.add(date);
         inputs.add(tags);
         inputs.add("0");
-
-        io = new IOStub(inputs);
-        kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.kayttoliittyma();
+        aloita();
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" and creator \"([^\"]*)\" "
@@ -111,10 +170,7 @@ public class Stepdefs {
         inputs.add(date);
         inputs.add(tags);
         inputs.add("0");
-
-        io = new IOStub(inputs);
-        kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.kayttoliittyma();
+        aloita();
     }
 
     @When("^existing tip is deleted$")
@@ -124,20 +180,14 @@ public class Stepdefs {
         inputs.add("" + vinkki);
         inputs.add("1");
         inputs.add("0");
-
-        io = new IOStub(inputs);
-        kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.kayttoliittyma();
+        aloita();
     }
 
     @When("^non-existing tip is deleted$")
     public void non_existing_tip_is_deleted() throws Throwable {
         inputs.add("k");
         inputs.add("0");
-
-        io = new IOStub(inputs);
-        kayttis = new Tekstikayttis(logiikka, io);
-        kayttis.kayttoliittyma();
+        aloita();
     }
 
     @Then("^system will respond with message \"([^\"]*)\"$")
@@ -158,5 +208,11 @@ public class Stepdefs {
             }
         }
         return false;
+    }
+
+    private void aloita() {
+        io = new IOStub(inputs);
+        kayttis = new Tekstikayttis(logiikka, io);
+        kayttis.kayttoliittyma();
     }
 }
