@@ -122,211 +122,209 @@ public class VinkkiDAO {
 <span class="pc" id="L122">        try (Connection conn = this.db.getConnection();</span>
 <span class="fc" id="L123">                PreparedStatement stmt = conn.prepareStatement(query);</span>
 <span class="fc" id="L124">                ResultSet result = stmt.executeQuery()) {</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">            while (result.next()) {</span>
-<span class="fc" id="L126">                Vinkki vinkki = parsiVinkkiResultista(result);</span>
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">                if (vinkki == null) {</span>
-<span class="nc" id="L128">                    continue;</span>
-                }
-<span class="fc" id="L130">                vinkit.add(vinkki);</span>
-<span class="fc" id="L131">            }</span>
-<span class="pc bpc" id="L132" title="15 of 24 branches missed.">        } catch (SQLException e) {</span>
-<span class="fc" id="L133">            System.err.println(&quot;SQLException: &quot; + e);</span>
-<span class="fc" id="L134">            return null;</span>
-<span class="fc" id="L135">        } catch (NullPointerException ex) {</span>
+<span class="fc" id="L125">            luoVinkitResultista(vinkit, result);</span>
+<span class="pc bpc" id="L126" title="15 of 24 branches missed.">        } catch (SQLException e) {</span>
+<span class="fc" id="L127">            System.err.println(&quot;SQLException: &quot; + e);</span>
+<span class="fc" id="L128">            return null;</span>
+<span class="fc" id="L129">        } catch (NullPointerException ex) {</span>
             // Tietokanta-luokka tekee virheilmoituksen.
-<span class="fc" id="L137">            return null;</span>
-<span class="fc" id="L138">        }</span>
+<span class="fc" id="L131">            return null;</span>
+<span class="fc" id="L132">        }</span>
 
-<span class="fc" id="L140">        return vinkit;</span>
+<span class="fc" id="L134">        return vinkit;</span>
     }
 
     public List&lt;Vinkki&gt; hae(String hakuTermi) {
-<span class="fc" id="L144">        List&lt;Vinkki&gt; vinkit = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L138">        List&lt;Vinkki&gt; vinkit = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L146">        String hakuQuery = rakennaHakuQueryQuery();</span>
-        
-<span class="pc" id="L148">        try (Connection conn = this.db.getConnection();</span>
-<span class="fc" id="L149">                PreparedStatement stmt = conn.prepareStatement(hakuQuery)) {</span>
-<span class="fc" id="L150">            asetaArvot(stmt, hakuTermi, this.db.sarakeLukumaara());</span>
-<span class="fc" id="L151">            ResultSet result = stmt.executeQuery();</span>
-            
-<span class="fc bfc" id="L153" title="All 2 branches covered.">            while (result.next()) {</span>
-<span class="fc" id="L154">                Vinkki vinkki = parsiVinkkiResultista(result);</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">                if (vinkki == null) {</span>
-<span class="nc" id="L156">                    continue;</span>
-                }
-<span class="fc" id="L158">                vinkit.add(vinkki);</span>
-<span class="fc" id="L159">            }</span>
-<span class="pc bpc" id="L160" title="12 of 16 branches missed.">        } catch (SQLException e) {</span>
-<span class="nc" id="L161">            System.err.println(&quot;SQLException: &quot; + e);</span>
-<span class="nc" id="L162">            return null;</span>
-<span class="nc" id="L163">        } catch (NullPointerException ex) {</span>
+<span class="fc" id="L140">        String hakuQuery = rakennaHakuQueryQuery();</span>
+
+<span class="pc" id="L142">        try (Connection conn = this.db.getConnection();</span>
+<span class="fc" id="L143">                PreparedStatement stmt = conn.prepareStatement(hakuQuery)) {</span>
+<span class="fc" id="L144">            asetaArvot(stmt, hakuTermi, this.db.sarakeLukumaara());</span>
+<span class="fc" id="L145">            ResultSet result = stmt.executeQuery();</span>
+<span class="fc" id="L146">            luoVinkitResultista(vinkit, result);</span>
+<span class="pc bpc" id="L147" title="12 of 16 branches missed.">        } catch (SQLException e) {</span>
+<span class="nc" id="L148">            System.err.println(&quot;SQLException: &quot; + e);</span>
+<span class="nc" id="L149">            return null;</span>
+<span class="nc" id="L150">        } catch (NullPointerException ex) {</span>
             // Tietokanta-luokka tekee virheilmoituksen.
-<span class="nc" id="L165">            return null;</span>
-<span class="fc" id="L166">        }</span>
+<span class="nc" id="L152">            return null;</span>
+<span class="fc" id="L153">        }</span>
 
-<span class="fc" id="L168">        return vinkit;</span>
+<span class="fc" id="L155">        return vinkit;</span>
     }
+
+    private void luoVinkitResultista(List&lt;Vinkki&gt; vinkit, ResultSet result) throws SQLException {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        while (result.next()) {</span>
+<span class="fc" id="L160">            Vinkki vinkki = parsiVinkkiResultista(result);</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            if (vinkki == null) {</span>
+<span class="nc" id="L162">                continue;</span>
+            }
+<span class="fc" id="L164">            vinkit.add(vinkki);</span>
+<span class="fc" id="L165">        }</span>
+<span class="fc" id="L166">    }</span>
 
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private Vinkki parsiVinkkiResultista(ResultSet result) throws SQLException {
-<span class="fc" id="L173">        String tyyppi = result.getString(&quot;tyyppi&quot;);</span>
+<span class="fc" id="L170">        String tyyppi = result.getString(&quot;tyyppi&quot;);</span>
         Vinkki vinkki;
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (tyyppi.equals(&quot;kirja&quot;)) {</span>
-<span class="fc" id="L176">            vinkki = new Kirja(</span>
-<span class="fc" id="L177">                    result.getString(&quot;otsikko&quot;),</span>
-<span class="fc" id="L178">                    result.getString(&quot;kuvaus&quot;),</span>
-<span class="fc" id="L179">                    result.getString(&quot;kirja_ISBN&quot;),</span>
-<span class="fc" id="L180">                    result.getString(&quot;kirja_kirjailija&quot;)</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (tyyppi.equals(&quot;kirja&quot;)) {</span>
+<span class="fc" id="L173">            vinkki = new Kirja(</span>
+<span class="fc" id="L174">                    result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L175">                    result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L176">                    result.getString(&quot;kirja_ISBN&quot;),</span>
+<span class="fc" id="L177">                    result.getString(&quot;kirja_kirjailija&quot;)</span>
             );
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        } else if (tyyppi.equals(&quot;video&quot;)) {</span>
-<span class="fc" id="L183">            vinkki = new Video(</span>
-<span class="fc" id="L184">                    result.getString(&quot;otsikko&quot;),</span>
-<span class="fc" id="L185">                    result.getString(&quot;kuvaus&quot;),</span>
-<span class="fc" id="L186">                    result.getString(&quot;video_tekija&quot;),</span>
-<span class="fc" id="L187">                    result.getString(&quot;video_url&quot;),</span>
-<span class="fc" id="L188">                    result.getString(&quot;video_pvm&quot;)</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        } else if (tyyppi.equals(&quot;video&quot;)) {</span>
+<span class="fc" id="L180">            vinkki = new Video(</span>
+<span class="fc" id="L181">                    result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L182">                    result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L183">                    result.getString(&quot;video_tekija&quot;),</span>
+<span class="fc" id="L184">                    result.getString(&quot;video_url&quot;),</span>
+<span class="fc" id="L185">                    result.getString(&quot;video_pvm&quot;)</span>
             );
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        } else if (tyyppi.equals(&quot;blogi&quot;)) {</span>
-<span class="fc" id="L191">            vinkki = new Blogi(</span>
-<span class="fc" id="L192">                    result.getString(&quot;otsikko&quot;),</span>
-<span class="fc" id="L193">                    result.getString(&quot;kuvaus&quot;),</span>
-<span class="fc" id="L194">                    result.getString(&quot;blogi_kirjoittaja&quot;),</span>
-<span class="fc" id="L195">                    result.getString(&quot;blogi_nimi&quot;),</span>
-<span class="fc" id="L196">                    result.getString(&quot;blogi_url&quot;),</span>
-<span class="fc" id="L197">                    result.getString(&quot;blogi_pvm&quot;)</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        } else if (tyyppi.equals(&quot;blogi&quot;)) {</span>
+<span class="fc" id="L188">            vinkki = new Blogi(</span>
+<span class="fc" id="L189">                    result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L190">                    result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L191">                    result.getString(&quot;blogi_kirjoittaja&quot;),</span>
+<span class="fc" id="L192">                    result.getString(&quot;blogi_nimi&quot;),</span>
+<span class="fc" id="L193">                    result.getString(&quot;blogi_url&quot;),</span>
+<span class="fc" id="L194">                    result.getString(&quot;blogi_pvm&quot;)</span>
             );
-<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        } else if (tyyppi.equals(&quot;podcast&quot;)) {</span>
-<span class="fc" id="L200">            vinkki = new Podcast(</span>
-<span class="fc" id="L201">                    result.getString(&quot;otsikko&quot;),</span>
-<span class="fc" id="L202">                    result.getString(&quot;kuvaus&quot;),</span>
-<span class="fc" id="L203">                    result.getString(&quot;podcast_tekija&quot;),</span>
-<span class="fc" id="L204">                    result.getString(&quot;podcast_nimi&quot;),</span>
-<span class="fc" id="L205">                    result.getString(&quot;podcast_url&quot;),</span>
-<span class="fc" id="L206">                    result.getString(&quot;podcast_pvm&quot;)</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        } else if (tyyppi.equals(&quot;podcast&quot;)) {</span>
+<span class="fc" id="L197">            vinkki = new Podcast(</span>
+<span class="fc" id="L198">                    result.getString(&quot;otsikko&quot;),</span>
+<span class="fc" id="L199">                    result.getString(&quot;kuvaus&quot;),</span>
+<span class="fc" id="L200">                    result.getString(&quot;podcast_tekija&quot;),</span>
+<span class="fc" id="L201">                    result.getString(&quot;podcast_nimi&quot;),</span>
+<span class="fc" id="L202">                    result.getString(&quot;podcast_url&quot;),</span>
+<span class="fc" id="L203">                    result.getString(&quot;podcast_pvm&quot;)</span>
             );
         } else {
-<span class="nc" id="L209">            System.err.println(&quot;Tunnistamaton vinkin tyyppi: &quot; + tyyppi);</span>
-<span class="nc" id="L210">            return null;</span>
+<span class="nc" id="L206">            System.err.println(&quot;Tunnistamaton vinkin tyyppi: &quot; + tyyppi);</span>
+<span class="nc" id="L207">            return null;</span>
         }
-<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (result.getString(&quot;tagit&quot;) != null) {</span>
-<span class="fc" id="L213">            String[] tagitString = result.getString(&quot;tagit&quot;).split(&quot;,&quot;);</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            for (String tagString : tagitString) {</span>
-<span class="fc" id="L215">                vinkki.lisaaTag(new Tag(tagString));</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (result.getString(&quot;tagit&quot;) != null) {</span>
+<span class="fc" id="L210">            String[] tagitString = result.getString(&quot;tagit&quot;).split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">            for (String tagString : tagitString) {</span>
+<span class="fc" id="L212">                vinkki.lisaaTag(new Tag(tagString));</span>
             }
         }
-<span class="fc" id="L218">        return vinkki;</span>
+<span class="fc" id="L215">        return vinkki;</span>
     }
 
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private String rakennaKaikkiTiedotQuery() {
-<span class="fc" id="L223">        StringBuilder queryBuilder = new StringBuilder();</span>
-<span class="fc" id="L224">        queryBuilder.append(&quot;SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi&quot;);</span>
+<span class="fc" id="L220">        StringBuilder queryBuilder = new StringBuilder();</span>
+<span class="fc" id="L221">        queryBuilder.append(&quot;SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi&quot;);</span>
 
-<span class="fc" id="L226">        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;</span>
-<span class="fc" id="L227">        String[] videoSarakkeet = this.db.videonSarakkeet;</span>
-<span class="fc" id="L228">        String[] blogiSarakkeet = this.db.bloginSarakkeet;</span>
-<span class="fc" id="L229">        String[] podcastSarakkeet = this.db.podcastinSarakkeet;</span>
+<span class="fc" id="L223">        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;</span>
+<span class="fc" id="L224">        String[] videoSarakkeet = this.db.videonSarakkeet;</span>
+<span class="fc" id="L225">        String[] blogiSarakkeet = this.db.bloginSarakkeet;</span>
+<span class="fc" id="L226">        String[] podcastSarakkeet = this.db.podcastinSarakkeet;</span>
 
-<span class="fc" id="L231">        upotaSelectSarakkeet(&quot;Kirja&quot;, kirjaSarakkeet, queryBuilder);</span>
-<span class="fc" id="L232">        upotaSelectSarakkeet(&quot;Video&quot;, videoSarakkeet, queryBuilder);</span>
-<span class="fc" id="L233">        upotaSelectSarakkeet(&quot;Blogi&quot;, blogiSarakkeet, queryBuilder);</span>
-<span class="fc" id="L234">        upotaSelectSarakkeet(&quot;Podcast&quot;, podcastSarakkeet, queryBuilder);</span>
+<span class="fc" id="L228">        upotaSelectSarakkeet(&quot;Kirja&quot;, kirjaSarakkeet, queryBuilder);</span>
+<span class="fc" id="L229">        upotaSelectSarakkeet(&quot;Video&quot;, videoSarakkeet, queryBuilder);</span>
+<span class="fc" id="L230">        upotaSelectSarakkeet(&quot;Blogi&quot;, blogiSarakkeet, queryBuilder);</span>
+<span class="fc" id="L231">        upotaSelectSarakkeet(&quot;Podcast&quot;, podcastSarakkeet, queryBuilder);</span>
 
-<span class="fc" id="L236">        queryBuilder.append(&quot;, R.tagit &quot;);</span>
-<span class="fc" id="L237">        queryBuilder.append(&quot;FROM Vinkki &quot;);</span>
+<span class="fc" id="L233">        queryBuilder.append(&quot;, R.tagit &quot;);</span>
+<span class="fc" id="L234">        queryBuilder.append(&quot;FROM Vinkki &quot;);</span>
 
-<span class="fc" id="L239">        upotaLiitto(&quot;Kirja&quot;, queryBuilder);</span>
-<span class="fc" id="L240">        upotaLiitto(&quot;Video&quot;, queryBuilder);</span>
-<span class="fc" id="L241">        upotaLiitto(&quot;Blogi&quot;, queryBuilder);</span>
-<span class="fc" id="L242">        upotaLiitto(&quot;Podcast&quot;, queryBuilder);</span>
+<span class="fc" id="L236">        upotaLiitto(&quot;Kirja&quot;, queryBuilder);</span>
+<span class="fc" id="L237">        upotaLiitto(&quot;Video&quot;, queryBuilder);</span>
+<span class="fc" id="L238">        upotaLiitto(&quot;Blogi&quot;, queryBuilder);</span>
+<span class="fc" id="L239">        upotaLiitto(&quot;Podcast&quot;, queryBuilder);</span>
 
-<span class="fc" id="L244">        queryBuilder.append(&quot;LEFT OUTER JOIN (&quot;</span>
+<span class="fc" id="L241">        queryBuilder.append(&quot;LEFT OUTER JOIN (&quot;</span>
                 + &quot;SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM (&quot;
                 + &quot;SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag &quot;
                 + &quot;WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki&quot;
                 + &quot;) GROUP BY vinkki&quot;
                 + &quot;) AS R ON Vinkki.vinkki_id = R.vinkki&quot;);
 
-<span class="fc" id="L251">        return queryBuilder.toString();</span>
+<span class="fc" id="L248">        return queryBuilder.toString();</span>
     }
 
     private String rakennaHakuQueryQuery() {
-<span class="fc" id="L255">        StringBuilder queryBuilder = new StringBuilder();</span>
-<span class="fc" id="L256">        queryBuilder.append(rakennaKaikkiTiedotQuery());</span>
-<span class="fc" id="L257">        queryBuilder.append(&quot; WHERE Vinkki.otsikko LIKE ? OR Vinkki.kuvaus LIKE ? OR Vinkki.tyyppi LIKE ?&quot;);</span>
+<span class="fc" id="L252">        StringBuilder queryBuilder = new StringBuilder();</span>
+<span class="fc" id="L253">        queryBuilder.append(rakennaKaikkiTiedotQuery());</span>
+<span class="fc" id="L254">        queryBuilder.append(&quot; WHERE Vinkki.otsikko LIKE ? OR Vinkki.kuvaus LIKE ? OR Vinkki.tyyppi LIKE ?&quot;);</span>
 
-<span class="fc" id="L259">        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;</span>
-<span class="fc" id="L260">        String[] videoSarakkeet = this.db.videonSarakkeet;</span>
-<span class="fc" id="L261">        String[] blogiSarakkeet = this.db.bloginSarakkeet;</span>
-<span class="fc" id="L262">        String[] podcastSarakkeet = this.db.podcastinSarakkeet;</span>
+<span class="fc" id="L256">        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;</span>
+<span class="fc" id="L257">        String[] videoSarakkeet = this.db.videonSarakkeet;</span>
+<span class="fc" id="L258">        String[] blogiSarakkeet = this.db.bloginSarakkeet;</span>
+<span class="fc" id="L259">        String[] podcastSarakkeet = this.db.podcastinSarakkeet;</span>
 
-<span class="fc" id="L264">        upotaLikeSarakkeet(&quot;kirja&quot;, kirjaSarakkeet, queryBuilder);</span>
-<span class="fc" id="L265">        upotaLikeSarakkeet(&quot;video&quot;, videoSarakkeet, queryBuilder);</span>
-<span class="fc" id="L266">        upotaLikeSarakkeet(&quot;blogi&quot;, blogiSarakkeet, queryBuilder);</span>
-<span class="fc" id="L267">        upotaLikeSarakkeet(&quot;podcast&quot;, podcastSarakkeet, queryBuilder);</span>
-<span class="fc" id="L268">        return queryBuilder.toString();</span>
+<span class="fc" id="L261">        upotaLikeSarakkeet(&quot;kirja&quot;, kirjaSarakkeet, queryBuilder);</span>
+<span class="fc" id="L262">        upotaLikeSarakkeet(&quot;video&quot;, videoSarakkeet, queryBuilder);</span>
+<span class="fc" id="L263">        upotaLikeSarakkeet(&quot;blogi&quot;, blogiSarakkeet, queryBuilder);</span>
+<span class="fc" id="L264">        upotaLikeSarakkeet(&quot;podcast&quot;, podcastSarakkeet, queryBuilder);</span>
+<span class="fc" id="L265">        return queryBuilder.toString();</span>
     }
 
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaSelectSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
-<span class="fc" id="L273">        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);</span>
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        for (int i = 0; i &lt; sarakkeet.length; i++) {</span>
-<span class="fc" id="L275">            queryBuilder.append(&quot;, &quot;);</span>
-<span class="fc" id="L276">            queryBuilder.append(taulunNimi);</span>
-<span class="fc" id="L277">            queryBuilder.append(&quot;.&quot;);</span>
-<span class="fc" id="L278">            queryBuilder.append(sarakkeet[i]);</span>
-<span class="fc" id="L279">            queryBuilder.append(&quot; AS &quot;);</span>
-<span class="fc" id="L280">            queryBuilder.append(prefixSarakkeet[i]);</span>
+<span class="fc" id="L270">        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        for (int i = 0; i &lt; sarakkeet.length; i++) {</span>
+<span class="fc" id="L272">            queryBuilder.append(&quot;, &quot;);</span>
+<span class="fc" id="L273">            queryBuilder.append(taulunNimi);</span>
+<span class="fc" id="L274">            queryBuilder.append(&quot;.&quot;);</span>
+<span class="fc" id="L275">            queryBuilder.append(sarakkeet[i]);</span>
+<span class="fc" id="L276">            queryBuilder.append(&quot; AS &quot;);</span>
+<span class="fc" id="L277">            queryBuilder.append(prefixSarakkeet[i]);</span>
         }
-<span class="fc" id="L282">    }</span>
+<span class="fc" id="L279">    }</span>
 
+    // Apumetodi hakuQueryn rakentamiseen.
     private void upotaLikeSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
-<span class="fc" id="L285">        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);</span>
-<span class="fc bfc" id="L286" title="All 2 branches covered.">        for (int i = 0; i &lt; sarakkeet.length; i++) {</span>
-<span class="fc" id="L287">            queryBuilder.append(&quot; OR &quot;);</span>
-<span class="fc" id="L288">            queryBuilder.append(prefixSarakkeet[i]);</span>
-<span class="fc" id="L289">            queryBuilder.append(&quot; LIKE ?&quot;);</span>
+<span class="fc" id="L283">        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        for (int i = 0; i &lt; sarakkeet.length; i++) {</span>
+<span class="fc" id="L285">            queryBuilder.append(&quot; OR &quot;);</span>
+<span class="fc" id="L286">            queryBuilder.append(prefixSarakkeet[i]);</span>
+<span class="fc" id="L287">            queryBuilder.append(&quot; LIKE ?&quot;);</span>
         }
-<span class="fc" id="L291">    }</span>
+<span class="fc" id="L289">    }</span>
 
     // apumedoti sarakkeiden nimeämiseen taulun nimellä tyyliin &quot;taulu_sarake&quot;
     private String[] prefixaaSarakkeet(String taulunNimi, String[] sarakkeet) {
-<span class="fc" id="L295">        String[] prefixattu = new String[sarakkeet.length];</span>
+<span class="fc" id="L293">        String[] prefixattu = new String[sarakkeet.length];</span>
 
-<span class="fc bfc" id="L297" title="All 2 branches covered.">        for (int i = 0; i &lt; prefixattu.length; i++) {</span>
-<span class="fc" id="L298">            prefixattu[i] = taulunNimi.toLowerCase() + &quot;_&quot; + sarakkeet[i];</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        for (int i = 0; i &lt; prefixattu.length; i++) {</span>
+<span class="fc" id="L296">            prefixattu[i] = taulunNimi.toLowerCase() + &quot;_&quot; + sarakkeet[i];</span>
         }
 
-<span class="fc" id="L301">        return prefixattu;</span>
+<span class="fc" id="L299">        return prefixattu;</span>
     }
 
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
-<span class="fc" id="L306">        queryBuilder.append(&quot;LEFT JOIN &quot;);</span>
+<span class="fc" id="L304">        queryBuilder.append(&quot;LEFT JOIN &quot;);</span>
+<span class="fc" id="L305">        queryBuilder.append(taulunNimi);</span>
+<span class="fc" id="L306">        queryBuilder.append(&quot; ON &quot;);</span>
 <span class="fc" id="L307">        queryBuilder.append(taulunNimi);</span>
-<span class="fc" id="L308">        queryBuilder.append(&quot; ON &quot;);</span>
-<span class="fc" id="L309">        queryBuilder.append(taulunNimi);</span>
-<span class="fc" id="L310">        queryBuilder.append(&quot;.vinkki = Vinkki.vinkki_id &quot;);</span>
-<span class="fc" id="L311">    }</span>
+<span class="fc" id="L308">        queryBuilder.append(&quot;.vinkki = Vinkki.vinkki_id &quot;);</span>
+<span class="fc" id="L309">    }</span>
 
     public boolean poistaVinkki(Vinkki poistettava) {
-<span class="fc" id="L314">        Long poistettavaID = poistettava.getId();</span>
-<span class="fc" id="L315">        String query = &quot;DELETE FROM Vinkki WHERE vinkki_id = ?;&quot;;</span>
-<span class="pc" id="L316">        try (Connection conn = this.db.getConnection();) {</span>
-<span class="fc" id="L317">            PreparedStatement stmt = conn.prepareStatement(query);</span>
-<span class="fc" id="L318">            stmt.setLong(1, poistettavaID);</span>
-<span class="pc bpc" id="L319" title="1 of 2 branches missed.">            return stmt.executeUpdate() &gt; 0;</span>
-<span class="pc bpc" id="L320" title="6 of 8 branches missed.">        } catch (SQLException ex) {</span>
-<span class="nc" id="L321">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
-<span class="nc" id="L322">            return false;</span>
+<span class="fc" id="L312">        Long poistettavaID = poistettava.getId();</span>
+<span class="fc" id="L313">        String query = &quot;DELETE FROM Vinkki WHERE vinkki_id = ?;&quot;;</span>
+<span class="pc" id="L314">        try (Connection conn = this.db.getConnection();) {</span>
+<span class="fc" id="L315">            PreparedStatement stmt = conn.prepareStatement(query);</span>
+<span class="fc" id="L316">            stmt.setLong(1, poistettavaID);</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">            return stmt.executeUpdate() &gt; 0;</span>
+<span class="pc bpc" id="L318" title="6 of 8 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc" id="L319">            System.out.println(&quot;SQL kysely epäonnistui: &quot; + ex);</span>
+<span class="nc" id="L320">            return false;</span>
         }
     }
 
     private void asetaArvot(PreparedStatement stmt, String hakuTermi, int sarakeLukumaara) throws SQLException {
-<span class="fc bfc" id="L327" title="All 2 branches covered.">        for (int i = 1; i &lt;= sarakeLukumaara; i++) {</span>
-<span class="fc" id="L328">            stmt.setString(i, &quot;%&quot; + hakuTermi + &quot;%&quot;);</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">        for (int i = 1; i &lt;= sarakeLukumaara; i++) {</span>
+<span class="fc" id="L326">            stmt.setString(i, &quot;%&quot; + hakuTermi + &quot;%&quot;);</span>
         }
-<span class="fc" id="L330">    }</span>
+<span class="fc" id="L328">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
