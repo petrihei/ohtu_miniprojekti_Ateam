@@ -172,18 +172,18 @@ public class Tekstikayttis {
     }
 
     public void vinkkienTulostus() {
-<span class="fc" id="L175">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (vinkit == null) {</span>
+<span class="nc" id="L175">        List&lt;Vinkki&gt; vinkit = logiikka.kaikkiVinkit();</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (vinkit == null) {</span>
 <span class="nc" id="L177">            this.io.print(&quot;Ei vinkkejä. Valitse toiminto 1 lisätäksesi vinkin.&quot;);</span>
         } else {
-<span class="fc" id="L179">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
-<span class="fc" id="L180">            this.io.print(&quot;**************&quot;);</span>
-<span class="fc bfc" id="L181" title="All 2 branches covered.">            for (Vinkki vinkki : vinkit) {</span>
-<span class="fc" id="L182">                this.io.print(vinkki.toString());</span>
-<span class="fc" id="L183">                this.io.print(&quot;*****  \n&quot;);</span>
-<span class="fc" id="L184">            }</span>
+<span class="nc" id="L179">            this.io.print(&quot;Kaikki vinkit:&quot;);</span>
+<span class="nc" id="L180">            this.io.print(&quot;**************&quot;);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            for (Vinkki vinkki : vinkit) {</span>
+<span class="nc" id="L182">                this.io.print(vinkki.toString());</span>
+<span class="nc" id="L183">                this.io.print(&quot;*****  \n&quot;);</span>
+<span class="nc" id="L184">            }</span>
         }
-<span class="fc" id="L186">    }</span>
+<span class="nc" id="L186">    }</span>
 
     public void vinkkienJaTietojenTulostus() {
 <span class="fc" id="L189">        List&lt;Vinkki&gt; vinkit = logiikka.haeKaikkiVinkit();</span>
