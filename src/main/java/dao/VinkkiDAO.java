@@ -13,7 +13,7 @@ import tietokantaobjektit.*;
  * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
  */
 public class VinkkiDAO {
-    
+
     private Tietokanta db;
 
     /**
@@ -116,18 +116,18 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
-        
+
         String query = rakennaKaikkiTiedotQuery();
-        
+
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
             while (result.next()) {
                 String tyyppi = result.getString("tyyppi");
-                
+
                 Vinkki vinkki = parsiVinkkiResultista(result);
-                
-                if(vinkki == null) {
+
+                if (vinkki == null) {
                     continue;
                 }
                 vinkit.add(vinkki);
@@ -142,7 +142,15 @@ public class VinkkiDAO {
 
         return vinkit;
     }
-    
+
+    public List<Vinkki> hae(String hakuTermi) {
+        List<Vinkki> vinkit = new ArrayList<>();
+
+        String hakuQuery = rakennaHakuQueryQuery();
+
+        return vinkit;
+    }
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private Vinkki parsiVinkkiResultista(ResultSet result) throws SQLException {
         String tyyppi = result.getString("tyyppi");
@@ -192,54 +200,74 @@ public class VinkkiDAO {
         }
         return vinkki;
     }
-    
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private String rakennaKaikkiTiedotQuery() {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
-        
+
         String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
         String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
         String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
         String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
-        
+
         upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
         upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
         upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
         upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
-        
+
         queryBuilder.append(", R.tagit ");
         queryBuilder.append("FROM Vinkki ");
-        
+
         upotaLiitto("Kirja", queryBuilder);
         upotaLiitto("Video", queryBuilder);
         upotaLiitto("Blogi", queryBuilder);
         upotaLiitto("Podcast", queryBuilder);
-        
+
         queryBuilder.append("LEFT OUTER JOIN ("
                 + "SELECT GROUP_CONCAT(tag) AS tagit, vinkki FROM ("
                 + "SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag "
                 + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
                 + ") GROUP BY vinkki"
-                + ") AS R ON Vinkki.vinkki_id = R.vinkki;");
+                + ") AS R ON Vinkki.vinkki_id = R.vinkki");
+        System.out.println(queryBuilder.toString());
+        return queryBuilder.toString();
+    }
+
+    private String rakennaHakuQueryQuery() {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append(rakennaKaikkiTiedotQuery());
+        queryBuilder.append(" WHERE Vinkki.otsikko LIKE ? OR Vinkki.kuvaus LIKE ? OR Vinkki.tyyppi LIKE ?");
+        
+        
         
         return queryBuilder.toString();
     }
-    
+
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
-        for(String sarake : sarakkeet) {
+        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);
+        for (int i = 0; i < sarakkeet.length; i++) {
             queryBuilder.append(", ");
             queryBuilder.append(taulunNimi);
             queryBuilder.append(".");
-            queryBuilder.append(sarake);
+            queryBuilder.append(sarakkeet[i]);
             queryBuilder.append(" AS ");
-            queryBuilder.append(taulunNimi.toLowerCase());
-            queryBuilder.append("_");
-            queryBuilder.append(sarake);
+            queryBuilder.append(prefixSarakkeet[i]);
         }
     }
     
+    // apumedoti sarakkeiden nimeämiseen taulun nimellä tyyliin "taulu_sarake"
+    private String[] prefixaaSarakkeet(String taulunNimi, String[] sarakkeet) {
+        String[] prefixattu = new String[sarakkeet.length];
+        
+        for (int i = 0; i < prefixattu.length; i++) {
+            prefixattu[i] = taulunNimi.toLowerCase() + "_" + sarakkeet[i];
+        }
+        
+        return prefixattu;
+    }
+
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
         queryBuilder.append("LEFT JOIN ");
