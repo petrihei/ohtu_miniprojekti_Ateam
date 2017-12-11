@@ -16,6 +16,7 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
   * toteutus täyttää hyväksymisehdot (Acceptance criteria).
 
 
+
 ## Travis
 [![Build status](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam.svg?branch=master)](https://travis-ci.org/petrihei/ohtu_miniprojekti_Ateam)
 
@@ -30,6 +31,7 @@ http://htmlpreview.github.io/?https://github.com/petrihei/ohtu_miniprojekti_Atea
 
 
 ## Ohjelman asennus- ja käyttöohje
-* gradle build
-* gradle run
-* Tallenna vinkkejä
+* lataa jar-tiedosto uusimmasta releasesta https://github.com/petrihei/ohtu_miniprojekti_Ateam/releases/tag/v0.2
+* lataa myös pakattu lähdekoodi (sisältää tietokannan)
+* aja tietokannan (tietokanta.db) sisältävässä kansiossa java -jar <jar-tiedoston-nimi>
+

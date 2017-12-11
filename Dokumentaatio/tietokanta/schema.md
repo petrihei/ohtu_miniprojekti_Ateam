@@ -29,27 +29,29 @@
 
 
     CREATE TABLE Video (
-	vinkki INTEGER NOT NULL,
-	tekija TEXT,
-	url TEXT NOT NULL,
-	pvm TEXT,
-	FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
+        vinkki INTEGER NOT NULL,
+        tekija TEXT,
+        url TEXT NOT NULL,
+        pvm TEXT,
+        FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
     );
 
     CREATE TABLE Blogi (
-	vinkki INTEGER NOT NULL,
-	kirjoittaja TEXT,
-	url TEXT NOT NULL,
-	pvm TEXT,
-	FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
+        vinkki INTEGER NOT NULL,
+        kirjoittaja TEXT,
+        nimi TEXT,
+        url TEXT NOT NULL,
+        pvm TEXT,
+        FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
     );
 
     CREATE TABLE Podcast (
-	vinkki INTEGER NOT NULL,
-	tekija TEXT,
-	url TEXT NOT NULL,
-	pvm TEXT,
-	FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
+        vinkki INTEGER NOT NULL,
+        tekija TEXT,
+        nimi TEXT,
+        url TEXT NOT NULL,
+        pvm TEXT,
+        FOREIGN KEY(vinkki) REFERENCES Vinkki(vinkki_id)
     );
 
 

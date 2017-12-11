@@ -1,22 +1,25 @@
 package tietokantaobjektit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Chamion
  */
-public class Video extends Vinkki  {
-    
+public class Video extends Vinkki {
+
     private String tekija;
     private String url;
     private String pvm;
-        
+
     public Video(String otsikko, String kuvaus, String tekija, String url, String pvm) {
         super(otsikko, kuvaus, "video");
         this.tekija = tekija;
         this.url = url;
         this.pvm = pvm;
     }
-    
+
     public String getTekija() {
         return tekija;
     }
@@ -40,7 +43,16 @@ public class Video extends Vinkki  {
     public void setPvm(String pvm) {
         this.pvm = pvm;
     }
-    
+
+    @Override
+    public List<String> tyypinTiedotJarjestyksessa() {
+        ArrayList<String> tiedot = (ArrayList) new ArrayList();
+        tiedot.add(this.tekija);
+        tiedot.add(this.url);
+        tiedot.add(this.pvm);
+        return tiedot;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -50,7 +62,7 @@ public class Video extends Vinkki  {
                 .append("  Url: ").append(this.url).append("\n")
                 .append("  Pvm: ").append(this.pvm).append("\n")
                 .append("  Tagit: ");
-        for (Tag tag : this.tagit){
+        for (Tag tag : this.tagit) {
             sb.append(tag.getTag()).append(" ");
         }
         return sb.toString();

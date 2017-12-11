@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author petriheinonen
  */
-public class IOStub implements IO{
+public class IOStub implements IO {
 
     String[] inputs;
     ArrayList<String> inputList;
@@ -23,16 +23,16 @@ public class IOStub implements IO{
         this.outputs = new ArrayList<>();
     }
 
-    public IOStub(ArrayList<String> inputs){
+    public IOStub(ArrayList<String> inputs) {
         this.inputList = inputs;
         this.outputs = new ArrayList<>();
     }
 
     public String nextLine() {
-        if (inputs != null){
+        if (inputs != null) {
             return inputs[mones++];
         }
-        if (inputList != null){
+        if (inputList != null) {
             return inputList.get(mones++);
         }
         return null;
@@ -42,7 +42,7 @@ public class IOStub implements IO{
         outputs.add(m);
     }
 
-    public ArrayList<String> getOutputs(){
+    public ArrayList<String> getOutputs() {
         return this.outputs;
     }
 }
