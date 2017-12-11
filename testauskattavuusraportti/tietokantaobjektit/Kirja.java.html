@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Kirja.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ohtu_miniprojekti_Ateam</a> &gt; <a href="index.source.html" class="el_package">tietokantaobjektit</a> &gt; <span class="el_source">Kirja.java</span></div><h1>Kirja.java</h1><pre class="source lang-java linenums">package tietokantaobjektit;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Kirja extends Vinkki {
+
+    private String isbn;
+    private String kirjailija;
+    
+    public Kirja(String otsikko, String kuvaus) {
+<span class="nc" id="L12">        super(otsikko, kuvaus, &quot;kirja&quot;);</span>
+<span class="nc" id="L13">    }</span>
+
+    public Kirja(String otsikko, String kuvaus, String isbn, String kirjailija) {
+<span class="fc" id="L16">        super(otsikko, kuvaus, &quot;kirja&quot;);</span>
+<span class="fc" id="L17">        this.isbn = isbn;</span>
+<span class="fc" id="L18">        this.kirjailija = kirjailija;</span>
+<span class="fc" id="L19">    }</span>
+
+    public String getIsbn() {
+<span class="fc" id="L22">        return isbn;</span>
+    }
+
+    public void setIsbn(String isbn) {
+<span class="nc" id="L26">        this.isbn = isbn;</span>
+<span class="nc" id="L27">    }</span>
+
+    public String getKirjailija() {
+<span class="fc" id="L30">        return kirjailija;</span>
+    }
+
+    public void setKirjailija(String kirjailija) {
+<span class="nc" id="L34">        this.kirjailija = kirjailija;</span>
+<span class="nc" id="L35">    }</span>
+    
+    @Override
+    public List&lt;String&gt; tyypinTiedotJarjestyksessa() {
+<span class="fc" id="L39">        ArrayList&lt;String&gt; tiedot = (ArrayList) new ArrayList();</span>
+<span class="fc" id="L40">        tiedot.add(this.isbn);</span>
+<span class="fc" id="L41">        tiedot.add(this.kirjailija);</span>
+<span class="fc" id="L42">        return tiedot;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L47">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L48">        sb.append(this.tyyppi).append(&quot;: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
+<span class="fc" id="L49">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
+<span class="fc" id="L50">                .append(&quot;  ISBN: &quot;).append(this.isbn).append(&quot;\n&quot;)</span>
+<span class="fc" id="L51">                .append(&quot;  Kirjailija: &quot;).append(this.kirjailija).append(&quot;\n&quot;)</span>
+<span class="fc" id="L52">                .append(&quot;  Tagit: &quot;);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
+<span class="fc" id="L54">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        return sb.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

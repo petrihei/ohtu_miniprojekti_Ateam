@@ -17,7 +17,7 @@ public class Validaattori implements Validoija {
         }
         return palautettava;
     }   
-    
+
     // validoi noudattaako parametri ISBN-13 muotoa
     public boolean validoiISBN(String isbn) {
         boolean palautettava = false;
