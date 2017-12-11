@@ -28,9 +28,11 @@ public class VinkkiDAOTest {
 
     @Before
     public void initTietokanta() {
-        if (isInitialized) return;
         this.db = new Tietokanta("jdbc:sqlite:TestausTietokanta.db");
         this.dao = new VinkkiDAO(db);
+        
+        // Lisää testidata kerran koko luokalle.
+        if (isInitialized) return;
         this.db.lisaaTestiData();
         this.isInitialized = true;
     }
@@ -97,7 +99,8 @@ public class VinkkiDAOTest {
 
     @Test
     public void hakuToimiiVideonTekijalla() {
-        String tulos = dao.hae("Sam Laing").toString();
+        String tulos = dao.hae("Angela Druckman").toString();
+        System.out.println(tulos);
         tulosSisaltaa60SecondScrumOrganizingTheProductBacklog(tulos);
     }
 
@@ -163,13 +166,14 @@ public class VinkkiDAOTest {
     }
 
     private void tulosSisaltaaMasteryForScrumTeams(String tulos) {
-        assertTrue(tulos.contains("podcastjakso: Donald Ewart the 3 steps to mastery for Scrum teams."));
+        assertTrue(tulos.contains("podcast-jakso: Donald Ewart the 3 steps to mastery for Scrum teams."));
         assertTrue(tulos.contains("Kuvaus: Powerful Questions is recommended as a tool that helps Scrum "
                 + "Masters to initiate right kind of discussions with the team."));
         assertTrue(tulos.contains("Tekijä: Donald Ewart"));
-        assertTrue(tulos.contains("Nimi: Scrum Master Toolbox Podcast"));
+        assertTrue(tulos.contains("Podcastin nimi: Scrum Master Toolbox Podcast"));
         assertTrue(tulos.contains("Url: http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/"));
         assertTrue(tulos.contains("Pvm: 16.11.2017"));
+        assertTrue(tulos.contains("Tagit: scrum ohtu"));
     }
 
     private void tulosSisaltaaRemoteAgileTeams(String tulos) {

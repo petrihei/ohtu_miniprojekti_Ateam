@@ -147,6 +147,29 @@ public class VinkkiDAO {
         List<Vinkki> vinkit = new ArrayList<>();
 
         String hakuQuery = rakennaHakuQueryQuery();
+        
+        try (Connection conn = this.db.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(hakuQuery)) {
+            asetaArvot(stmt, hakuTermi, this.db.sarakeLukumaara());
+            ResultSet result = stmt.executeQuery();
+            
+            while (result.next()) {
+                String tyyppi = result.getString("tyyppi");
+
+                Vinkki vinkki = parsiVinkkiResultista(result);
+
+                if (vinkki == null) {
+                    continue;
+                }
+                vinkit.add(vinkki);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e);
+            return null;
+        } catch (NullPointerException ex) {
+            // Tietokanta-luokka tekee virheilmoituksen.
+            return null;
+        }
 
         return vinkit;
     }
@@ -206,15 +229,15 @@ public class VinkkiDAO {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
 
-        String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
-        String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
-        String[] blogiSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
-        String[] podcastSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
+        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;
+        String[] videoSarakkeet = this.db.videonSarakkeet;
+        String[] blogiSarakkeet = this.db.bloginSarakkeet;
+        String[] podcastSarakkeet = this.db.podcastinSarakkeet;
 
-        upotaSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
-        upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
-        upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
-        upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
+        upotaSelectSarakkeet("Kirja", kirjaSarakkeet, queryBuilder);
+        upotaSelectSarakkeet("Video", videoSarakkeet, queryBuilder);
+        upotaSelectSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
+        upotaSelectSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
 
         queryBuilder.append(", R.tagit ");
         queryBuilder.append("FROM Vinkki ");
@@ -230,7 +253,7 @@ public class VinkkiDAO {
                 + "WHERE Tag.tag_id = VinkkiTag.tag ORDER BY VinkkiTag.vinkki"
                 + ") GROUP BY vinkki"
                 + ") AS R ON Vinkki.vinkki_id = R.vinkki");
-        System.out.println(queryBuilder.toString());
+
         return queryBuilder.toString();
     }
 
@@ -238,14 +261,21 @@ public class VinkkiDAO {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append(rakennaKaikkiTiedotQuery());
         queryBuilder.append(" WHERE Vinkki.otsikko LIKE ? OR Vinkki.kuvaus LIKE ? OR Vinkki.tyyppi LIKE ?");
-        
-        
-        
+
+        String[] kirjaSarakkeet = this.db.kirjanSarakkeet;
+        String[] videoSarakkeet = this.db.videonSarakkeet;
+        String[] blogiSarakkeet = this.db.bloginSarakkeet;
+        String[] podcastSarakkeet = this.db.podcastinSarakkeet;
+
+        upotaLikeSarakkeet("kirja", kirjaSarakkeet, queryBuilder);
+        upotaLikeSarakkeet("video", videoSarakkeet, queryBuilder);
+        upotaLikeSarakkeet("blogi", blogiSarakkeet, queryBuilder);
+        upotaLikeSarakkeet("podcast", podcastSarakkeet, queryBuilder);
         return queryBuilder.toString();
     }
 
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
-    private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
+    private void upotaSelectSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
         String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);
         for (int i = 0; i < sarakkeet.length; i++) {
             queryBuilder.append(", ");
@@ -256,15 +286,24 @@ public class VinkkiDAO {
             queryBuilder.append(prefixSarakkeet[i]);
         }
     }
-    
+
+    private void upotaLikeSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
+        String[] prefixSarakkeet = prefixaaSarakkeet(taulunNimi, sarakkeet);
+        for (int i = 0; i < sarakkeet.length; i++) {
+            queryBuilder.append(" OR ");
+            queryBuilder.append(prefixSarakkeet[i]);
+            queryBuilder.append(" LIKE ?");
+        }
+    }
+
     // apumedoti sarakkeiden nimeämiseen taulun nimellä tyyliin "taulu_sarake"
     private String[] prefixaaSarakkeet(String taulunNimi, String[] sarakkeet) {
         String[] prefixattu = new String[sarakkeet.length];
-        
+
         for (int i = 0; i < prefixattu.length; i++) {
             prefixattu[i] = taulunNimi.toLowerCase() + "_" + sarakkeet[i];
         }
-        
+
         return prefixattu;
     }
 
@@ -287,6 +326,12 @@ public class VinkkiDAO {
         } catch (SQLException ex) {
             System.out.println("SQL kysely epäonnistui: " + ex);
             return false;
+        }
+    }
+
+    private void asetaArvot(PreparedStatement stmt, String hakuTermi, int sarakeLukumaara) throws SQLException {
+        for (int i = 1; i <= sarakeLukumaara; i++) {
+            stmt.setString(i, "%" + hakuTermi + "%");
         }
     }
 }

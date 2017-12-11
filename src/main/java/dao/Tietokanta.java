@@ -13,6 +13,11 @@ import org.sqlite.SQLiteOpenMode;
 public class Tietokanta {
 
     private String jdbcOsoite;
+    public final String[] vinkinSarakkeet = new String[]{"otsikko", "kuvaus", "tyyppi"};
+    public final String[] kirjanSarakkeet = new String[]{"ISBN", "kirjailija"};
+    public final String[] videonSarakkeet = new String[]{"tekija", "url", "pvm"};
+    public final String[] bloginSarakkeet = new String[]{"kirjoittaja", "nimi", "url", "pvm"};
+    public final String[] podcastinSarakkeet = new String[]{"tekija", "nimi", "url", "pvm"};
 
     /**
      * Parametri "jdbc:sqlite:TietokantaTest1.db" näyttää toimivan.
@@ -41,6 +46,10 @@ public class Tietokanta {
             return null;
         }
         return conn;
+    }
+    
+    public int sarakeLukumaara() {
+        return vinkinSarakkeet.length + kirjanSarakkeet.length + videonSarakkeet.length + bloginSarakkeet.length + podcastinSarakkeet.length;
     }
 
     public void poistaKaikki() {
