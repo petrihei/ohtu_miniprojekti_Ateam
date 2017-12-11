@@ -226,7 +226,7 @@ public class Tekstikayttis {
                     String varmistus = io.nextLine();
 
                     if (varmistus.equals("1")) {
-                        deleted = logiikka.VinkinPoisto(vinkki);
+                        deleted = logiikka.poistaVinkki(vinkki);
                     }
 
                     return deleted;
