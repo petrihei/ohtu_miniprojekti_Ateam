@@ -192,9 +192,11 @@ public class VinkkiDAO {
         return vinkit;
     }
 
-    public boolean poistaVinkki(Vinkki poistettava) {
+  public boolean poistaVinkki(Vinkki poistettava) {
         Long poistettavaID = poistettava.getId();
+        Long TagCounter;
         String query = "SELECT tag FROM VinkkiTag where vinkki = " + poistettavaID;
+        System.out.println(query);
         try (Connection conn = this.db.getConnection();) {
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet result = stmt.executeQuery();
@@ -206,20 +208,23 @@ public class VinkkiDAO {
             }
             for (int tagID : Tag_ids) {
                 query = "SELECT Count() from VinkkiTag WHERE tag = " + tagID;
+                System.out.println(query);
                 stmt = conn.prepareStatement(query);
                 result = stmt.executeQuery();
                 while (result.next()) {
-                    int TagCounter = result.getInt("Count()");
-
+                    TagCounter = result.getLong(1);
+                    System.out.println("Tag: " + tagID + " Count: " + TagCounter);
                     if (TagCounter == 1) {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
+                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID + " AND tag = " + tagID;
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
                         query = "Delete from Tag where tag_id = " + tagID;
+                        System.out.println(query);
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
                     } else {
-                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID;
+                        query = "Delete from VinkkiTag where vinkki = " + poistettavaID + " AND tag = " + tagID;
+                        System.out.println(query);
                         stmt = conn.prepareStatement(query);
                         stmt.executeUpdate();
                     }
