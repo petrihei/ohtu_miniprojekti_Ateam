@@ -2,6 +2,7 @@ package tekstikayttis;
 
 import java.util.ArrayList;
 import java.util.List;
+import tietokantaobjektit.RelatedCourse;
 import tietokantaobjektit.Tag;
 
 
@@ -15,6 +16,16 @@ public class Tagaaja {
             tagLista.add(new Tag(lisattava));
         }
         return tagLista;
+    }
+
+    List<RelatedCourse> kurssienErottaminen(String syote) {
+        List<RelatedCourse> kurssiLista = new ArrayList<>();
+        String tagit[] = syote.split(",");
+        for (int i = 0; i < tagit.length; i++) {
+            String lisattava = tagit[i].trim();
+            kurssiLista.add(new RelatedCourse(lisattava));
+        }
+        return kurssiLista;
     }
     
 }

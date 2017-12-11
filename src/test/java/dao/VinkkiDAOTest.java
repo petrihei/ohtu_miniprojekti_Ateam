@@ -13,9 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tietokantaobjektit.SuperTag;
-import tietokantaobjektit.Tag;
-import tietokantaobjektit.Vinkki;
+import tietokantaobjektit.*;
 
 /**
  *
@@ -47,7 +45,7 @@ public class VinkkiDAOTest {
         lisattava.lisaaTag(new Tag("doot"));
         List<SuperTag> tagit = new ArrayList<>();
         tagit.addAll(lisattava.getTagit());
-        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l));
+        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l, new SuperTagDAO(huonoDB,"tag")));
     }
     
     @Test
@@ -79,7 +77,7 @@ public class VinkkiDAOTest {
         lisattava.lisaaTag(new Tag("doot"));
         List<SuperTag> tagit = new ArrayList<>();
         tagit.addAll(lisattava.getTagit());
-        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l));
+        assertFalse(huonoDao.lisaaVinkkiTag(tagit, 1l, new SuperTagDAO(huonoDB,"tag")));
     }
     
     @Test

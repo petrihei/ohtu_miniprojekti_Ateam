@@ -132,7 +132,7 @@ public class Vinkki {
     
     protected void toStringSuffix(StringBuilder sb) {
         liitaTagit(sb);
-        //liitaRelatedCourses(sb);
+        liitaRelatedCourses(sb);
     }
     
     private void liitaTagit(StringBuilder sb) {
@@ -140,6 +140,7 @@ public class Vinkki {
         for (Tag tag : this.tagit){
             sb.append(tag.getTag()).append(" ");
         }
+        sb.append("\n");
     }
     
     private void liitaRelatedCourses(StringBuilder sb) {
