@@ -56,6 +56,7 @@ public class Stepdefs {
         inputs.add("www.video.com/watch");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -69,6 +70,7 @@ public class Stepdefs {
         inputs.add("www.video.com/watch");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -83,6 +85,7 @@ public class Stepdefs {
         inputs.add("www.blogs.com/read");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -97,6 +100,7 @@ public class Stepdefs {
         inputs.add("www.blog.com/read");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -111,6 +115,7 @@ public class Stepdefs {
         inputs.add("www.podcast.com/listen");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }

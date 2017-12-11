@@ -270,10 +270,10 @@ public class Tekstikayttis {
 <span class="fc" id="L270">        String validoitava = this.io.nextLine();</span>
 <span class="fc" id="L271">        String komento = &quot;x&quot;;</span>
 <span class="pc bpc" id="L272" title="1 of 4 branches missed.">        while (!validointi.validoiSyote(validoitava, kentanTyyppi) || komento.equals(&quot;k&quot;)) {</span>
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">            if (kentanTyyppi.substring(kentanTyyppi.length() - 1).equals(&quot;*&quot;)) {</span>
-<span class="nc" id="L274">                this.io.print(kentanTyyppi.substring(0, kentanTyyppi.length() - 1) + &quot; on pakollinen kenttä. Syötä uusi.&quot;);</span>
-<span class="nc" id="L275">                validoitava = this.io.nextLine();</span>
-<span class="nc" id="L276">                komento = &quot;x&quot;;</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">            if (kentanTyyppi.substring(kentanTyyppi.length() - 1).equals(&quot;*&quot;)) {</span>
+<span class="fc" id="L274">                this.io.print(kentanTyyppi.substring(0, kentanTyyppi.length() - 1) + &quot; on pakollinen kenttä. Syötä uusi.&quot;);</span>
+<span class="fc" id="L275">                validoitava = this.io.nextLine();</span>
+<span class="fc" id="L276">                komento = &quot;x&quot;;</span>
             } else {
 <span class="fc" id="L278">                this.io.print(kentanTyyppi + &quot; väärässä muodossa&quot;);</span>
 <span class="fc" id="L279">                this.io.print(&quot;Haluatko syöttää uuden? k/e&quot;);</span>
