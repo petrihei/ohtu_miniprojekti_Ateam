@@ -86,31 +86,31 @@ public class Tietokanta {
         //kirja
         lista.add("INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\"Introduction to Algorithms\",\"The algorithms are described in English and in a pseudocode designed to be readable by anyone who has done a little programming.\", \"kirja\");");
         lista.add("INSERT INTO Kirja (vinkki, ISBN, kirjailija) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\"9780262033848\" ,\"James Cormen\");");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"algoritmit\");");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"algoritmit\", \"tag\" );");
         lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"Tira\");");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"TiRa\", \"related_course\");");
         lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));");
 
         //podcast
         lista.add("INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\"Donald Ewart the 3 steps to mastery for Scrum teams.\", \"Powerful Questions is recommended as a tool that helps Scrum Masters to initiate right kind of discussions with the team.\", \"podcast\");");
         lista.add("INSERT INTO Podcast (vinkki, tekija, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\"Donald Ewart\", \"Scrum Master Toolbox Podcast\", \"http://scrum-master-toolbox.org/2017/11/podcast/donald-ewart-the-3-steps-to-mastery-for-scrum-teams/\", \"16.11.2017\");");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"scrum\");");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"ohtu\");");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"scrum\", \"tag\");");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"OhTu\", \"related_course\");");
         lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"scrum\" LIMIT 1));");
-        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"ohtu\" LIMIT 1));");
+        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"OhTu\" LIMIT 1));");
 
         //blogi
         lista.add("INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\"Remote Agile Teams\",\"Results of a survey about how agile teams work when team members don't work in the same place.\", \"blogi\");");
         lista.add("INSERT INTO Blogi (vinkki, kirjoittaja, nimi, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\"Sam Laing\", \"Growing Agile Blog\", \"https://www.growingagile.co.za/2017/07/remote-agile-teams/\", \"25.7.2017\");");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"agile\");");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"agile\", \"tag\");");
         lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"agile\" LIMIT 1));");
-        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"ohtu\" LIMIT 1));");
+        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"OhTu\" LIMIT 1));");
 
         //video
         lista.add("INSERT INTO Vinkki (otsikko, kuvaus, tyyppi) VALUES (\"60 Second Scrum Organizing the Product Backlog\",\"Is your Product Backlog growing too large to manage?  Here are some tips to get it under control.\", \"video\");");
         lista.add("INSERT INTO Video (vinkki, tekija, url, pvm) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),\"Angela Druckman\", \"https://www.youtube.com/watch?v=g92anflQgyY\", \"26.11.2012\");");
-        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"ohtu\" LIMIT 1));");
-        lista.add("INSERT INTO Tag (tag) VALUES (\"product backlog\");");
+        lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag WHERE tag = \"OhTu\" LIMIT 1));");
+        lista.add("INSERT INTO Tag (tag, tyyppi) VALUES (\"product backlog\", \"tag\");");
         lista.add("INSERT INTO VinkkiTag (vinkki, tag) VALUES ((SELECT vinkki_id FROM Vinkki ORDER BY vinkki_id DESC LIMIT 1),(SELECT tag_id FROM Tag ORDER BY tag_id DESC LIMIT 1));");
 
         return lista;
