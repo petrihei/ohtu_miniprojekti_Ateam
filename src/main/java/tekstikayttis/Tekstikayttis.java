@@ -8,8 +8,7 @@ import logiikka.Logiikka;
 import tietokantaobjektit.Kirja;
 import tietokantaobjektit.Tag;
 import tietokantaobjektit.Video;
-import tietokantaobjektit.Blogi;
-import tietokantaobjektit.Podcast;
+
 
 
 public class Tekstikayttis {
@@ -17,13 +16,13 @@ public class Tekstikayttis {
     private Logiikka logiikka;
     private IO io;
     private Validoija validointi;
-    private Tagaaja tagaaja;
+    //private Tagaaja tagaaja;
 
     public Tekstikayttis(Logiikka l, IO io) {
         this.logiikka = l;
         this.io = io;
         this.validointi = new Validaattori();
-        this.tagaaja = new Tagaaja();
+       // this.tagaaja = new Tagaaja();
         io.print("***********************");
         io.print("*     Vinkkilista     *");
         io.print("***********************");
@@ -37,7 +36,9 @@ public class Tekstikayttis {
                 this.vinkinLisays();
             } else if (valinta.equals("2")) {
                 this.vinkkienJaTietojenTulostus();
-            } else if (valinta.equals("3")) {
+            } else if (valinta.equals("3")){
+                this.HaeVinkki();
+            } else if (valinta.equals("4")) {
                 if (this.vinkkienTulostusPoistamiseen()) {
                     this.io.print("Vinkki poistettu.");
                 }
@@ -140,7 +141,7 @@ public class Tekstikayttis {
         String kirjailija = kysyKentta("Kirjailija");
 
         Kirja lisattava = new Kirja(otsikko, kuvaus, isbn, kirjailija);
-        
+
         kysyTagit(lisattava);
 
         this.io.print("");
@@ -165,7 +166,8 @@ public class Tekstikayttis {
         this.io.print("Valitse toiminnallisuus:");
         this.io.print("1: Lisää vinkkilistaan");
         this.io.print("2: Selaa vinkkejä");
-        this.io.print("3: Poista vinkki");
+        this.io.print("3: Hae vinkki");
+        this.io.print("4: Poista vinkki");
         this.io.print("0: Poistu");
         this.io.print("");
         return this.io.nextLine();
@@ -195,6 +197,24 @@ public class Tekstikayttis {
             for (Vinkki vinkki : vinkit) {
                 this.io.print(vinkki.toString() + "\n");
             }
+        }
+
+    }
+
+    public void HaeVinkki(){
+        List<Vinkki> haetutVinkit = new ArrayList<Vinkki>();
+        this.io.print("Anna merkkijono, jolla haetaan vinkkejä.");
+        String merkkijono = io.nextLine();
+        if (merkkijono.length() > 3){
+            haetutVinkit = logiikka.hae(merkkijono);
+        } else {
+            this.io.print("Merkkijono on oltava ainakin 3 merkkiä pitkä.");
+        }
+        if (haetutVinkit != null){
+            for(Vinkki V:haetutVinkit){
+                this.io.print(V.toString());
+            }
+
         }
 
     }
@@ -257,7 +277,7 @@ public class Tekstikayttis {
         List<Tag> tagit = tagaaja.tagienErottaminen(tagSyote);
         lisattava.setTagit(tagit);
     }
-    
+
     //hoitaa validointiin liittyvän viestimisen käyttäjän kanssa
     private String kysyValidoitava(String kentanTyyppi) {
         String validoitava = this.io.nextLine();
@@ -283,5 +303,5 @@ public class Tekstikayttis {
             }
         }
         return validoitava;
-    } 
+    }
 }
