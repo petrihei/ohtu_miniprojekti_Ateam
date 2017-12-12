@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author petriheinonen
  */
-public class IOStub implements IO{
+public class IOStub implements IO {
 
     String[] inputs;
     ArrayList&lt;String&gt; inputList;
@@ -23,16 +23,16 @@ public class IOStub implements IO{
 <span class="fc" id="L23">        this.outputs = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L24">    }</span>
 
-<span class="fc" id="L26">    public IOStub(ArrayList&lt;String&gt; inputs){</span>
+<span class="fc" id="L26">    public IOStub(ArrayList&lt;String&gt; inputs) {</span>
 <span class="fc" id="L27">        this.inputList = inputs;</span>
 <span class="fc" id="L28">        this.outputs = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L29">    }</span>
 
     public String nextLine() {
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (inputs != null){</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (inputs != null) {</span>
 <span class="fc" id="L33">            return inputs[mones++];</span>
         }
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (inputList != null){</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (inputList != null) {</span>
 <span class="fc" id="L36">            return inputList.get(mones++);</span>
         }
 <span class="nc" id="L38">        return null;</span>
@@ -42,7 +42,7 @@ public class IOStub implements IO{
 <span class="fc" id="L42">        outputs.add(m);</span>
 <span class="fc" id="L43">    }</span>
 
-    public ArrayList&lt;String&gt; getOutputs(){
+    public ArrayList&lt;String&gt; getOutputs() {
 <span class="fc" id="L46">        return this.outputs;</span>
     }
 }

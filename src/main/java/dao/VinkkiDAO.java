@@ -2,10 +2,7 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import tietokantaobjektit.*;
 
 /**
@@ -13,7 +10,7 @@ import tietokantaobjektit.*;
  * @author Chamion DAO luokalle tietokantaobjektit.Vinkki
  */
 public class VinkkiDAO {
-    
+
     private Tietokanta db;
 
     /**
@@ -54,23 +51,28 @@ public class VinkkiDAO {
             // Tietokanta-luokka tekee virheilmoituksen.
             return -1;
         }
-        
-        List<SuperTag> superTagit = new ArrayList<>();
-        superTagit.addAll(lisattava.getTagit());
-        superTagit.addAll(lisattava.getRelatedCourses());
 
-        if (!lisaaVinkkiTag(superTagit, vinkkiId)) {
+        List<SuperTag> tagit = new ArrayList<>();
+        tagit.addAll(lisattava.getTagit());
+        List<SuperTag> kurssit = new ArrayList<>();
+        kurssit.addAll(lisattava.getRelatedCourses());
+
+        if (!lisaaVinkkiTag(tagit, vinkkiId, new SuperTagDAO(db, "tag"))) {
+            return -1;
+        }
+
+        if (!lisaaVinkkiTag(kurssit, vinkkiId, new SuperTagDAO(db, "related_course"))) {
             return -1;
         }
 
         return vinkkiId;
     }
 
-    public boolean lisaaVinkkiTag(List<SuperTag> tagit, long vinkkiId) {
-        TagDAO tagDao = new TagDAO(db);
+    public boolean lisaaVinkkiTag(List<SuperTag> tagit, long vinkkiId, SuperTagDAO dao) {
         for (SuperTag tag : tagit) {
             // Lisätään tag.
-            long tagId = tagDao.lisaaTag(tag);
+
+            long tagId = dao.lisaaTag(tag);
 
             // Liitetään tag Vinkkiin.
             String vinkkiTagQuery = "INSERT INTO VinkkiTag (vinkki, tag) values (?, ?)";
@@ -120,21 +122,20 @@ public class VinkkiDAO {
         //pitäisi palauttaa lista kaikista vinkeistä
         //sisältäen kaikki niiden tiedot
         List<Vinkki> vinkit = new ArrayList<>();
-        
+
         //Tähän kaikki halutut taginkaltaiset. Katso mallia aiemmista.
         String[] tagTyypit = new String[]{TagDAO.TYYPPI, RelatedCourseDAO.TYYPPI};
-        
+
         String query = rakennaKaikkiTiedotQuery(tagTyypit);
-        
+
         try (Connection conn = this.db.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery()) {
             while (result.next()) {
-                String tyyppi = result.getString("tyyppi");
-                
+
                 Vinkki vinkki = parsiVinkkiResultista(result, tagTyypit);
-                
-                if(vinkki == null) {
+
+                if (vinkki == null) {
                     continue;
                 }
                 vinkit.add(vinkki);
@@ -149,7 +150,7 @@ public class VinkkiDAO {
 
         return vinkit;
     }
-    
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private Vinkki parsiVinkkiResultista(ResultSet result, String[] tagTyypit) throws SQLException {
         String tyyppi = result.getString("tyyppi");
@@ -162,7 +163,8 @@ public class VinkkiDAO {
                         result.getString("kuvaus"),
                         result.getString("kirja_ISBN"),
                         result.getString("kirja_kirjailija")
-                );  break;
+                );
+                break;
             case "video":
                 vinkki = new Video(
                         result.getString("otsikko"),
@@ -170,7 +172,8 @@ public class VinkkiDAO {
                         result.getString("video_tekija"),
                         result.getString("video_url"),
                         result.getString("video_pvm")
-                );  break;
+                );
+                break;
             case "blogi":
                 vinkki = new Blogi(
                         result.getString("otsikko"),
@@ -179,7 +182,8 @@ public class VinkkiDAO {
                         result.getString("blogi_nimi"),
                         result.getString("blogi_url"),
                         result.getString("blogi_pvm")
-                );  break;
+                );
+                break;
             case "podcast":
                 vinkki = new Podcast(
                         result.getString("otsikko"),
@@ -188,14 +192,15 @@ public class VinkkiDAO {
                         result.getString("podcast_nimi"),
                         result.getString("podcast_url"),
                         result.getString("podcast_pvm")
-                );  break;
+                );
+                break;
             default:
                 System.err.println("Tunnistamaton vinkin tyyppi: " + tyyppi);
                 return null;
         }
         //Parsii kaikki taginkaltaiset automaattisesti tagTyypit taulukon ja Vinkki-luokan toimintojen avulla.
-        for(String tagTyyppi : tagTyypit) {
-            String sarake = tagTyyppi+"_concat";
+        for (String tagTyyppi : tagTyypit) {
+            String sarake = tagTyyppi + "_concat";
             if (result.getString(sarake) != null) {
                 String[] tagitString = result.getString(sarake).split(",");
                 for (String tagString : tagitString) {
@@ -205,13 +210,13 @@ public class VinkkiDAO {
         }
         return vinkki;
     }
-    
+
     // Apumetodi metodille kaikkiVinkitJaTiedot
     private String rakennaKaikkiTiedotQuery(String[] tagTyypit) {
         StringBuilder queryBuilder = new StringBuilder();
         // Vinkin sarakkeet
         queryBuilder.append("SELECT Vinkki.otsikko, Vinkki.kuvaus, Vinkki.tyyppi");
-        
+
         // Lisätään jokaisen tyyppien tarvitsemat sarakkeet erikseen.
         String[] kirjaSarakkeet = new String[]{"ISBN", "kirjailija"};
         String[] videoSarakkeet = new String[]{"tekija", "url", "pvm"};
@@ -221,26 +226,26 @@ public class VinkkiDAO {
         upotaSarakkeet("Video", videoSarakkeet, queryBuilder);
         upotaSarakkeet("Blogi", blogiSarakkeet, queryBuilder);
         upotaSarakkeet("Podcast", podcastSarakkeet, queryBuilder);
-        
+
         // Taginkaltaisille sarakkeet muodostetaan automaattisesti tagTyypit taulukon avulla.
         upotaTagSarakkeet(tagTyypit, queryBuilder);
         queryBuilder.append(" FROM Vinkki ");
-        
+
         // Lisätään tyyppien tarvitsemat JOIN:it
         upotaLiitto("Kirja", queryBuilder);
         upotaLiitto("Video", queryBuilder);
         upotaLiitto("Blogi", queryBuilder);
         upotaLiitto("Podcast", queryBuilder);
-        
+
         // Taginkaltaisten liitot automaattisesti tagTyypit taulukon avulla.
         upotaTagLiitot(tagTyypit, queryBuilder);
         queryBuilder.append(";");
         return queryBuilder.toString();
     }
-    
+
     private void upotaTagSarakkeet(String[] tagTyypit, StringBuilder queryBuilder) {
         // Saadaan tyyppi_concat sarakkeeseen pilkuilla erotettu lista.
-        for(String tyyppi : tagTyypit) {
+        for (String tyyppi : tagTyypit) {
             queryBuilder.append(", ");
             queryBuilder.append(tyyppi);
             queryBuilder.append("_kysely.");
@@ -248,10 +253,10 @@ public class VinkkiDAO {
             queryBuilder.append("_concat");
         }
     }
-    
+
     private void upotaTagLiitot(String[] tagTyypit, StringBuilder queryBuilder) {
         // tehdään taginkaltaisista pilkuilla erotettu lista, joka on sarakkeessa tyyppi_kysely.tyyppi_concat
-        for(String tyyppi : tagTyypit) {
+        for (String tyyppi : tagTyypit) {
             queryBuilder.append("LEFT JOIN (SELECT GROUP_CONCAT(tag) AS ");
             queryBuilder.append(tyyppi);
             queryBuilder.append("_concat, vinkki FROM (SELECT Tag.tag AS tag, VinkkiTag.vinkki AS vinkki FROM Tag, VinkkiTag WHERE Tag.tag_id = VinkkiTag.tag AND Tag.tyyppi = '");
@@ -263,11 +268,11 @@ public class VinkkiDAO {
             queryBuilder.append("_kysely.vinkki ");
         }
     }
-    
+
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaSarakkeet(String taulunNimi, String[] sarakkeet, StringBuilder queryBuilder) {
         // kaikki sarakkeet muodossa Taulu.sarake AS taulu_sarake
-        for(String sarake : sarakkeet) {
+        for (String sarake : sarakkeet) {
             queryBuilder.append(", ");
             queryBuilder.append(taulunNimi);
             queryBuilder.append(".");
@@ -278,7 +283,7 @@ public class VinkkiDAO {
             queryBuilder.append(sarake);
         }
     }
-    
+
     // apumetodi apumetodille rakennaKaikkiTiedotQuery
     private void upotaLiitto(String taulunNimi, StringBuilder queryBuilder) {
         queryBuilder.append("LEFT JOIN ");

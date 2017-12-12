@@ -1,16 +1,8 @@
 package tekstikayttis;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import tietokantaobjektit.Vinkki;
 import logiikka.Logiikka;
-import tietokantaobjektit.Kirja;
-import tietokantaobjektit.Tag;
-import tietokantaobjektit.Video;
-import tietokantaobjektit.Blogi;
-import tietokantaobjektit.Podcast;
-
+import tietokantaobjektit.*;
 
 public class Tekstikayttis {
 
@@ -67,13 +59,17 @@ public class Tekstikayttis {
         switch (komento) {
 
             case "1":
-                this.kirjanLisays(); break;
+                this.kirjanLisays();
+                break;
             case "2":
-                this.videonLisays(); break;
+                this.videonLisays();
+                break;
             case "3":
-                this.bloginLisays(); break;
+                this.bloginLisays();
+                break;
             case "4":
-                this.podcastinLisays(); break;
+                this.podcastinLisays();
+                break;
             case "0":
                 return;
             default:
@@ -93,6 +89,7 @@ public class Tekstikayttis {
 
         Podcast lisattava = new Podcast(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
+        kysyKurssit(lisattava);
 
         this.io.print("");
 
@@ -110,6 +107,7 @@ public class Tekstikayttis {
 
         Blogi lisattava = new Blogi(otsikko, kuvaus, tekija, nimi, url, pvm);
         kysyTagit(lisattava);
+        kysyKurssit(lisattava);
 
         this.io.print("");
 
@@ -126,6 +124,7 @@ public class Tekstikayttis {
 
         Video lisattava = new Video(otsikko, kuvaus, tekija, url, pvm);
         kysyTagit(lisattava);
+        kysyKurssit(lisattava);
 
         this.io.print("");
 
@@ -140,8 +139,9 @@ public class Tekstikayttis {
         String kirjailija = kysyKentta("Kirjailija");
 
         Kirja lisattava = new Kirja(otsikko, kuvaus, isbn, kirjailija);
-        
+
         kysyTagit(lisattava);
+        kysyKurssit(lisattava);
 
         this.io.print("");
 
@@ -215,13 +215,13 @@ public class Tekstikayttis {
             }
             this.io.print("0: Peruuta poisto.");
             this.io.print("Valitse vinkki, joka haluat poistaa (ID): \n");
-            String PoistettavaID = io.nextLine();
-            if (PoistettavaID.equals("0")) {
+            String poistettavaID = io.nextLine();
+            if (poistettavaID.equals("0")) {
                 this.io.print("Vinkin poisto peruttu.\n");
                 return false;
             }
             for (Vinkki vinkki : vinkit) {
-                if (String.valueOf(vinkki.getId()).equals(PoistettavaID)) {
+                if (String.valueOf(vinkki.getId()).equals(poistettavaID)) {
                     this.io.print("Haluatko varmasti poistaa seuraavan vinkin?(1: Kyllä)");
                     this.io.print(vinkki.getId() + " | " + vinkki.getTyyppi() + " | " + vinkki.getOtsikko() + " | " + vinkki.getKuvaus() + " | " + "\n");
                     String varmistus = io.nextLine();
@@ -257,7 +257,14 @@ public class Tekstikayttis {
         List<Tag> tagit = tagaaja.tagienErottaminen(tagSyote);
         lisattava.setTagit(tagit);
     }
-    
+
+    private void kysyKurssit(Vinkki lisattava) {
+        this.io.print("Anna lukuvinkkiin liittyvät kurssit. Erota eri kurssit pilkulla:");
+        String tagSyote = this.io.nextLine();
+        List<RelatedCourse> kurssit = tagaaja.kurssienErottaminen(tagSyote);
+        lisattava.setRelatedCourses(kurssit);
+    }
+
     //hoitaa validointiin liittyvän viestimisen käyttäjän kanssa
     private String kysyValidoitava(String kentanTyyppi) {
         String validoitava = this.io.nextLine();
@@ -283,5 +290,5 @@ public class Tekstikayttis {
             }
         }
         return validoitava;
-    } 
+    }
 }

@@ -56,6 +56,7 @@ public class Stepdefs {
         inputs.add("www.video.com/watch");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -69,6 +70,7 @@ public class Stepdefs {
         inputs.add("www.video.com/watch");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -83,6 +85,7 @@ public class Stepdefs {
         inputs.add("www.blogs.com/read");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -97,6 +100,7 @@ public class Stepdefs {
         inputs.add("www.blog.com/read");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
@@ -111,32 +115,37 @@ public class Stepdefs {
         inputs.add("www.podcast.com/listen");
         inputs.add("2017-12-01");
         inputs.add("testi, tag");
+        inputs.add("course, kurs");
         inputs.add("0");
         aloita();
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
-            + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+            + "and isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" "
+            + "and courses \"([^\"]*)\" are entered$")
     public void title_and_description_and_isbn_and_author_and_tags_are_entered(String title,
-            String description, String isbn, String author, String tags) {
+            String description, String isbn, String author, String tags, String courses) {
         inputs.add(title);
         inputs.add(description);
         inputs.add(isbn);
         inputs.add(author);
         inputs.add(tags);
+        inputs.add(courses);
         inputs.add("0");
         aloita();
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" "
-            + "and wrong isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+            + "and wrong isbn \"([^\"]*)\" and author \"([^\"]*)\" and tags \"([^\"]*)\" "
+            + "and courses \"([^\"]*)\" are entered$")
     public void title_and_description_and_wrong_isbn_are_entered(String title,
-            String description, String isbn, String author, String tags) {
+            String description, String isbn, String author, String tags, String courses) {
         inputs.add(title);
         inputs.add(description);
         inputs.add(isbn);
         inputs.add(author);
         inputs.add(tags);
+        inputs.add(courses);
         inputs.add("0");
 //        aloita();
         io = new IOStub(inputs);
@@ -145,23 +154,27 @@ public class Stepdefs {
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" and creator \"([^\"]*)\" "
-            + "and url \"([^\"]*)\" and date \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+            + "and url \"([^\"]*)\" and date \"([^\"]*)\" and tags \"([^\"]*)\" "
+            + "and courses \"([^\"]*)\" are entered$")
     public void title_and_description_and_creator_and_url_and_date_and_tags_are_entered(String title,
-            String description, String creator, String url, String date, String tags) throws Throwable {
+            String description, String creator, String url, String date, String tags, String courses) {
         inputs.add(title);
         inputs.add(description);
         inputs.add(creator);
         inputs.add(url);
         inputs.add(date);
         inputs.add(tags);
+        inputs.add(courses);
         inputs.add("0");
         aloita();
     }
 
     @When("^title \"([^\"]*)\" and description \"([^\"]*)\" and creator \"([^\"]*)\" "
-            + "and name \"([^\"]*)\" and url \"([^\"]*)\" and date \"([^\"]*)\" and tags \"([^\"]*)\" are entered$")
+            + "and name \"([^\"]*)\" and url \"([^\"]*)\" and date \"([^\"]*)\" "
+            + "and tags \"([^\"]*)\" and courses \"([^\"]*)\" are entered$")
     public void title_and_description_and_creator_and_name_and_url_and_date_and_tags_are_entered(
-            String title, String description, String creator, String name, String url, String date, String tags) throws Throwable {
+            String title, String description, String creator, String name,
+            String url, String date, String tags, String courses) {
         inputs.add(title);
         inputs.add(description);
         inputs.add(creator);
@@ -169,6 +182,7 @@ public class Stepdefs {
         inputs.add(url);
         inputs.add(date);
         inputs.add(tags);
+        inputs.add(courses);
         inputs.add("0");
         aloita();
     }

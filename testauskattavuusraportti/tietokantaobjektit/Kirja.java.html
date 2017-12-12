@@ -7,7 +7,7 @@ public class Kirja extends Vinkki {
 
     private String isbn;
     private String kirjailija;
-    
+
     public Kirja(String otsikko, String kuvaus) {
 <span class="nc" id="L12">        super(otsikko, kuvaus, &quot;kirja&quot;);</span>
 <span class="nc" id="L13">    }</span>
@@ -33,7 +33,7 @@ public class Kirja extends Vinkki {
     public void setKirjailija(String kirjailija) {
 <span class="nc" id="L34">        this.kirjailija = kirjailija;</span>
 <span class="nc" id="L35">    }</span>
-    
+
     @Override
     public List&lt;String&gt; tyypinTiedotJarjestyksessa() {
 <span class="fc" id="L39">        ArrayList&lt;String&gt; tiedot = (ArrayList) new ArrayList();</span>
@@ -45,15 +45,12 @@ public class Kirja extends Vinkki {
     @Override
     public String toString() {
 <span class="fc" id="L47">        StringBuilder sb = new StringBuilder();</span>
-<span class="fc" id="L48">        sb.append(this.tyyppi).append(&quot;: &quot;).append(this.otsikko).append(&quot;\n&quot;)</span>
-<span class="fc" id="L49">                .append(&quot;  Kuvaus: &quot;).append(this.kuvaus).append(&quot;\n&quot;)</span>
+<span class="fc" id="L48">        toStringPrefix(sb);</span>
+<span class="fc" id="L49">        sb.append(&quot;\n&quot;)</span>
 <span class="fc" id="L50">                .append(&quot;  ISBN: &quot;).append(this.isbn).append(&quot;\n&quot;)</span>
-<span class="fc" id="L51">                .append(&quot;  Kirjailija: &quot;).append(this.kirjailija).append(&quot;\n&quot;)</span>
-<span class="fc" id="L52">                .append(&quot;  Tagit: &quot;);</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (Tag tag : this.tagit){</span>
-<span class="fc" id="L54">            sb.append(tag.getTag()).append(&quot; &quot;);</span>
-<span class="fc" id="L55">        }</span>
-<span class="fc" id="L56">        return sb.toString();</span>
+<span class="fc" id="L51">                .append(&quot;  Kirjailija: &quot;).append(this.kirjailija).append(&quot;\n&quot;);</span>
+<span class="fc" id="L52">        toStringSuffix(sb);</span>
+<span class="fc" id="L53">        return sb.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
