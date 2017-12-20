@@ -5,6 +5,7 @@ https://docs.google.com/spreadsheets/d/1919yz47HJkCDnhW_d3NNH1e0Amzv3YS6PuW-Fr3g
 
 ## Projektin loppuraportti
 https://docs.google.com/document/d/1LFhQbO5O7GRao3xU4KK_eKOrdhWyfeZCG8p-ewQ_Rzg/edit#heading=h.wuq8hn476pri
+(vain kommentointioikeudet julkisia)
 
 ## Definition of Done
 
